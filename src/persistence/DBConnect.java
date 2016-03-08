@@ -7,14 +7,18 @@ import java.sql.Statement;
 import java.sql.Connection;
 
 public class DBConnect {
-	
+
 	protected static final String DB_USER = "admincdb";
 	protected static final String DB_PASS = "qwerty1234";
 	protected static final String DB_URL  = "jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	protected static Connection connec;
-	
+
 	private final static DBConnect _instance = new DBConnect();
-	
+
+	public static DBConnect getInstance(){
+		return _instance;
+	}
+
 	private DBConnect(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -29,11 +33,18 @@ public class DBConnect {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/*
 	public Connection getConnection(){
 		return connec;
 	}
-	
+	//*/
+
+	/**
+	 * Executes a MySQL query of type "SELECT FROM WHERE"
+	 * @param query the query to execute
+	 * @return the ResultSet from the request
+	 */
 	public ResultSet executeQuery(String query){
 		ResultSet rs = null;
 		Statement stmt = null;
@@ -51,7 +62,12 @@ public class DBConnect {
 		}
 		return rs;
 	}
-	
+
+	/**
+	 * Executes a MySQL query of type INSERT/UPDATE/DELETE
+	 * @param update the query to execute
+	 * @return the result from the request
+	 */
 	public int executeUpdate(String update){
 		int rs = -1;
 		Statement stmt = null;
@@ -69,7 +85,11 @@ public class DBConnect {
 		}
 		return rs;
 	}
-	
+
+
+	/**
+	 * Closes the connection to the database
+	 */
 	public static void close(){
 		try {
 			connec.close();
@@ -78,36 +98,23 @@ public class DBConnect {
 			e.printStackTrace();
 		}
 	}
-	
-	public static DBConnect getInstance(){
-		return _instance;
-	}
-	
+
+	/**
+	 * Closes the connection to the database when the object dies
+	 */
 	protected void finalize(){
 		try {
-			connec.close();
+			if (!connec.isClosed()){
+				try {
+					connec.close();
+				} catch (SQLException e) {
+					System.out.println("Couln't close the connection!");
+					e.printStackTrace();
+				}
+			}
 		} catch (SQLException e) {
-			System.out.println("Couln't close the connection!");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	/*
-	public static void main(String[] args) throws SQLException{
-		DBConnect dbc = getInstance();
-		ResultSet rs;
-		String query = "select distinct name from computer";
-		rs = dbc.executeQuery(query);
-		while (rs.next()){
-			try {
-				System.out.println(rs.getString("name"));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	//*/
-
 }

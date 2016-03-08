@@ -1,12 +1,45 @@
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import model.Queries;
 
+
 public class CLI {
+	
+	public static void showMenu(){
+		System.out.println("1) List computers");
+		System.out.println("2) List companies");
+		System.out.println("3) Show computer details");
+		System.out.println("4) Create new computer");
+		System.out.println("5) Update a computer");
+		System.out.println("6) Delete a computer");
+		System.out.println("7) Quit");
+		
+		System.out.println("What do you choose ? ");
+	}
+	
 	public static void main(String[] args){
 		
 		Queries q = new Queries();
+		Scanner sc = new Scanner(System.in);
+		int choice;
+		boolean keepOnRocking = true;
 		
+		while (keepOnRocking){
+			CLI.showMenu();
+			
+			choice = sc.nextInt();
+			System.out.println(choice);
+			
+			switch(choice){
+			case 7:
+				keepOnRocking = false;
+				break;
+			default:
+				break;
+			}
+		}
+		sc.close();
 		/*
 		try {
 			q.listCompanies();
@@ -37,7 +70,7 @@ public class CLI {
 			e.printStackTrace();
 		}
 		//*/
-		//*
+		/*
 		int id = -1;
 		try {
 			id = q.getComputerId("Testouille");
