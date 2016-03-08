@@ -10,7 +10,7 @@ public class DBConnect {
 	
 	protected static final String DB_USER = "admincdb";
 	protected static final String DB_PASS = "qwerty1234";
-	protected static final String DB_URL  = "jdbc:mysql://127.0.0.1:3306/computer-database-db";
+	protected static final String DB_URL  = "jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	protected static Connection connec;
 	
 	private final static DBConnect _instance = new DBConnect();
@@ -71,10 +71,25 @@ public class DBConnect {
 	}
 	
 	public static void close(){
+		try {
+			connec.close();
+		} catch (SQLException e) {
+			System.out.println("Couln't close the connection!");
+			e.printStackTrace();
+		}
 	}
 	
 	public static DBConnect getInstance(){
 		return _instance;
+	}
+	
+	protected void finalize(){
+		try {
+			connec.close();
+		} catch (SQLException e) {
+			System.out.println("Couln't close the connection!");
+			e.printStackTrace();
+		}
 	}
 	
 	/*
