@@ -145,7 +145,7 @@ public class Queries {
 	/**
 	 * Gets the id of a computer via the provided name
 	 * @param name the name of the computer
-	 * @return an int which is the computer's id
+	 * @return an int which is the computer's id, -1 if the id couldn't be found
 	 * @throws SQLException
 	 */
 	public int getComputerId(String name) throws SQLException{
@@ -283,7 +283,8 @@ public class Queries {
 		}
 		if (id == -1)
 			return id;
-		String delete = "delete if exists from computer where id='" + id + "'";
+//		String delete = "delete if exists from computer where id='" + id + "'";
+		String delete = "delete from computer where id='" + id + "'";
 		res = dbc.executeUpdate(delete);
 
 		return res;
