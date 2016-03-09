@@ -1,3 +1,4 @@
+package ui;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -122,7 +123,10 @@ public class CLI {
 	protected void createComputer(){
 		System.out.println("Computer creation menu");
 		String[] infos = getInfo();
-		q.createComputer(infos[0], infos[1], infos[2], infos[3]);
+		if (infos[0].length() == 0)
+			System.out.println("Error! No name given!");
+		else
+			q.createComputer(infos[0], infos[1], infos[2], infos[3]);
 	}
 
 	protected void updateComputer(){
