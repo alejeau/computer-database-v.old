@@ -4,9 +4,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 
 public class DBConnect {
+	
+	protected final Logger logger = LoggerFactory.getLogger(DBConnect.class);
 
 	protected static final String DB_USER = "admincdb";
 	protected static final String DB_PASS = "qwerty1234";
@@ -24,25 +30,25 @@ public class DBConnect {
 	 * Init the MySQL driver and starts the connection
 	 */
 	private DBConnect(){
+		logger.info("Loading driver...");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
+			logger.info("Couldn't load driver!");
 			System.out.println("Can't load class!");
 			e.printStackTrace();
 		}
+		logger.info("Done.");
 		try {
+			logger.info("Retrieving connection...");
 			connec = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 		} catch (SQLException e) {
+			logger.info("Couldn't get connection!");
 			System.out.println("Can't get connection!");
 			e.printStackTrace();
 		}
+		logger.info("Done.");
 	}
-
-	/*
-	public Connection getConnection(){
-		return connec;
-	}
-	//*/
 
 	/**
 	 * Executes a MySQL query of type "SELECT FROM WHERE"
@@ -53,17 +59,23 @@ public class DBConnect {
 		ResultSet rs = null;
 		Statement stmt = null;
 		try {
+			logger.info("Creating statement");
 			stmt = connec.createStatement();
 		} catch (SQLException e) {
+			logger.info("Couldn't create statement!");
 			System.out.println("Can't create statement!");
 			e.printStackTrace();
 		}
+		logger.info("Done.");
 		try {
+			logger.info("Executing query : \"{}\"", query);
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
+			logger.info("Query error!");
 			System.out.println("Query error!");
 			e.printStackTrace();
 		}
+		logger.info("Done.");
 		return rs;
 	}
 
@@ -76,17 +88,22 @@ public class DBConnect {
 		int rs = -1;
 		Statement stmt = null;
 		try {
+			logger.info("Creating statement");
 			stmt = connec.createStatement();
 		} catch (SQLException e) {
+			logger.info("Couldn't create statement!");
 			System.out.println("Can't create statement!");
 			e.printStackTrace();
 		}
 		try {
+			logger.info("Execute update : \"{}\"", update);
 			rs = stmt.executeUpdate(update);
 		} catch (SQLException e) {
+			logger.info("Query error!");
 			System.out.println("Query error!");
 			e.printStackTrace();
 		}
+		logger.info("Done.");
 		return rs;
 	}
 

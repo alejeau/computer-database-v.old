@@ -348,7 +348,7 @@ public class CLI {
 	//*/
 
 	public static void main(String[] args){
-		/*
+		//*
 		Queries q = new Queries();
 		Scanner sc = new Scanner(System.in);
 		CLI cli = new CLI(q, sc);
