@@ -11,14 +11,18 @@ public class DBConnect {
 	protected static final String DB_USER = "admincdb";
 	protected static final String DB_PASS = "qwerty1234";
 	protected static final String DB_URL  = "jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	// ?zeroDateTimeBehavior=convertToNull converts zero date to null
+	
 	protected static Connection connec;
-
 	private final static DBConnect _instance = new DBConnect();
 
 	public static DBConnect getInstance(){
 		return _instance;
 	}
-
+	
+	/**
+	 * Init the MySQL driver and starts the connection
+	 */
 	private DBConnect(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -113,7 +117,6 @@ public class DBConnect {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

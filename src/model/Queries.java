@@ -6,51 +6,76 @@ import java.sql.SQLException;
 import persistence.DBConnect;
 
 public class Queries {
-	public static final String TIMESTAMP_ZERO = "0000-00-00";
+	public static final String TIMESTAMP_ZERO 	= "0000-00-00";
+	public static final String COMPUTER 		= "computer";
+	public static final String COMPANY 			= "company";
 	protected DBConnect dbc = null;
 
 	public Queries(){
 		dbc = DBConnect.getInstance();
 	}
-
+	
 	/**
-	 * Lists the differents computers available and prints them out on the console
+	 * Lists the different computers/companies available and prints them out on the console
+	 * 
+	 * @param type Queries.COMPUTER or Queries.COMPANY
 	 * @throws SQLException if the ResultSet can't work properly
 	 */
-	public void listComputers() throws SQLException {
-		ResultSet rs;
-		String query = "select distinct name from computer";
-		rs = dbc.executeQuery(query);
-		while (rs.next()){
-			try {
-				System.out.println(rs.getString("name"));
-			} catch (SQLException e) {
-				System.out.println("\n\n*** Can't get computer name! *** \n\n");
-				e.printStackTrace();
+	public void listAll(String type) throws SQLException{
+		if (!checkType(type)){
+			System.out.println("Wrong table name!");
+		}
+		else {
+			ResultSet rs;
+			String query = "select distinct name from " + type + ";";
+			rs = dbc.executeQuery(query);
+			while (rs.next()){
+				try {
+					System.out.println(rs.getString("name"));
+				} catch (SQLException e) {
+					System.out.println("\n\n*** Can't get " + type + " name! *** \n\n");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	protected boolean checkType(String type){
+		if (type.equals(COMPUTER) || type.equals(COMPANY))
+			return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Lists the different computers/companies available and prints them out on the console by pages
+	 * 
+	 * @param type Queries.COMPUTER or Queries.COMPANY
+	 * @param pageNumber the number of the page to display
+	 * @throws SQLException if the ResultSet can't work properly
+	 */
+	public void listByPages(String type, int pageNumber) throws SQLException{
+		if (!checkType(type)){
+			System.out.println("Wrong table name!");
+		}
+		else {
+			ResultSet rs;
+			pageNumber *= 20;
+			String query = "select distinct name from " + type + " limit " + pageNumber + ", 20";
+			rs = dbc.executeQuery(query);
+			while (rs.next()){
+				try {
+					System.out.println(rs.getString("name"));
+				} catch (SQLException e) {
+					System.out.println("\n\n*** Can't get " + type + " name! *** \n\n");
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
 	/**
-	 * Lists the differents companies available and prints them out on the console
-	 * @throws SQLException if the ResultSet can't work properly
-	 */
-	public void listCompanies() throws SQLException{
-		ResultSet rs;
-		String query = "select distinct name from company";
-		rs = dbc.executeQuery(query);
-		while (rs.next()){
-			try {
-				System.out.println(rs.getString("name"));
-			} catch (SQLException e) {
-				System.out.println("\n\n*** Can't get company name! *** \n\n");
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * Prints out on the console the details of the computer which name is in argument
+	 * Displays on the console the details of the computer which name is in argument
 	 * 
 	 * @param name a String of the computer's name
 	 * @throws SQLException if the ResultSet can't work properly
@@ -207,7 +232,7 @@ public class Queries {
 			if (id == -1)
 				return id;
 		}
-		
+
 		// if the dates aren't given, we set them to zero
 		intro = checkDateValidity(intro);
 		outro = checkDateValidity(outro);
@@ -283,19 +308,20 @@ public class Queries {
 		}
 		if (id == -1)
 			return id;
-//		String delete = "delete if exists from computer where id='" + id + "'";
+		//		String delete = "delete if exists from computer where id='" + id + "'";
 		String delete = "delete from computer where id='" + id + "'";
 		res = dbc.executeUpdate(delete);
 
 		return res;
 	}
+	
 	/**
-	 * 
-	 * @param id
-	 * @param name
-	 * @param intro
-	 * @param outro
-	 * @param company
+	 * Updates infos about a computer in the database
+	 * @param id the computer's id
+	 * @param name the computer's name
+	 * @param intro the computer's introduction date
+	 * @param outro the computer's discontinuation date
+	 * @param company the computer's manufacturer
 	 * @return
 	 */
 	public int updateComputer(int id, String name, String intro, String outro, String company){
@@ -308,7 +334,7 @@ public class Queries {
 			return -2;
 
 		int companyId = -1;
-		
+
 		// we get the company id, or create one if necessary
 		try {
 			companyId = getCompanyId(company);
@@ -318,7 +344,7 @@ public class Queries {
 		}
 		if (companyId == -1)
 			companyId = createCompany(company);
-		
+
 		String update = "update computer set name='" + name + "', introduced='" + intro + "', discontinued='"
 				+ outro + "', company_id='" + companyId + "' where id='" + id + "';";
 		System.out.println("update = " + update);
@@ -336,7 +362,7 @@ public class Queries {
 			return TIMESTAMP_ZERO;
 		return d;
 	}
-	
+
 	/**
 	 * Check whether before comes before after
 	 * @param before the date that's supposed to be first
@@ -346,11 +372,7 @@ public class Queries {
 	protected static boolean checkDates(String before, String after){
 		if (after.equals(checkDateValidity(after)) || (before.compareTo(after) < 0))
 			return true;
-		
+
 		return false;
 	}
-
-
-	//*/
-
 }
