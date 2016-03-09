@@ -1,5 +1,6 @@
 package ui;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import model.Queries;
@@ -70,7 +71,6 @@ public class CLI {
 	 * @return whether to quit or not
 	 */
 	public boolean launch(){
-		System.out.println("******************---||| cli.launch() |||---******************");
 		boolean b = true;
 		switch(this.choice){
 		case 1: // List all computers
@@ -106,7 +106,7 @@ public class CLI {
 		this.choice = -1;
 		return b;
 	}
-	
+
 	/**
 	 * Displays the list of all Computer or Companies
 	 * @param type Queries.COMPUTER or Queries.COMPANY
@@ -179,7 +179,7 @@ public class CLI {
 
 		return c;
 	}
-	
+
 	/**
 	 * Gets the user's choice for page number
 	 * @return
@@ -280,9 +280,11 @@ public class CLI {
 
 		System.out.println("Please enter computer computer introduction date (YYYY-MM-DD) :");
 		infos[1] = sc.nextLine();
+		infos[1] = CLI.validateDate(infos[1]);
 
 		System.out.println("Please enter computer computer discontinuation date (YYYY-MM-DD) :");
 		infos[2] = sc.nextLine();
+		infos[2] = CLI.validateDate(infos[2]);
 
 		System.out.println("Please enter company name :");
 		infos[3] = sc.nextLine();
@@ -290,8 +292,63 @@ public class CLI {
 		return infos;
 	}
 
+	/**
+	 * Checks whether a date is in a valid format or not
+	 * @param date a String representing the date
+	 * @return the date or Queries.TIMESTAMP_ZERO if the date's wrong
+	 */
+	protected static String validateDate(String date){
+		LocalDate ld = null;
+		if (date.length() == 10){
+			String[] s = date.split("-");
+			if (s.length != 3){
+				System.out.println("Wrong date format!\nThe date will be set to null.");
+				date = Queries.TIMESTAMP_ZERO;
+			}
+			else if (!date.equals(Queries.TIMESTAMP_ZERO)){
+				int year 	= Integer.valueOf(s[0]);
+				int month 	= Integer.valueOf(s[1]);
+				int day 	= Integer.valueOf(s[2]);
+				ld = LocalDate.of(year, month, day);
+				date = ld.toString();
+			}
+		}
+		return date;
+	}
+
+
+
+	/**
+	 * Checks whether a date is in a valid format or not
+	 * @param date a String representing the date
+	 * @return the date or Queries.TIMESTAMP_ZERO if the date's wrong
+	 */
+	/*
+	protected static String validateDate(String date){
+		String d = Queries.TIMESTAMP_ZERO;;
+		if (date.length() == 10){
+			String[] s = date.split("-");
+			if ((s.length == 3) && (s[0].length() == 4) && (s[1].length() == 2) && (s[2].length() == 2)){
+				if (s[0].compareTo("1822") < 0)
+					d = Queries.TIMESTAMP_ZERO;
+				else if ((s[1].compareTo("12") > 0) || (s[1].compareTo("1") < 0))
+					d = Queries.TIMESTAMP_ZERO;
+				else if ((s[2].compareTo("31") > 0) || (s[2].compareTo("1") > 0))
+					d = Queries.TIMESTAMP_ZERO;
+				else
+					d = date;
+			}
+		}
+		if (d.equals(Queries.TIMESTAMP_ZERO))
+			System.out.println("Wrong date format!");
+		return d;
+	}
+	//*/
+
+	//*/
+
 	public static void main(String[] args){
-		//*
+		/*
 		Queries q = new Queries();
 		Scanner sc = new Scanner(System.in);
 		CLI cli = new CLI(q, sc);
@@ -321,6 +378,12 @@ public class CLI {
 			e.printStackTrace();
 		}
 		System.out.println(d.toString());
+		java.time.format.DateTimeFormatter jdt = new java.time.format.DateTimeFormatter(); 
 		//*/
+		/*
+		LocalDate ld = LocalDate.of(1992, 04, 12);
+		System.out.println(ld.toString());
+		//*/
+
 	}
 }
