@@ -1,18 +1,17 @@
-package persistence;
+package com.exclilys.formation.computerdb.persistence;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 
 public class DBConnect {
 	
-	protected final Logger logger = LoggerFactory.getLogger(DBConnect.class);
+	protected final Logger logger = Logger.getLogger(DBConnect.class);
 
 	protected static final String DB_USER = "admincdb";
 	protected static final String DB_PASS = "qwerty1234";
@@ -68,7 +67,7 @@ public class DBConnect {
 		}
 		logger.info("Done.");
 		try {
-			logger.info("Executing query : \"{}\"", query);
+			logger.info("Executing query : \"" + query + "\"");
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
 			logger.info("Query error!");
@@ -96,7 +95,7 @@ public class DBConnect {
 			e.printStackTrace();
 		}
 		try {
-			logger.info("Execute update : \"{}\"", update);
+			logger.info("Execute update : \"" + update + "\"");
 			rs = stmt.executeUpdate(update);
 		} catch (SQLException e) {
 			logger.info("Query error!");

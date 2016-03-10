@@ -1,9 +1,9 @@
-package model;
+package com.exclilys.formation.computerdb.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import persistence.DBConnect;
+import com.exclilys.formation.computerdb.persistence.DBConnect;
 
 public class Queries {
 	public static final String TIMESTAMP_ZERO 	= "0000-00-00";

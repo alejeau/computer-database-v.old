@@ -1,9 +1,9 @@
-package ui;
+package com.exclilys.formation.computerdb.ui;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import model.Queries;
+import com.exclilys.formation.computerdb.model.Queries;
 
 
 public class CLI {
