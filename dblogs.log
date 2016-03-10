@@ -10,3 +10,135 @@ main INFO  persistence.DBConnect - Creating statement
 main INFO  persistence.DBConnect - Done.
 main INFO  persistence.DBConnect - Executing query : "select distinct name from computer limit 0, 20"
 main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select distinct name from computer;"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '-1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Loading driver...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Retrieving connection...
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '2'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '1'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '0'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '0'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '0'"
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Creating statement
+main INFO  persistence.DBConnect - Done.
+main INFO  persistence.DBConnect - Executing query : "select name from company where id = '0'"
+main INFO  persistence.DBConnect - Done.

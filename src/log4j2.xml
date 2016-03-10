@@ -4,10 +4,19 @@
 		<File name="dblogs" fileName="dblogs.log" append="true">
 			<PatternLayout pattern="%t %-5p %c{2} - %m%n" />
 		</File>
+		<File name="exceptions" fileName="exceptions.log" append="true">
+			<PatternLayout pattern="%t %-5p %c{2} - %m%n" />
+		</File>
 	</Appenders>
 	<Loggers>
 		<Logger name="com.exclilys.formation.computerdb.persistence.DBConnect" level="debug">
 			<AppenderRef ref="dblogs" />
+		</Logger>
+		<Logger name="com.exclilys.formation.computerdb.persistence.impl.CompanyDAOImpl" level="error">
+			<AppenderRef ref="exceptions" />
+		</Logger>
+		<Logger name="com.exclilys.formation.computerdb.persistence.impl.ComputerDAOImpl" level="error">
+			<AppenderRef ref="exceptions" />
 		</Logger>
 	</Loggers>
 </Configuration>

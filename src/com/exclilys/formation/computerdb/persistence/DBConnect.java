@@ -26,7 +26,7 @@ public class DBConnect {
 	}
 	
 	/**
-	 * Init the MySQL driver and starts the connection
+	 * Inits the MySQL driver and starts the connection
 	 */
 	private DBConnect(){
 		logger.info("Loading driver...");

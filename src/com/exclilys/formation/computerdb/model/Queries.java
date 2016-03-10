@@ -131,17 +131,22 @@ public class Queries {
 	 * @return a String of the name of the company 
 	 * @throws SQLException
 	 */
-	protected String getCompanyName(int id) throws SQLException{
+	public String getCompanyName(int id) {
 		ResultSet rs;
 		rs = dbc.executeQuery("select name from company where id = '" + id + "'");
 		String name = null;
-		while (rs.next()){
-			try {
-				name = rs.getString("name");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			while (rs.next()){
+				try {
+					name = rs.getString("name");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return name;
 	}
