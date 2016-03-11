@@ -5,7 +5,8 @@ import java.util.List;
 import com.exclilys.formation.computerdb.model.Company;
 
 public interface CompanyDAO {
-	List<Company> getAll();
-	List<Company> getFromTo(int from, int nb);
-	int getNbEntries();
+	public List<Company> getAll();
+	public List<Company> getFromTo(int from, int nb);
+	public int getNbEntries();
 }
+	

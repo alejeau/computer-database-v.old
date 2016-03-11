@@ -12,221 +12,287 @@ import org.apache.log4j.Logger;
 
 import com.exclilys.formation.computerdb.exception.DAOException;
 import com.exclilys.formation.computerdb.model.Company;
-import com.exclilys.formation.computerdb.model.Queries;
 import com.exclilys.formation.computerdb.persistence.CompanyDAO;
 import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
 import com.exclilys.formation.computerdb.persistence.mapper.CompanyMapper;
 
 public class CompanyDAOImpl implements CompanyDAO {
-
+	//*
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(CompanyDAOImpl.class);
+	protected Connection connection = null;
+	protected Statement stmt = null;
+	protected PreparedStatement pstmt = null;
+	protected ResultSet rs = null;
+	protected List<Company> list = null;
 
 	public CompanyDAOImpl(ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
-	}
-	
-	@Override
-	public List<Company> getAll() {
-		List<Company> liste = new ArrayList<>();
-		String query = "SELECT * FROM company";
-		
-		Connection connexion = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		try {
-			connexion = connectionFactory.getConnection();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			stmt = connexion.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			rs = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
-			while (rs.next()) {
-				Company company = null;
-				company = CompanyMapper.map(rs);
-				liste.add(company);
-			}
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-		
-		connectionFactory.close(connexion, rs, stmt, null);
-		return liste;
+		this.connection = this.connectionFactory.getConnection();
+		this.list = new ArrayList<Company>();
 	}
 
 	@Override
-	public int getNbEntries() {
-		Connection connexion = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		int nbEntries = 0;
-		String query = "SELECT COUNT(*) as nb_companies FROM company";
-
-		try {
-			connexion = connectionFactory.getConnection();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			stmt = connexion.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			rs = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
-			if (rs.next()){
-				try {
-					nbEntries = rs.getInt("nb_companies");
-				} catch (SQLException e) {
-					logger.fatal(e.getMessage());
-					connectionFactory.close(connexion, rs, stmt, null);
-					throw new DAOException(e.getMessage());
-				}
-			}
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-
-		connectionFactory.close(connexion, rs, stmt, null);
-		return nbEntries;
-	}
-
-	@Override
-	public List<Company> getFromTo(int from, int nb) {
-		// TODO Auto-generated method stub
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<Company> liste = new ArrayList<Company>();
+	public List<Company> getFromTo(int from, int to) {
+		list = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ?, ?";
-
+		
 		try {
-			connexion = connectionFactory.getConnection();
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			pstmt = connexion.prepareStatement(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setInt(1, from);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(2, nb);
+			pstmt.setInt(2, to);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
 		try {
 			while (rs.next()){
-				Company company = null;
-				company = CompanyMapper.map(rs);
-				liste.add(company);
+				Company company = CompanyMapper.map(rs);
+				list.add(company);
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			connectionFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		return liste;
+		this.closeAll();
+		return list;
 	}
-	
-	public static Company getCompany(long id){
-		ConnectionFactory cf = ConnectionFactory.getInstance();
 
-		String query = "select name from company where id = '" + id + "'";
-		ResultSet rs = null;
-		String name = null;
 
-		Connection connexion = null;
-		Statement stmt = null;
+
+	@Override
+	public int getNbEntries() {
+		int nbEntries = 0;
+		String query = "SELECT COUNT(*) as nb_companys FROM company";
 
 		try {
-			connexion = cf.getConnection();
+			stmt = this.connection.createStatement();
 		} catch (SQLException e) {
-			cf.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			stmt = connexion.createStatement();
-		} catch (SQLException e) {
-			cf.close(connexion, rs, stmt, null);
+			logger.fatal(e.getMessage());
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			cf.close(connexion, rs, stmt, null);
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		try {
+			if (rs.next()){
+				try {
+					nbEntries = rs.getInt("nb_companys");
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+			}
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		this.closeAll();
+		return nbEntries;
+	}
+
+	@Override
+	public List<Company> getAll() {
+		list = new ArrayList<>();
+		String query = "SELECT * FROM company";
+
+		try {
+			stmt = this.connection.createStatement();
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		
 		try {
-			if (rs.next()){
-				try {
-					name = rs.getString("name");
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
 		}
 		
+		try {
+			while (rs.next()){
+				Company company = CompanyMapper.map(rs);
+				list.add(company);
+			}
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		this.closeAll();
 
-		return new Company(id, name);
+		return list;
 	}
 
+	public void closeAll(){
+		if (this.rs != null){
+			try {
+				this.rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.rs = null;
+		}
+		
+		if (this.stmt != null){
+			try {
+				this.stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.stmt = null;
+		}
+		
+		if (this.pstmt != null){
+			try {
+				this.pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.pstmt = null;
+		}
+
+		//this.list = new ArrayList<>();
+	}
+
+	public static Company getCompanyById(long id, ConnectionFactory cf) {
+		Connection connection = cf.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Company company = null;
+		String query = "SELECT * FROM company WHERE id = ?";
+
+		try {
+			pstmt = connection.prepareStatement(query);
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setLong(1, id);
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+
+		// si l'entrée existe
+		try {
+			if (rs.next()){
+				company = CompanyMapper.map(rs);
+			}
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+
+		CompanyDAOImpl.close(rs, pstmt);
+		return company;
+	}
+	
+	public static Company getCompanyByName(String name, ConnectionFactory cf) {
+		Connection connection = cf.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Company company = null;
+		String query = "SELECT * FROM company WHERE name = ?";
+
+		try {
+			pstmt = connection.prepareStatement(query);
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(1, name);
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+
+		// si l'entrée existe
+		try {
+			if (rs.next()){
+				company = CompanyMapper.map(rs);
+			}
+		} catch (SQLException e) {
+			CompanyDAOImpl.close(rs, pstmt);
+			throw new DAOException(e.getMessage());
+		}
+
+		CompanyDAOImpl.close(rs, pstmt);
+		return company;
+	}
+	
+	private static void close(ResultSet rs, PreparedStatement pstmt){ 
+		if (rs != null){
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			rs = null;
+		}
+		
+		if (pstmt != null){
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			pstmt = null;
+		}
+	}
+	
+	public void finalize(){
+		this.closeAll();
+		this.connectionFactory = null;
+	}
 }

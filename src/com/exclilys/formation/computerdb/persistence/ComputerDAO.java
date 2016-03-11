@@ -11,5 +11,7 @@ public interface ComputerDAO {
 	int createComputer(Computer computer);
 	void updateComputer(Computer computer);
 	Computer getComputerById(long id);
+	Computer getComputerByName(String name);
 	void deleteComputer(long id);
+	void deleteComputer(String name);
 }

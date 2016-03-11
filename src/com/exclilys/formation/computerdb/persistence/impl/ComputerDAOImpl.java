@@ -19,54 +19,52 @@ import com.exclilys.formation.computerdb.persistence.mapper.ComputerMapper;
 
 public class ComputerDAOImpl implements ComputerDAO {
 	//*
-	private ConnectionFactory daoFactory;
+	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(ComputerDAOImpl.class);
+	protected Connection connection = null;
+	protected Statement stmt = null;
+	protected PreparedStatement pstmt = null;
+	protected ResultSet rs = null;
+	protected List<Computer> list = null;
 
-	public ComputerDAOImpl(ConnectionFactory daoFactory) {
-		this.daoFactory = daoFactory;
+	public ComputerDAOImpl(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+		this.connection = this.connectionFactory.getConnection();
+		this.list = new ArrayList<Computer>();
 	}
-	//*/
 
 	@Override
 	public List<Computer> getFromTo(int from, int to) {
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<Computer> liste = new ArrayList<Computer>();
+		list = new ArrayList<>();
 
 		String query = "SELECT * FROM computer LIMIT ?, ?";
+		
 		try {
-			connexion = daoFactory.getConnection();
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			pstmt = connexion.prepareStatement(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setInt(1, from);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setInt(2, to);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
@@ -80,55 +78,44 @@ public class ComputerDAOImpl implements ComputerDAO {
 					id = rs.getLong("company_id");
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, null, pstmt);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompany(id);
+				c = CompanyDAOImpl.getCompanyById(id, connectionFactory);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, null, pstmt);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 
-				liste.add(computer);
+				list.add(computer);
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		daoFactory.close(connexion, rs, null, pstmt);
+		this.closeAll();
 
-		return liste;
+		return list;
 	}
 
 
 
 	@Override
 	public int getNbEntries() {
-		Connection connexion = null;
-		Statement stmt = null;
-		ResultSet rs = null;
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_computers FROM computer";
 
 		try {
-			connexion = daoFactory.getConnection();
+			stmt = this.connection.createStatement();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
-			stmt = connexion.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
@@ -136,7 +123,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
@@ -146,50 +133,42 @@ public class ComputerDAOImpl implements ComputerDAO {
 					nbEntries = rs.getInt("nb_computers");
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, stmt, null);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		daoFactory.close(connexion, rs, stmt, null);
+		this.closeAll();
 
 		return nbEntries;
 	}
 
 	@Override
 	public List<Computer> getAll() {
-		Connection connexion = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		List<Computer> list = new ArrayList<Computer>();
+		list = new ArrayList<>();
 		String query = "SELECT * FROM computer";
 
 		try {
-			connexion = daoFactory.getConnection();
+			stmt = this.connection.createStatement();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		try {
-			stmt = connexion.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
-			throw new DAOException(e.getMessage());
-		}
+		
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-
+		
 		try {
 			while (rs.next()){
 				Company c = null;
@@ -200,64 +179,55 @@ public class ComputerDAOImpl implements ComputerDAO {
 					id = rs.getLong("company_id");
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, stmt, null);
+					rs.close();
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompany(id);
+				c = CompanyDAOImpl.getCompanyById(id, connectionFactory);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, stmt, null);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 				list.add(computer);
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, stmt, null);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		daoFactory.close(connexion, rs, stmt, null);
+		this.closeAll();
 
 		return list;
 	}
 
 	@Override
 	public Computer getComputerById(long id) {
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE id = ?";
 
 		try {
-			connexion = daoFactory.getConnection();
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			pstmt = connexion.prepareStatement(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setLong(1, id);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
@@ -271,187 +241,309 @@ public class ComputerDAOImpl implements ComputerDAO {
 					idc = rs.getLong("company_id");
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, null, pstmt);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompany(idc);
+				c = CompanyDAOImpl.getCompanyById(idc, connectionFactory);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
 					logger.fatal(e.getMessage());
-					daoFactory.close(connexion, rs, null, pstmt);
+					this.closeAll();
 					throw new DAOException(e.getMessage());
 				}
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, rs, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		daoFactory.close(connexion, rs, null, pstmt);
+		this.closeAll();
 
 		return computer;
 	}
 
-	@Override
-	public int createComputer(Computer computer) {
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
-		int nbRow = 0;
-		String query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+	public Computer getComputerByName(String name) {
+		Computer computer = null;
+		String query = "SELECT * FROM computer WHERE name = ?";
 
 		try {
-			connexion = daoFactory.getConnection();
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt = connexion.prepareStatement(query);
+			pstmt.setString(1, name);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		// si l'entrée existe
+		try {
+			if (rs.next()){
+				Company c = null;
+				long idc = -1;
+
+				try {
+					idc = rs.getLong("company_id");
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+
+				c = CompanyDAOImpl.getCompanyById(idc, connectionFactory);
+				try {
+					computer = ComputerMapper.map(rs, c);
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+			}
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		this.closeAll();
+
+		return computer;
+	}
+	
+	@Override
+	public int createComputer(Computer computer) {
+		int nbRow = 0;
+		String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
+		String intro = (computer.getIntro() != null)?(computer.getIntro().toString()):Computer.TIMESTAMP_ZERO;
+		String outro = (computer.getOutro() != null)?(computer.getOutro().toString()):Computer.TIMESTAMP_ZERO;
+		boolean hasACompany = computer.hasACompany();
+		if (hasACompany)
+			query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+		
+
+		try {
+			pstmt = this.connection.prepareStatement(query);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setString(1, computer.getName());
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setString(2, computer.getIntro().toString());
+			pstmt.setString(2, intro);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setString(3, computer.getOutro().toString());
+			pstmt.setString(3, outro);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		try {
-			pstmt.setLong(4, computer.getCompany().getId());
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
-			throw new DAOException(e.getMessage());
+		if (hasACompany){
+			try {
+				pstmt.setLong(4, computer.getCompany().getId());
+			} catch (SQLException e) {
+				logger.fatal(e.getMessage());
+				this.closeAll();
+				throw new DAOException(e.getMessage());
+			}
 		}
 		try {
 			nbRow = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		daoFactory.close(connexion, null, null, pstmt);
+		this.closeAll();
 		return nbRow;
 	}
 
 	@Override
 	public void updateComputer(Computer computer) {
-
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
-		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-
-		try {
-			connexion = daoFactory.getConnection();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
-			throw new DAOException(e.getMessage());
+		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?";
+		int champs = 4;
+		String intro = (computer.getIntro() != null)?(computer.getIntro().toString()):Computer.TIMESTAMP_ZERO;
+		String outro = (computer.getOutro() != null)?(computer.getOutro().toString()):Computer.TIMESTAMP_ZERO;
+		boolean hasACompany = computer.hasACompany();
+		if (hasACompany){
+			query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+			champs = 5;
 		}
+
 		try {
-			pstmt = connexion.prepareStatement(query);
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setString(1, computer.getName());
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setString(2, computer.getIntro().toString());
+			pstmt.setString(2, intro);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setString(3, computer.getOutro().toString());
+			pstmt.setString(3, outro);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
+		if (hasACompany){
+			try {
+				pstmt.setLong(4, computer.getCompany().getId());
+			} catch (SQLException e) {
+				logger.fatal(e.getMessage());
+				this.closeAll();
+				throw new DAOException(e.getMessage());
+			}
+		}
+		
 		try {
-			pstmt.setLong(4, computer.getCompany().getId());
+			pstmt.setLong(champs, computer.getId());
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
+		
 		try {
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		daoFactory.close(connexion, null, null, pstmt);
+		this.closeAll();
 	}
-
+	
 	@Override
 	public void deleteComputer(long id) {
-		Connection connexion = null;
-		PreparedStatement pstmt = null;
 		String query = "DELETE FROM computer WHERE id = ?";
 
 		try {
-			connexion = daoFactory.getConnection();
+			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
-			throw new DAOException(e.getMessage());
-		}
-		try {
-			pstmt = connexion.prepareStatement(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setLong(1, id);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
-			daoFactory.close(connexion, null, null, pstmt);
+			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 
-		daoFactory.close(connexion, null, null, pstmt);
+		this.closeAll();
+	}
 
+	@Override
+	public void deleteComputer(String name) {
+		String query = "DELETE FROM computer WHERE name = ?";
+
+		try {
+			pstmt = this.connection.prepareStatement(query);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(1, name);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		this.closeAll();
+	}
+	
+	public void closeAll(){
+		if (this.rs != null){
+			try {
+				this.rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.rs = null;
+		}
+		
+		if (this.stmt != null){
+			try {
+				this.stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.stmt = null;
+		}
+		
+		if (this.pstmt != null){
+			try {
+				this.pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			this.pstmt = null;
+		}
+
+		//this.list = new ArrayList<>();
+	}
+	
+	public void finalize(){
+		this.closeAll();
+		this.connectionFactory = null;
 	}
 
 }

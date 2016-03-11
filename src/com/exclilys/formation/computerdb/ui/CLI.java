@@ -1,26 +1,44 @@
 package com.exclilys.formation.computerdb.ui;
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
-import com.exclilys.formation.computerdb.model.Queries;
+import com.exclilys.formation.computerdb.model.Company;
+import com.exclilys.formation.computerdb.model.Computer;
+import com.exclilys.formation.computerdb.pagination.CompanyPager;
+import com.exclilys.formation.computerdb.pagination.ComputerPager;
+import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
+import com.exclilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
+import com.exclilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 
 
 public class CLI {
+	public static final String COMPUTER = "computer";
+	public static final String COMPANY = "company";
+	public static final String TIMESTAMP_ZERO = "0000-00-00";
 
-	Queries q = null;
 	Scanner sc = null;
-	int choice = -1;
-	int activePageNumber = 0;
+
+	private ConnectionFactory connectionFactory = null;
+	private CompanyDAOImpl companyDAOImpl = null;
+	private ComputerDAOImpl computerDAOImpl = null;
+	private int choice = -1;
+	private ComputerPager computerPager = null;
+	private CompanyPager  companyPager  = null;
+	private List<Computer> computerList = null;
+	private List<Company>  companyList  = null;
 
 	/**
-	 * Creates a CLI using a Queries and a Scanner
-	 * @param q
+	 * Creates a CLI using a Scanner
 	 * @param sc
 	 */
-	public CLI(Queries q, Scanner sc){
-		this.q = q;
+	public CLI(Scanner sc){
 		this.sc = sc;
+		connectionFactory 	= ConnectionFactory.getInstance();
+		companyDAOImpl 		= new CompanyDAOImpl(connectionFactory);
+		computerDAOImpl		= new ComputerDAOImpl(connectionFactory);
+		this.computerPager	= new ComputerPager(10, this.computerDAOImpl);
+		this.companyPager  	= new CompanyPager(10, this.companyDAOImpl);
 	}
 
 	/**
@@ -47,7 +65,7 @@ public class CLI {
 	/**
 	 * Waits for the user's choice
 	 */
-	public void makeAChoiceAndChecskIt(){
+	public void makeAChoiceAndChecksIt(){
 		String tmpChoice;
 		tmpChoice = sc.next();
 		sc.nextLine();
@@ -74,16 +92,16 @@ public class CLI {
 		boolean b = true;
 		switch(this.choice){
 		case 1: // List all computers
-			listAll(Queries.COMPUTER);
+			displayAllComputers();
 			break;
 		case 2: // List computers by pages
-			listByPages(Queries.COMPUTER);
+			displayComputersByPages();
 			break;
 		case 3: // List all companies
-			listAll(Queries.COMPANY);
+			displayAllCompanies();
 			break;
 		case 4: // List companies by pages
-			listByPages(Queries.COMPANY);
+			displayCompaniesByPages();
 			break;
 		case 5: // Show computer details
 			whichComputer();
@@ -109,22 +127,19 @@ public class CLI {
 
 	/**
 	 * Displays the list of all Computer or Companies
-	 * @param type Queries.COMPUTER or Queries.COMPANY
+	 * @param type CLI2.COMPUTER or CLI2.COMPANY
 	 */
-	protected void listAll(String type){
-		try {
-			q.listAll(type);
-		} catch (SQLException e) {
-			System.out.println("Couldn't list " + type + "!");
-			e.printStackTrace();
-		}
+	protected void displayAllComputers(){
+		List<Computer> comps = computerDAOImpl.getAll();
+		System.out.println("comps.size() : " + comps.size());
+		for (Computer comp : comps)
+			System.out.println(comp.toString());
 	}
 
 	/**
-	 * Displays a list of Computer or Companies by pages
-	 * @param type Queries.COMPUTER or Queries.COMPANY
+	 * Displays a list of Computer by pages
 	 */
-	protected void listByPages(String type){
+	protected void displayComputersByPages(){
 		boolean keepAtIt = true;
 		int c = -1;
 		while (keepAtIt){
@@ -134,28 +149,69 @@ public class CLI {
 			else {
 				switch (c){
 				case 1: // First page
-					this.activePageNumber = 0;
+					this.computerPager.goToPageNumber(0);
+					this.computerList = this.computerPager.getCurrentPage();
 					break;
 				case 2: // Previous page
-					this.activePageNumber--;
-					if (this.activePageNumber < 0)
-						this.activePageNumber = 0;
+					this.computerList = this.computerPager.getPreviousPage();
 					break;
-				case 3: // Previous page
-					this.activePageNumber++;
+				case 3: // Next page
+					this.computerList = this.computerPager.getNextPage();
 					break;
 				case 4:
-					this.activePageNumber = getPageNumber();
+					int pageNumber = getPageNumber();
+					this.computerPager.goToPageNumber(pageNumber);
+					this.computerList = this.computerPager.getCurrentPage();
 					break;
 				default:
 					break;
 				}
-				try {
-					q.listByPages(type, activePageNumber);
-				} catch (SQLException e) {
-					System.out.println("Could'nt list computers!");
-					e.printStackTrace();
+
+				for (Computer comp : this.computerList)
+					System.out.println(comp.toString());
+			}
+		}
+	}
+
+	protected void displayAllCompanies(){
+		List<Company> comps = companyDAOImpl.getAll();
+		for (Company comp : comps)
+			System.out.println(comp.toString());
+	}
+
+	/**
+	 * Displays a list of Company by pages
+	 */
+	protected void displayCompaniesByPages(){
+		boolean keepAtIt = true;
+		int c = -1;
+		while (keepAtIt){
+			c = getPageChoice();
+			if (c == 5)
+				break;
+			else {
+				switch (c){
+				case 1: // First page
+					this.companyPager.goToPageNumber(0);
+					this.companyList = this.companyPager.getCurrentPage();
+					break;
+				case 2: // Previous page
+					this.companyList = this.companyPager.getPreviousPage();
+					break;
+				case 3: // Next page
+					this.companyList = this.companyPager.getNextPage();
+					break;
+				case 4:
+					int pageNumber = getPageNumber();
+					this.companyPager.goToPageNumber(pageNumber);
+					this.companyList = this.companyPager.getCurrentPage();
+					break;
+				default:
+					break;
 				}
+
+				for (Company comp : this.companyList)
+					System.out.println(comp.toString());
 			}
 		}
 	}
@@ -172,7 +228,6 @@ public class CLI {
 		System.out.println("3) Next page");
 		System.out.println("4) Custom page number");
 		System.out.println("5) Quit");
-		System.out.println("Current selected page : " + this.activePageNumber);
 
 		c = sc.nextInt();
 		sc.nextLine();
@@ -200,28 +255,11 @@ public class CLI {
 		String name = null;
 		name = this.sc.nextLine();
 		System.out.println();
-
-		// We get the id of the computer
-		int id = -1;
-		try {
-			id = q.getComputerId(name);
-		} catch (SQLException e) {
-			System.out.println("Couldn't get computerId");
-			e.printStackTrace();
-		}
-
-		// if there's no id, there's nothing to show
-		if (id == -1){
-			System.out.println("The computer does not exists!");
-		}
-		else { // else, we print the infos out
-			try {
-				q.showDetails(name);
-			} catch (SQLException e) {
-				System.out.println("Error while getting computer \"" + name + "\" details!");
-				e.printStackTrace();
-			}
-		}
+		Computer c = computerDAOImpl.getComputerByName(name);
+		if (c != null)
+			System.out.println(c.toString());
+		else 
+			System.out.println("The specicified computer does not exists!");
 	}
 
 	/**
@@ -232,8 +270,10 @@ public class CLI {
 		String[] infos = getInfo();
 		if (infos[0].length() == 0)
 			System.out.println("Error! No name given!");
-		else
-			q.createComputer(infos[0], infos[1], infos[2], infos[3]);
+		else {
+			Company cy = CompanyDAOImpl.getCompanyByName(infos[3], connectionFactory);
+			computerDAOImpl.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
+		}
 	}
 
 	/**
@@ -242,26 +282,28 @@ public class CLI {
 	protected void updateComputer(){
 		System.out.println("Computer update menu");
 		String[] infos = getInfo();
-		int id = -1;
-		try {
-			id = q.getComputerId(infos[0]);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		if (id != -1)
-			q.updateComputer(id, infos[0], infos[1], infos[2], infos[3]);
-		else
-			System.out.println("Computer doesn't exists in the database!");
+		Computer computer = null;
+
+		if (infos[0].length() == 0)
+			System.out.println("Error! No name given!");
+		else {
+			computer = computerDAOImpl.getComputerByName(infos[0]);
+			computer.setIntro(infos[1]);
+			computer.setOutro(infos[2]);
+			Company cy = CompanyDAOImpl.getCompanyByName(infos[3], connectionFactory);
+			computer.setCompany(cy);
+			computerDAOImpl.updateComputer(computer);
+		}	
 	}
 
 	/**
-	 * Delete a given computer
+	 * Deletes a given computer
 	 */
 	protected void deleteComputer(){
 		System.out.println("Computer deletion menu");
 		System.out.println("Please specify the name of the computer you want to delete");
 		String name = sc.nextLine();
-		q.deleteComputer(name);
+		computerDAOImpl.deleteComputer(name);
 
 	}
 
@@ -269,8 +311,8 @@ public class CLI {
 	 * Gets infos about a computer from user's input :<br>
 	 * Name<br>
 	 * Date of introduction<br>
-	 * Date of discontinuation<br>
-	 * Date of company name
+	 * Date of production stop<br>
+	 * Company name
 	 * @return an array of String containing the previously stated infos
 	 */
 	protected String[] getInfo(){
@@ -295,7 +337,7 @@ public class CLI {
 	/**
 	 * Checks whether a date is in a valid format or not
 	 * @param date a String representing the date
-	 * @return the date or Queries.TIMESTAMP_ZERO if the date's wrong
+	 * @return the date or CLI2.TIMESTAMP_ZERO if the date's wrong
 	 */
 	protected static String validateDate(String date){
 		LocalDate ld = null;
@@ -303,9 +345,9 @@ public class CLI {
 			String[] s = date.split("-");
 			if (s.length != 3){
 				System.out.println("Wrong date format!\nThe date will be set to null.");
-				date = Queries.TIMESTAMP_ZERO;
+				date = CLI.TIMESTAMP_ZERO;
 			}
-			else if (!date.equals(Queries.TIMESTAMP_ZERO)){
+			else if (!date.equals(CLI.TIMESTAMP_ZERO)){
 				int year 	= Integer.valueOf(s[0]);
 				int month 	= Integer.valueOf(s[1]);
 				int day 	= Integer.valueOf(s[2]);
@@ -316,74 +358,16 @@ public class CLI {
 		return date;
 	}
 
-
-
-	/**
-	 * Checks whether a date is in a valid format or not
-	 * @param date a String representing the date
-	 * @return the date or Queries.TIMESTAMP_ZERO if the date's wrong
-	 */
-	/*
-	protected static String validateDate(String date){
-		String d = Queries.TIMESTAMP_ZERO;;
-		if (date.length() == 10){
-			String[] s = date.split("-");
-			if ((s.length == 3) && (s[0].length() == 4) && (s[1].length() == 2) && (s[2].length() == 2)){
-				if (s[0].compareTo("1822") < 0)
-					d = Queries.TIMESTAMP_ZERO;
-				else if ((s[1].compareTo("12") > 0) || (s[1].compareTo("1") < 0))
-					d = Queries.TIMESTAMP_ZERO;
-				else if ((s[2].compareTo("31") > 0) || (s[2].compareTo("1") > 0))
-					d = Queries.TIMESTAMP_ZERO;
-				else
-					d = date;
-			}
-		}
-		if (d.equals(Queries.TIMESTAMP_ZERO))
-			System.out.println("Wrong date format!");
-		return d;
-	}
-	//*/
-
-	//*/
-
 	public static void main(String[] args){
-		//*
-		Queries q = new Queries();
 		Scanner sc = new Scanner(System.in);
-		CLI cli = new CLI(q, sc);
+		CLI cli = new CLI(sc);
 		boolean keepOnRocking = true;
 
 		while (keepOnRocking){
 			cli.showMenu();
-			cli.makeAChoiceAndChecskIt();
+			cli.makeAChoiceAndChecksIt();
 			keepOnRocking = cli.launch();
 		}
 		sc.close();
-		//*/
-		/*
-		SimpleDateFormat smd = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = new Date();
-		try {
-			d = smd.parse("1992-04-13");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(d.toString());
-		Timestamp tmstp = new Timestamp(d.getTime());try {
-			d = smd.parse("1992-13-32");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(d.toString());
-		java.time.format.DateTimeFormatter jdt = new java.time.format.DateTimeFormatter(); 
-		//*/
-		/*
-		LocalDate ld = LocalDate.of(1992, 04, 12);
-		System.out.println(ld.toString());
-		//*/
-
 	}
 }

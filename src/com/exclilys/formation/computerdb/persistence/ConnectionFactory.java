@@ -19,12 +19,14 @@ public class ConnectionFactory { // A renommer en ConnectionFactory
 	private static final String PROPERTY_DRIVER				= "driver";
 	private static final String PROPERTY_NOM_UTILISATEUR	= "utilisateur";
 	private static final String PROPERTY_MOT_DE_PASSE		= "password";
-	private static Properties properties;
 
 	protected static final Logger logger = Logger.getLogger(ConnectionFactory.class);
-
-
+	
 	private final static ConnectionFactory _instance = new ConnectionFactory();
+
+	private static Properties properties;
+	
+	protected Connection connec = null;
 
 	public static ConnectionFactory getInstance(){
 		return _instance;
@@ -48,12 +50,30 @@ public class ConnectionFactory { // A renommer en ConnectionFactory
 		} catch (ClassNotFoundException e) {
 			logger.error("Failed to load driver!");
 		}
+		
+		try {
+			connec = DriverManager.getConnection(properties.getProperty(PROPERTY_URL), properties.getProperty(PROPERTY_NOM_UTILISATEUR), properties.getProperty(PROPERTY_MOT_DE_PASSE));
+		} catch (SQLException e) {
+			logger.error("Failed to retrieve Connection!");
+		}
 	}
 
-	public Connection getConnection() throws SQLException{
-		return DriverManager.getConnection(properties.getProperty(PROPERTY_URL), properties.getProperty(PROPERTY_NOM_UTILISATEUR), properties.getProperty(PROPERTY_MOT_DE_PASSE));
+	public Connection getConnection(){
+		return connec;
 	}
 
+	public void close(){
+		try {
+			this.connec.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	/*
 	public void close(Connection conn, ResultSet rs, Statement stmt, PreparedStatement pstmt ){ 
 		if (rs != null){
 			try {
@@ -84,4 +104,6 @@ public class ConnectionFactory { // A renommer en ConnectionFactory
 			}
 		}
 	}
+	//*/
+
 }
