@@ -1,0 +1,12 @@
+package com.exclilys.formation.computerdb.persistence;
+
+import java.util.List;
+
+import com.exclilys.formation.computerdb.model.Company;
+
+public interface CompanyDAO {
+	public List<Company> getAll();
+	public List<Company> getFromTo(int from, int nb);
+	public int getNbEntries();
+}
+	
