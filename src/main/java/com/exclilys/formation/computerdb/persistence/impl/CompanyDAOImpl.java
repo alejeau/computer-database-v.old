@@ -17,7 +17,7 @@ import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
 import com.exclilys.formation.computerdb.persistence.mapper.CompanyMapper;
 
 public class CompanyDAOImpl implements CompanyDAO {
-	//*
+	
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(CompanyDAOImpl.class);
 	protected Connection connection = null;

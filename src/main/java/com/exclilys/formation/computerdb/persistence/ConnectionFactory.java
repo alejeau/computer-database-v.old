@@ -25,12 +25,19 @@ public class ConnectionFactory { // A renommer en ConnectionFactory
 	
 	protected Connection connec = null;
 
+	/**
+	 * Returns a Singleton of ConnectionFactory
+	 * @return a Singleton of ConnectionFactory
+	 */
 	public static ConnectionFactory getInstance(){
 		return _instance;
 	}
 
 	// méthode déclarée statique car sinon nous devons l'appeler depuis une instance alors que ce n'sst pas le but
 	// permet d'éviter la création d'un nouvel objet à chaque appel
+	/**
+	 * Private computer to allow a Singleton
+	 */
 	private ConnectionFactory() {
 		properties = new Properties();
 
@@ -54,11 +61,18 @@ public class ConnectionFactory { // A renommer en ConnectionFactory
 			logger.error("Failed to retrieve Connection!");
 		}
 	}
-
+	
+	/**
+	 * Returns the connection initialized by the constructor
+	 * @return the connection initialized by the constructor
+	 */
 	public Connection getConnection(){
 		return connec;
 	}
 
+	/**
+	 * Closes the connection initialized by the constructor
+	 */
 	public void close(){
 		try {
 			this.connec.close();
