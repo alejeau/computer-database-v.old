@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.formation.computerdb.persistence.ConnectionFactory;
+
 public class ConnectionFactoryTest {
 
 	@Before
