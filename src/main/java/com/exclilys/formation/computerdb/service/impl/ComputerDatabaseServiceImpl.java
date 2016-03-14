@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.exclilys.formation.computerdb.model.Company;
 import com.exclilys.formation.computerdb.model.Computer;
-import com.exclilys.formation.computerdb.persistence.CompanyDAO;
-import com.exclilys.formation.computerdb.persistence.ComputerDAO;
-import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
 import com.exclilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.exclilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.exclilys.formation.computerdb.service.ComputerDatabaseService;
@@ -14,71 +11,82 @@ import com.exclilys.formation.computerdb.service.ComputerDatabaseService;
 public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService{
 	INSTANCE;
 	
-	private ConnectionFactory daoFactory;
-	private ComputerDAO computerDao;
-	private CompanyDAO companyDao;
+	private ComputerDAOImpl computerDAOImpl;
+	private CompanyDAOImpl companyDAOImpl;
 	
 	private ComputerDatabaseServiceImpl() {
-		daoFactory = ConnectionFactory.getInstance();
-		computerDao = new ComputerDAOImpl(daoFactory);
-		companyDao 	= new CompanyDAOImpl(daoFactory);
+		computerDAOImpl = ComputerDAOImpl.INSTANCE;
+		companyDAOImpl 	= CompanyDAOImpl.INSTANCE;
 	}
-	
-
-	@Override
-	public List<Computer> getAllComputers() {
-		return computerDao.getAll();
-	}
-
-
-	@Override
-	public List<Company> getAllCompanies() {
-		return companyDao.getAll();
-	}
-
-	@Override
-	public void deleteComputer(Long id) {
-		computerDao.deleteComputer(id);
-	}
-
-	@Override
-	public List<Computer> getComputersFromTo(int from, int nb) {
-		return computerDao.getFromTo(from, nb);
-	}
-
-
-	@Override
-	public int getNbComputers() {
-		return computerDao.getNbEntries();
-	}
-
-
-	@Override
-	public Computer getComputerById(Long id) {
-		return computerDao.getComputerById(id);
-	}
-
-
-	@Override
-	public void createComputer(Computer c) {
-		computerDao.createComputer(c);
-	}
-
-
-	@Override
-	public void updateComputer(Computer c) {
-		computerDao.updateComputer(c);
-	}
-
 
 	@Override
 	public int getNbCompanies() {
-		return companyDao.getNbEntries();
+		return companyDAOImpl.getNbEntries();
+	}
+
+	@Override
+	public int getNbComputers() {
+		return computerDAOImpl.getNbEntries();
+	}
+
+	@Override
+	public Company getCompanyById(Long id) {
+		return companyDAOImpl.getCompanyById(id);
+	}
+
+	@Override
+	public Company getCompanyByName(String name) {
+		return companyDAOImpl.getCompanyByName(name);
+	}
+
+	@Override
+	public Computer getComputerById(Long id) {
+		return computerDAOImpl.getComputerById(id);
+	}
+
+	@Override
+	public Computer getComputerByName(String name) {
+		return computerDAOImpl.getComputerByName(name);
+	}
+
+	@Override
+	public List<Company> getAllCompanies() {
+		return companyDAOImpl.getAll();
+	}
+
+	@Override
+	public List<Computer> getAllComputers() {
+		return computerDAOImpl.getAll();
 	}
 
 	@Override
 	public List<Company> getCompaniesFromTo(int from, int nb) {
-		return companyDao.getFromTo(from, nb);
+		return companyDAOImpl.getFromTo(from, nb);
+	}
+
+	@Override
+	public List<Computer> getComputersFromTo(int from, int nb) {
+		return computerDAOImpl.getFromTo(from, nb);
+	}
+
+	@Override
+	public void createComputer(Computer c) {
+		computerDAOImpl.createComputer(c);
+	}
+
+	@Override
+	public void updateComputer(Computer c) {
+		computerDAOImpl.updateComputer(c);
+	}
+
+	@Override
+	public void deleteComputer(Long id) {
+		computerDAOImpl.deleteComputer(id);
+	}
+
+	@Override
+	public void deleteComputer(String name) {
+		computerDAOImpl.deleteComputer(name);
 	}
 
 }

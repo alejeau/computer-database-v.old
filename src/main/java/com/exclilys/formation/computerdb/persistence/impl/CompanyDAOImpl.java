@@ -16,7 +16,8 @@ import com.exclilys.formation.computerdb.persistence.CompanyDAO;
 import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
 import com.exclilys.formation.computerdb.persistence.mapper.CompanyMapper;
 
-public class CompanyDAOImpl implements CompanyDAO {
+public enum CompanyDAOImpl implements CompanyDAO {
+	INSTANCE;
 	
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(CompanyDAOImpl.class);
@@ -26,8 +27,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 	protected ResultSet rs = null;
 	protected List<Company> list = null;
 
-	public CompanyDAOImpl(ConnectionFactory connectionFactory) {
-		this.connectionFactory = connectionFactory;
+	private CompanyDAOImpl() {
+		this.connectionFactory = ConnectionFactory.getInstance();
 		this.connection = this.connectionFactory.getConnection();
 		this.list = new ArrayList<Company>();
 	}
@@ -80,8 +81,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 		this.closeAll();
 		return list;
 	}
-
-
 
 	@Override
 	public int getNbEntries() {
@@ -191,10 +190,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 		//this.list = new ArrayList<>();
 	}
 
-	public static Company getCompanyById(long id, ConnectionFactory cf) {
-		Connection connection = cf.getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+	public Company getCompanyById(long id) {
+		pstmt = null;
+		rs = null;
 		Company company = null;
 		String query = "SELECT * FROM company WHERE id = ?";
 
@@ -231,10 +229,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 		return company;
 	}
 	
-	public static Company getCompanyByName(String name, ConnectionFactory cf) {
-		Connection connection = cf.getConnection();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+	public Company getCompanyByName(String name) {
+		pstmt = null;
+		rs = null;
 		Company company = null;
 		String query = "SELECT * FROM company WHERE name = ?";
 
@@ -289,10 +286,5 @@ public class CompanyDAOImpl implements CompanyDAO {
 			}
 			pstmt = null;
 		}
-	}
-	
-	public void finalize(){
-		this.closeAll();
-		this.connectionFactory = null;
 	}
 }

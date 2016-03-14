@@ -17,19 +17,22 @@ import com.exclilys.formation.computerdb.persistence.ComputerDAO;
 import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
 import com.exclilys.formation.computerdb.persistence.mapper.ComputerMapper;
 
-public class ComputerDAOImpl implements ComputerDAO {
+public enum ComputerDAOImpl implements ComputerDAO {
+	INSTANCE;
 	//*
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(ComputerDAOImpl.class);
+	protected CompanyDAOImpl companyDAOImpl;
 	protected Connection connection = null;
 	protected Statement stmt = null;
 	protected PreparedStatement pstmt = null;
 	protected ResultSet rs = null;
 	protected List<Computer> list = null;
 
-	public ComputerDAOImpl(ConnectionFactory connectionFactory) {
-		this.connectionFactory = connectionFactory;
+	private ComputerDAOImpl() {
+		this.connectionFactory = ConnectionFactory.getInstance();
 		this.connection = this.connectionFactory.getConnection();
+		this.companyDAOImpl = CompanyDAOImpl.INSTANCE;
 		this.list = new ArrayList<Computer>();
 	}
 
@@ -82,7 +85,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompanyById(id, connectionFactory);
+				c = this.companyDAOImpl.getCompanyById(id);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
@@ -184,7 +187,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompanyById(id, connectionFactory);
+				c = this.companyDAOImpl.getCompanyById(id);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
@@ -245,7 +248,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompanyById(idc, connectionFactory);
+				c = this.companyDAOImpl.getCompanyById(idc);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
@@ -304,7 +307,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 					throw new DAOException(e.getMessage());
 				}
 
-				c = CompanyDAOImpl.getCompanyById(idc, connectionFactory);
+				c = this.companyDAOImpl.getCompanyById(idc);
 				try {
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
@@ -540,10 +543,4 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 		//this.list = new ArrayList<>();
 	}
-	
-	public void finalize(){
-		this.closeAll();
-		this.connectionFactory = null;
-	}
-
 }

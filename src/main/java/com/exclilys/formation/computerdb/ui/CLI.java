@@ -7,9 +7,7 @@ import com.exclilys.formation.computerdb.model.Company;
 import com.exclilys.formation.computerdb.model.Computer;
 import com.exclilys.formation.computerdb.pagination.CompanyPager;
 import com.exclilys.formation.computerdb.pagination.ComputerPager;
-import com.exclilys.formation.computerdb.persistence.ConnectionFactory;
-import com.exclilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
-import com.exclilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
+import com.exclilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 
 public class CLI {
@@ -19,9 +17,8 @@ public class CLI {
 
 	Scanner sc = null;
 
-	private ConnectionFactory connectionFactory = null;
-	private CompanyDAOImpl companyDAOImpl = null;
-	private ComputerDAOImpl computerDAOImpl = null;
+	ComputerDatabaseServiceImpl service;
+	
 	private int choice = -1;
 	private ComputerPager computerPager = null;
 	private CompanyPager  companyPager  = null;
@@ -34,11 +31,7 @@ public class CLI {
 	 */
 	public CLI(Scanner sc){
 		this.sc = sc;
-		connectionFactory 	= ConnectionFactory.getInstance();
-		companyDAOImpl 		= new CompanyDAOImpl(connectionFactory);
-		computerDAOImpl		= new ComputerDAOImpl(connectionFactory);
-		this.computerPager	= new ComputerPager(10, this.computerDAOImpl);
-		this.companyPager  	= new CompanyPager(10, this.companyDAOImpl);
+		this.service = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
 	/**
@@ -130,7 +123,7 @@ public class CLI {
 	 * @param type CLI2.COMPUTER or CLI2.COMPANY
 	 */
 	protected void displayAllComputers(){
-		List<Computer> comps = computerDAOImpl.getAll();
+		List<Computer> comps = service.getAllComputers();
 		System.out.println("comps.size() : " + comps.size());
 		for (Computer comp : comps)
 			System.out.println(comp.toString());
@@ -174,7 +167,7 @@ public class CLI {
 	}
 
 	protected void displayAllCompanies(){
-		List<Company> comps = companyDAOImpl.getAll();
+		List<Company> comps = service.getAllCompanies();
 		for (Company comp : comps)
 			System.out.println(comp.toString());
 	}
@@ -255,7 +248,7 @@ public class CLI {
 		String name = null;
 		name = this.sc.nextLine();
 		System.out.println();
-		Computer c = computerDAOImpl.getComputerByName(name);
+		Computer c = service.getComputerByName(name);
 		if (c != null)
 			System.out.println(c.toString());
 		else 
@@ -271,8 +264,8 @@ public class CLI {
 		if (infos[0].length() == 0)
 			System.out.println("Error! No name given!");
 		else {
-			Company cy = CompanyDAOImpl.getCompanyByName(infos[3], connectionFactory);
-			computerDAOImpl.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
+			Company cy = service.getCompanyByName(infos[3]);
+			service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
 		}
 	}
 
@@ -287,12 +280,12 @@ public class CLI {
 		if (infos[0].length() == 0)
 			System.out.println("Error! No name given!");
 		else {
-			computer = computerDAOImpl.getComputerByName(infos[0]);
+			computer = this.service.getComputerByName(infos[0]);
 			computer.setIntro(infos[1]);
 			computer.setOutro(infos[2]);
-			Company cy = CompanyDAOImpl.getCompanyByName(infos[3], connectionFactory);
+			Company cy = this.service.getCompanyByName(infos[3]);
 			computer.setCompany(cy);
-			computerDAOImpl.updateComputer(computer);
+			this.service.updateComputer(computer);
 		}	
 	}
 
@@ -303,7 +296,7 @@ public class CLI {
 		System.out.println("Computer deletion menu");
 		System.out.println("Please specify the name of the computer you want to delete");
 		String name = sc.nextLine();
-		computerDAOImpl.deleteComputer(name);
+		this.service.deleteComputer(name);
 
 	}
 
