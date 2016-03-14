@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ComputerDatabaseServlet extends HttpServlet {
+public class ServletModifyComputer extends HttpServlet {
+	protected static final String VIEW = "/WEB-INF/static/views/editComputer.jsp";
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2466894131493728982L;
+	private static final long serialVersionUID = 613906361639763913L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
-
 }

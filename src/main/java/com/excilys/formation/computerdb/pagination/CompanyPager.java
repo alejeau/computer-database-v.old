@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.model.Company;
-import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
+import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class CompanyPager extends Pager {
 
 	protected List<Company> list = null;
-	protected CompanyDAOImpl dao = null;
+	protected ComputerDatabaseServiceImpl services = null;
 	
-	public CompanyPager(int objectsPerPages, CompanyDAOImpl dao) {
+	public CompanyPager(int objectsPerPages) {
 		super(objectsPerPages);
-		this.dao = dao;
+		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 		this.list = new ArrayList<Company>(this.objectsPerPages);
-		this.maxPageNumber = (int) Math.ceil(dao.getNbEntries()/this.objectsPerPages);
+		this.maxPageNumber = (int) Math.ceil(services.getNbCompanies()/this.objectsPerPages);
 		this.updateList();
 	}
 
@@ -49,7 +49,7 @@ public class CompanyPager extends Pager {
 	 * Reloads the list with the current page from the database
 	 */
 	protected void updateList(){
-		this.list = dao.getFromTo(currentPageNumber*objectsPerPages, objectsPerPages);
+		this.list = services.getCompaniesFromTo(currentPageNumber*objectsPerPages, objectsPerPages);
 	}
 	
 	public void finalize(){

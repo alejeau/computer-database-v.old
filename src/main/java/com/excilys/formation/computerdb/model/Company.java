@@ -1,9 +1,14 @@
 package com.excilys.formation.computerdb.model;
 
-public class Company {
+public class Company implements Comparable<Company> {
 	String name = null;
 	long id = -1;
 
+	/**
+	 * Creates a Company with a given name and id
+	 * @param id a long representing the company id in the database
+	 * @param name the name of the company
+	 */
 	public Company(long id, String name) {
 		this.name = name;
 		this.id = id;
@@ -58,8 +63,12 @@ public class Company {
 	}
 
 	@Override
+	public int compareTo(Company c) {
+		return this.name.compareTo(c.getName());
+	}
+
+	@Override
 	public String toString() {
 		return name;
 	}
-
 }

@@ -32,6 +32,8 @@ public class CLI {
 	public CLI(Scanner sc){
 		this.sc = sc;
 		this.service = ComputerDatabaseServiceImpl.INSTANCE;
+		this.companyPager = new CompanyPager(10);
+		this.computerPager = new ComputerPager(10);
 	}
 
 	/**

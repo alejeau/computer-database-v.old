@@ -12,16 +12,16 @@ public class Computer {
 	Company company = null;
 	long id = -1;
 
-	public Computer(){}
+	public Computer() { }
 
 	/**
-	 * Creates a computer without id, useful to insert it into the database
+	 * Creates a computer without id, useful to insert it into the database.
 	 * @param name Computer's name
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
 	 */
-	public Computer(String name, LocalDate intro, LocalDate outro, Company comp){
+	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.name = name;
 		this.intro = intro;
 		this.outro = outro;
@@ -36,14 +36,14 @@ public class Computer {
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
 	 */
-	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp){
+	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.id = id;
 		this.name = name;
 		this.intro = intro;
 		this.outro = outro;
 		this.company = comp;
 	}
-	
+
 	/**
 	 * Creates a computer without id, useful to insert it into the database
 	 * @param name Computer's name
@@ -51,19 +51,19 @@ public class Computer {
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
 	 */
-	public Computer(String name, String intro, String outro, Company comp){
+	public Computer(String name, String intro, String outro, Company comp) {
 		this.name = name;
 
-		if ((intro == null) || (intro.equals("")))
+		if ((intro == null) || (intro.equals(""))) {
 			this.intro = null;
-		else {
+		} else {
 			intro = intro.split(" ")[0];
 			this.intro = LocalDate.parse(intro);
 		}
 
-		if (outro == null || (outro.equals("")))
+		if (outro == null || (outro.equals(""))) {
 			this.outro = null;
-		else {
+		} else {
 			outro = outro.split(" ")[0];
 			this.outro = LocalDate.parse(outro);
 		}
@@ -79,20 +79,20 @@ public class Computer {
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
 	 */
-	public Computer(long id, String name, String intro, String outro, Company comp){
+	public Computer(long id, String name, String intro, String outro, Company comp) {
 		this.id = id;
 		this.name = name;
 
-		if (intro == null)
+		if (intro == null) {
 			this.intro = null;
-		else {
+		} else {
 			intro = intro.split(" ")[0];
 			this.intro = LocalDate.parse(intro);
 		}
 
-		if (outro == null)
+		if (outro == null) {
 			this.outro = null;
-		else {
+		} else {
 			outro = outro.split(" ")[0];
 			this.outro = LocalDate.parse(outro);
 		}
@@ -120,9 +120,9 @@ public class Computer {
 	 * @param intro the date of start of production
 	 */
 	public void setIntro(String intro) {
-		if (intro == null)
+		if (intro == null) {
 			this.intro = null;
-		else {
+		} else {
 			intro = intro.split(" ")[0];
 			this.intro = LocalDate.parse(intro);
 		}
@@ -140,9 +140,9 @@ public class Computer {
 	 * @param outro the date of start of production
 	 */
 	public void setOutro(String outro) {
-		if (outro == null)
+		if (outro == null) {
 			this.outro = null;
-		else {
+		} else {
 			outro = outro.split(" ")[0];
 			this.outro = LocalDate.parse(outro);
 		}
@@ -159,13 +159,13 @@ public class Computer {
 	public long getId() {
 		return id;
 	}
-	
+
 	/**
 	 * Checks whether the computer is associated to manufacturing company
 	 * @return true if there is a manufacturing company associated to the computer, false else
 	 */
-	public boolean hasACompany(){
-		return (this.company != null)?true:false;
+	public boolean hasACompany() {
+		return (this.company != null) ? true : false;
 	}
 
 	@Override
@@ -181,45 +181,61 @@ public class Computer {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
+
 		Computer other = (Computer) obj;
+
 		if (company == null) {
-			if (other.company != null)
+			if (other.company != null) {
 				return false;
-		} else if (!company.equals(other.company))
+			}
+		} else if (!company.equals(other.company)) {
 			return false;
+		}
 		if (intro == null) {
-			if (other.intro != null)
+			if (other.intro != null) {
 				return false;
-		} else if (!intro.equals(other.intro))
+			}
+		} else if (!intro.equals(other.intro)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (outro == null) {
-			if (other.outro != null)
+			if (other.outro != null) {
 				return false;
-		} else if (!outro.equals(other.outro))
+			}
+		} else if (!outro.equals(other.outro)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		String s = "\"" + name + "\"";
-		if (intro != null)
+		if (intro != null) {
 			s += ", introduced in " + intro;
-		if (outro != null)
+		}
+		if (outro != null) {
 			s += ", discontinued in " + outro;
-		if (company != null)
+		}
+		if (company != null) {
 			s += ", manufactured by " + company.getName();
+		}
 		return s;
 	}
 

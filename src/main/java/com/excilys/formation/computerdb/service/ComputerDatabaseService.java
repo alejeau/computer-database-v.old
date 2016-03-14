@@ -12,10 +12,10 @@ public interface ComputerDatabaseService {
 	Company getCompanyByName(String name);
 	Computer getComputerById(Long id);
 	Computer getComputerByName(String name);
-	List<Computer> getComputersFromTo(int from, int nb);
-	List<Computer> getAllComputers();
 	List<Company> getAllCompanies();
 	List<Company> getCompaniesFromTo(int from, int nb);
+	List<Computer> getAllComputers();
+	List<Computer> getComputersFromTo(int from, int nb);
 	void createComputer(Computer c);
 	void updateComputer(Computer c);
 	void deleteComputer(Long id);

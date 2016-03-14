@@ -58,7 +58,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService{
 	public List<Computer> getAllComputers() {
 		return computerDAOImpl.getAll();
 	}
-
+	
 	@Override
 	public List<Company> getCompaniesFromTo(int from, int nb) {
 		return companyDAOImpl.getFromTo(from, nb);
