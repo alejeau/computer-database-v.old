@@ -2,7 +2,7 @@ package com.excilys.formation.computerdb.model;
 
 import java.time.LocalDate;
 
-public class Computer {
+public class Computer implements Comparable<Computer> {
 
 	public static final String TIMESTAMP_ZERO = "0000-00-00";
 
@@ -239,6 +239,8 @@ public class Computer {
 		return s;
 	}
 
-
-
+	@Override
+	public int compareTo(Computer c) {
+		return this.compareTo(c);
+	}
 }

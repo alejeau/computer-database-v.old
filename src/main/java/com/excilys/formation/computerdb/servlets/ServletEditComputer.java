@@ -12,20 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
-public class ServletAddComputer extends HttpServlet {
-	private static final long serialVersionUID = 8660445621574175568L;
-	protected static final String VIEW = "/WEB-INF/static/views/addComputer.jsp";
+public class ServletEditComputer extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 613906361639763913L;
+	protected static final String VIEW = "/WEB-INF/static/views/editComputer.jsp";
 	protected ComputerDatabaseServiceImpl services;
 
-	public ServletAddComputer() {
+	public ServletEditComputer() {
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
-
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Company> companyList = services.getAllCompanies();
 		Collections.sort(companyList);
 		request.setAttribute("companies",  companyList);
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
-
 }

@@ -9,4 +9,3 @@ public interface CompanyDAO {
 	public List<Company> getFromTo(int from, int nb);
 	public int getNbEntries();
 }
-	

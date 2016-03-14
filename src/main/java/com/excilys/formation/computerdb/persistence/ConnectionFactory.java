@@ -17,20 +17,20 @@ public class ConnectionFactory {
 	private static final String PROPERTY_NOM_UTILISATEUR	= "utilisateur";
 	private static final String PROPERTY_MOT_DE_PASSE		= "password";
 
-	protected static final Logger logger = Logger.getLogger(ConnectionFactory.class);
-	
-	private final static ConnectionFactory _instance = new ConnectionFactory();
+	protected static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
+
+	private static final ConnectionFactory INSTANCE = new ConnectionFactory();
 
 	private static Properties properties;
-	
+
 	protected Connection connec = null;
 
 	/**
 	 * Returns a Singleton of ConnectionFactory
 	 * @return a Singleton of ConnectionFactory
 	 */
-	public static ConnectionFactory getInstance(){
-		return _instance;
+	public static ConnectionFactory getInstance() {
+		return INSTANCE;
 	}
 
 	/**
@@ -43,39 +43,39 @@ public class ConnectionFactory {
 			properties.load(ConnectionFactory.class.getClassLoader().getResourceAsStream(FILE_PROPERTIES));
 
 		} catch (IOException e) {
-			logger.error("Failed to load properties file!");
+			LOGGER.error("Failed to load properties file!");
 		}
 
 		// chargement du driver jdbc
 		try {
 			Class.forName(properties.getProperty(PROPERTY_DRIVER));
 		} catch (ClassNotFoundException e) {
-			logger.error("Failed to load driver!");
+			LOGGER.error("Failed to load driver!");
 		}
-		
+
 		try {
 			connec = DriverManager.getConnection(properties.getProperty(PROPERTY_URL), properties.getProperty(PROPERTY_NOM_UTILISATEUR), properties.getProperty(PROPERTY_MOT_DE_PASSE));
 		} catch (SQLException e) {
-			logger.error("Failed to retrieve Connection!");
+			LOGGER.error("Failed to retrieve Connection!");
 		}
 	}
-	
+
 	/**
 	 * Returns the connection initialized by the constructor
 	 * @return the connection initialized by the constructor
 	 */
-	public Connection getConnection(){
+	public Connection getConnection() {
 		return connec;
 	}
 
 	/**
 	 * Closes the connection initialized by the constructor
 	 */
-	public void close(){
+	public void close() {
 		try {
 			this.connec.close();
 		} catch (SQLException e) {
-			logger.error("Couldn't close the connection!");
+			LOGGER.error("Couldn't close the connection!");
 		}
 	}
 }

@@ -18,7 +18,7 @@ import com.excilys.formation.computerdb.persistence.mapper.CompanyMapper;
 
 public enum CompanyDAOImpl implements CompanyDAO {
 	INSTANCE;
-	
+
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(CompanyDAOImpl.class);
 	protected Connection connection = null;
@@ -37,7 +37,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public List<Company> getFromTo(int from, int to) {
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company LIMIT ?, ?";
-		
+
 		try {
 			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
@@ -68,7 +68,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		}
 
 		try {
-			while (rs.next()){
+			while (rs.next()) {
 				Company company = CompanyMapper.map(rs);
 				list.add(company);
 			}
@@ -104,7 +104,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		}
 
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				try {
 					nbEntries = rs.getInt("nb_companys");
 				} catch (SQLException e) {
@@ -135,7 +135,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
@@ -143,9 +143,9 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		try {
-			while (rs.next()){
+			while (rs.next()) {
 				Company company = CompanyMapper.map(rs);
 				list.add(company);
 			}
@@ -159,8 +159,8 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		return list;
 	}
 
-	public void closeAll(){
-		if (this.rs != null){
+	public void closeAll() {
+		if (this.rs != null) {
 			try {
 				this.rs.close();
 			} catch (SQLException e) {
@@ -168,8 +168,8 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			}
 			this.rs = null;
 		}
-		
-		if (this.stmt != null){
+
+		if (this.stmt != null) {
 			try {
 				this.stmt.close();
 			} catch (SQLException e) {
@@ -177,8 +177,8 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			}
 			this.stmt = null;
 		}
-		
-		if (this.pstmt != null){
+
+		if (this.pstmt != null) {
 			try {
 				this.pstmt.close();
 			} catch (SQLException e) {
@@ -217,7 +217,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		// si l'entrée existe
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
@@ -228,7 +228,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		CompanyDAOImpl.close(rs, pstmt);
 		return company;
 	}
-	
+
 	public Company getCompanyByName(String name) {
 		pstmt = null;
 		rs = null;
@@ -256,7 +256,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		// si l'entrée existe
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
@@ -267,9 +267,9 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		CompanyDAOImpl.close(rs, pstmt);
 		return company;
 	}
-	
-	private static void close(ResultSet rs, PreparedStatement pstmt){ 
-		if (rs != null){
+
+	private static void close(ResultSet rs, PreparedStatement pstmt) { 
+		if (rs != null) {
 			try {
 				rs.close();
 			} catch (SQLException e) {
@@ -277,8 +277,8 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			}
 			rs = null;
 		}
-		
-		if (pstmt != null){
+
+		if (pstmt != null) {
 			try {
 				pstmt.close();
 			} catch (SQLException e) {

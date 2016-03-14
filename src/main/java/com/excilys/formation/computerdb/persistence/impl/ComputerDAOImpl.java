@@ -41,7 +41,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		list = new ArrayList<>();
 
 		String query = "SELECT * FROM computer LIMIT ?, ?";
-		
+
 		try {
 			pstmt = this.connection.prepareStatement(query);
 		} catch (SQLException e) {
@@ -72,7 +72,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 
 		try {
-			while (rs.next()){
+			while (rs.next()) {
 				Company c = null;
 				Computer computer = null;
 				long id = -1;
@@ -131,7 +131,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				try {
 					nbEntries = rs.getInt("nb_computers");
 				} catch (SQLException e) {
@@ -163,7 +163,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (SQLException e) {
@@ -171,9 +171,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		try {
-			while (rs.next()){
+			while (rs.next()) {
 				Company c = null;
 				Computer computer = null;
 				long id = -1;
@@ -236,7 +236,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		// si l'entrée existe
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				Company c = null;
 				long idc = -1;
 
@@ -295,7 +295,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		// si l'entrée existe
 		try {
-			if (rs.next()){
+			if (rs.next()) {
 				Company c = null;
 				long idc = -1;
 
@@ -325,17 +325,18 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		return computer;
 	}
-	
+
 	@Override
 	public int createComputer(Computer computer) {
 		int nbRow = 0;
 		String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
-		String intro = (computer.getIntro() != null)?(computer.getIntro().toString()):Computer.TIMESTAMP_ZERO;
-		String outro = (computer.getOutro() != null)?(computer.getOutro().toString()):Computer.TIMESTAMP_ZERO;
+		String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Computer.TIMESTAMP_ZERO;
+		String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Computer.TIMESTAMP_ZERO;
 		boolean hasACompany = computer.hasACompany();
-		if (hasACompany)
+		if (hasACompany) {
 			query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-		
+		}
+
 
 		try {
 			pstmt = this.connection.prepareStatement(query);
@@ -365,7 +366,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		if (hasACompany){
+		if (hasACompany) {
 			try {
 				pstmt.setLong(4, computer.getCompany().getId());
 			} catch (SQLException e) {
@@ -390,10 +391,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	public void updateComputer(Computer computer) {
 		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?";
 		int champs = 4;
-		String intro = (computer.getIntro() != null)?(computer.getIntro().toString()):Computer.TIMESTAMP_ZERO;
-		String outro = (computer.getOutro() != null)?(computer.getOutro().toString()):Computer.TIMESTAMP_ZERO;
+		String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Computer.TIMESTAMP_ZERO;
+		String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Computer.TIMESTAMP_ZERO;
 		boolean hasACompany = computer.hasACompany();
-		if (hasACompany){
+		if (hasACompany) {
 			query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 			champs = 5;
 		}
@@ -426,7 +427,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		if (hasACompany){
+		if (hasACompany) {
 			try {
 				pstmt.setLong(4, computer.getCompany().getId());
 			} catch (SQLException e) {
@@ -435,7 +436,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 				throw new DAOException(e.getMessage());
 			}
 		}
-		
+
 		try {
 			pstmt.setLong(champs, computer.getId());
 		} catch (SQLException e) {
@@ -443,7 +444,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		try {
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -454,7 +455,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		this.closeAll();
 	}
-	
+
 	@Override
 	public void deleteComputer(long id) {
 		String query = "DELETE FROM computer WHERE id = ?";
@@ -512,9 +513,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		this.closeAll();
 	}
-	
-	public void closeAll(){
-		if (this.rs != null){
+
+	public void closeAll() {
+		if (this.rs != null) {
 			try {
 				this.rs.close();
 			} catch (SQLException e) {
@@ -522,8 +523,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			}
 			this.rs = null;
 		}
-		
-		if (this.stmt != null){
+
+		if (this.stmt != null) {
 			try {
 				this.stmt.close();
 			} catch (SQLException e) {
@@ -531,8 +532,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			}
 			this.stmt = null;
 		}
-		
-		if (this.pstmt != null){
+
+		if (this.pstmt != null) {
 			try {
 				this.pstmt.close();
 			} catch (SQLException e) {

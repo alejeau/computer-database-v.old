@@ -18,7 +18,7 @@ public class CLI {
 	Scanner sc = null;
 
 	ComputerDatabaseServiceImpl service;
-	
+
 	private int choice = -1;
 	private ComputerPager computerPager = null;
 	private CompanyPager  companyPager  = null;
@@ -27,9 +27,9 @@ public class CLI {
 
 	/**
 	 * Creates a CLI using a Scanner
-	 * @param sc
+	 * @param sc a Scanner
 	 */
-	public CLI(Scanner sc){
+	public CLI(Scanner sc) {
 		this.sc = sc;
 		this.service = ComputerDatabaseServiceImpl.INSTANCE;
 		this.companyPager = new CompanyPager(10);
@@ -39,7 +39,7 @@ public class CLI {
 	/**
 	 * Displays the main menu
 	 */
-	public void showMenu(){
+	public void showMenu() {
 		System.out.println("\n\n");
 		System.out.println("***************************");
 		System.out.println("******** Main Menu ********");
@@ -60,32 +60,32 @@ public class CLI {
 	/**
 	 * Waits for the user's choice
 	 */
-	public void makeAChoiceAndChecksIt(){
+	public void makeAChoiceAndChecksIt() {
 		String tmpChoice;
 		tmpChoice = sc.next();
 		sc.nextLine();
 		System.out.println(tmpChoice);
 		String j = "";
-		if (tmpChoice.length() == 1){
-			for (int i = 1; i < 10; i++){
+		if (tmpChoice.length() == 1) {
+			for (int i = 1; i < 10; i++) {
 				j = String.valueOf(i);
-				if (j.equals(tmpChoice)){
+				if (j.equals(tmpChoice)) {
 					choice = i;
 					break;
 				}
 			}
-		}
-		else 
+		} else { 
 			System.out.println("Choice not in menu!");
+		}
 	}
 
 	/**
 	 * Launches the right activity given the user's choice 
 	 * @return whether to quit or not
 	 */
-	public boolean launch(){
+	public boolean launch() {
 		boolean b = true;
-		switch(this.choice){
+		switch (this.choice) {
 		case 1: // List all computers
 			displayAllComputers();
 			break;
@@ -122,27 +122,27 @@ public class CLI {
 
 	/**
 	 * Displays the list of all Computer or Companies
-	 * @param type CLI2.COMPUTER or CLI2.COMPANY
 	 */
-	protected void displayAllComputers(){
+	protected void displayAllComputers() {
 		List<Computer> comps = service.getAllComputers();
 		System.out.println("comps.size() : " + comps.size());
-		for (Computer comp : comps)
+		for (Computer comp : comps) {
 			System.out.println(comp.toString());
+		}
 	}
 
 	/**
 	 * Displays a list of Computer by pages
 	 */
-	protected void displayComputersByPages(){
+	protected void displayComputersByPages() {
 		boolean keepAtIt = true;
 		int c = -1;
-		while (keepAtIt){
+		while (keepAtIt) {
 			c = getPageChoice();
-			if (c == 5)
+			if (c == 5) {
 				break;
-			else {
-				switch (c){
+			} else {
+				switch (c) {
 				case 1: // First page
 					this.computerPager.goToPageNumber(0);
 					this.computerList = this.computerPager.getCurrentPage();
@@ -162,30 +162,32 @@ public class CLI {
 					break;
 				}
 
-				for (Computer comp : this.computerList)
+				for (Computer comp : this.computerList) {
 					System.out.println(comp.toString());
+				}
 			}
 		}
 	}
 
-	protected void displayAllCompanies(){
+	protected void displayAllCompanies() {
 		List<Company> comps = service.getAllCompanies();
-		for (Company comp : comps)
+		for (Company comp : comps) {
 			System.out.println(comp.toString());
+		}
 	}
 
 	/**
 	 * Displays a list of Company by pages
 	 */
-	protected void displayCompaniesByPages(){
+	protected void displayCompaniesByPages() {
 		boolean keepAtIt = true;
 		int c = -1;
-		while (keepAtIt){
+		while (keepAtIt) {
 			c = getPageChoice();
-			if (c == 5)
+			if (c == 5) {
 				break;
-			else {
-				switch (c){
+			} else {
+				switch (c) {
 				case 1: // First page
 					this.companyPager.goToPageNumber(0);
 					this.companyList = this.companyPager.getCurrentPage();
@@ -205,8 +207,9 @@ public class CLI {
 					break;
 				}
 
-				for (Company comp : this.companyList)
+				for (Company comp : this.companyList) {
 					System.out.println(comp.toString());
+				}
 			}
 		}
 	}
@@ -215,7 +218,7 @@ public class CLI {
 	 * Gets the user's choice of page
 	 * @return the user's choice
 	 */
-	protected int getPageChoice(){
+	protected int getPageChoice() {
 		int c = -1;
 		System.out.println("\n*** Page selection menu ***");
 		System.out.println("1) First page");
@@ -232,9 +235,9 @@ public class CLI {
 
 	/**
 	 * Gets the user's choice for page number
-	 * @return
+	 * @return the number of pages
 	 */
-	protected int getPageNumber(){
+	protected int getPageNumber() {
 		int p = -1;
 		System.out.println("To which page would you like to go?");
 		p = sc.nextInt();
@@ -245,27 +248,28 @@ public class CLI {
 	/**
 	 * Displays the infos of the desired computer
 	 */
-	protected void whichComputer(){
+	protected void whichComputer() {
 		System.out.println("Which computer would you like to be detailed?");
 		String name = null;
 		name = this.sc.nextLine();
 		System.out.println();
 		Computer c = service.getComputerByName(name);
-		if (c != null)
+		if (c != null) {
 			System.out.println(c.toString());
-		else 
+		} else { 
 			System.out.println("The specicified computer does not exists!");
+		}
 	}
 
 	/**
 	 * Creates a computer
 	 */
-	protected void createComputer(){
+	protected void createComputer() {
 		System.out.println("Computer creation menu");
 		String[] infos = getInfo();
-		if (infos[0].length() == 0)
+		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
-		else {
+		} else {
 			Company cy = service.getCompanyByName(infos[3]);
 			service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
 		}
@@ -274,14 +278,14 @@ public class CLI {
 	/**
 	 * Updates a given computer
 	 */
-	protected void updateComputer(){
+	protected void updateComputer() {
 		System.out.println("Computer update menu");
 		String[] infos = getInfo();
 		Computer computer = null;
 
-		if (infos[0].length() == 0)
+		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
-		else {
+		} else {
 			computer = this.service.getComputerByName(infos[0]);
 			computer.setIntro(infos[1]);
 			computer.setOutro(infos[2]);
@@ -294,7 +298,7 @@ public class CLI {
 	/**
 	 * Deletes a given computer
 	 */
-	protected void deleteComputer(){
+	protected void deleteComputer() {
 		System.out.println("Computer deletion menu");
 		System.out.println("Please specify the name of the computer you want to delete");
 		String name = sc.nextLine();
@@ -310,7 +314,7 @@ public class CLI {
 	 * Company name
 	 * @return an array of String containing the previously stated infos
 	 */
-	protected String[] getInfo(){
+	protected String[] getInfo() {
 		String[] infos = new String[4];
 		System.out.println("Please enter computer name :");
 		infos[0] = sc.nextLine();
@@ -334,15 +338,14 @@ public class CLI {
 	 * @param date a String representing the date
 	 * @return the date or CLI2.TIMESTAMP_ZERO if the date's wrong
 	 */
-	protected static String validateDate(String date){
+	protected static String validateDate(String date) {
 		LocalDate ld = null;
-		if (date.length() == 10){
+		if (date.length() == 10) {
 			String[] s = date.split("-");
-			if (s.length != 3){
+			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
 				date = CLI.TIMESTAMP_ZERO;
-			}
-			else if (!date.equals(CLI.TIMESTAMP_ZERO)){
+			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
 				int year 	= Integer.valueOf(s[0]);
 				int month 	= Integer.valueOf(s[1]);
 				int day 	= Integer.valueOf(s[2]);
@@ -353,12 +356,12 @@ public class CLI {
 		return date;
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		CLI cli = new CLI(sc);
 		boolean keepOnRocking = true;
 
-		while (keepOnRocking){
+		while (keepOnRocking) {
 			cli.showMenu();
 			cli.makeAChoiceAndChecksIt();
 			keepOnRocking = cli.launch();

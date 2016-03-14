@@ -8,12 +8,12 @@ import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
 
-public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService{
+public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	INSTANCE;
-	
+
 	private ComputerDAOImpl computerDAOImpl;
 	private CompanyDAOImpl companyDAOImpl;
-	
+
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
 		companyDAOImpl 	= CompanyDAOImpl.INSTANCE;
@@ -58,7 +58,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService{
 	public List<Computer> getAllComputers() {
 		return computerDAOImpl.getAll();
 	}
-	
+
 	@Override
 	public List<Company> getCompaniesFromTo(int from, int nb) {
 		return companyDAOImpl.getFromTo(from, nb);
