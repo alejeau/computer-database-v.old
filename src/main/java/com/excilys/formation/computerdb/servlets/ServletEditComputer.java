@@ -25,8 +25,8 @@ public class ServletEditComputer extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
-		request.setAttribute("pathAddComputer", Paths.PATH_ADD_COMPUTER);
-		request.setAttribute("pathEditComputer", Paths.PATH_EDIT_COMPUTER);
+		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
+		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
 		List<Company> companyList = services.getAllCompanies();
 		Collections.sort(companyList);
 		request.setAttribute("companies",  companyList);

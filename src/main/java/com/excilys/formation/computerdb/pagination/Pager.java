@@ -4,6 +4,7 @@ public abstract class Pager {
 	protected int currentPageNumber;
 	protected int maxPageNumber;
 	protected int objectsPerPages;
+	protected int nbEntries;
 
 	Pager(int objectsPerPages) {
 		this.currentPageNumber = 0;
@@ -20,6 +21,10 @@ public abstract class Pager {
 
 	public int getMaxPageNumber() {
 		return maxPageNumber;
+	}
+
+	public int getNbEntries() {
+		return this.nbEntries;
 	}
 
 	protected abstract boolean goToPageNumber(int page);

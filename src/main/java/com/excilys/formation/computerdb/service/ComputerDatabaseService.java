@@ -8,8 +8,9 @@ import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 
 public interface ComputerDatabaseService {
-	int getNbComputers();
 	int getNbCompanies();
+	int getNbComputers();
+	int getNbComputersNamed(String search);
 	Company getCompanyById(Long id);
 	Company getCompanyByName(String name);
 	Computer getComputerById(Long id);
@@ -18,6 +19,7 @@ public interface ComputerDatabaseService {
 	List<Company> getCompaniesFromTo(int from, int nb);
 	List<Computer> getAllComputers();
 	List<Computer> getComputersFromTo(int from, int nb);
+	List<Computer> getComputersNamedFromTo(String search, int from, int to);
 	void createComputer(Computer c);
 	
 	/**

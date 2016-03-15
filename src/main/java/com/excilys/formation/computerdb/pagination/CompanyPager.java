@@ -15,7 +15,8 @@ public class CompanyPager extends Pager {
 		super(objectsPerPages);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 		this.list = new ArrayList<Company>(this.objectsPerPages);
-		this.maxPageNumber = (int) Math.ceil(services.getNbCompanies() / this.objectsPerPages);
+		this.nbEntries = services.getNbCompanies();
+		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
 		this.updateList();
 	}
 

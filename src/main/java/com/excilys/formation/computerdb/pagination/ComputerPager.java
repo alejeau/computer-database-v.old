@@ -15,7 +15,8 @@ public class ComputerPager extends Pager {
 		super(objectsPerPages);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
-		this.maxPageNumber = (int) Math.ceil(services.getNbComputers() / this.objectsPerPages);
+		this.nbEntries = services.getNbComputers();
+		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
 		this.updateList();
 	}
 
@@ -52,9 +53,5 @@ public class ComputerPager extends Pager {
 	 */
 	protected void updateList() {
 		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
-	}
-
-	public void finalize() {
-		this.list = null;
 	}
 }

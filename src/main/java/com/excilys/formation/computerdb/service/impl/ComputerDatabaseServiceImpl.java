@@ -33,6 +33,13 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	public int getNbComputersNamed(String search) {
+		int nb = computerDAOImpl.getNbEntriesNamed(search);
+		System.out.println("nb = " + nb);
+		return nb;
+	}
+
+	@Override
 	public Company getCompanyById(Long id) {
 		return companyDAOImpl.getCompanyById(id);
 	}
@@ -70,6 +77,11 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public List<Computer> getComputersFromTo(int from, int nb) {
 		return computerDAOImpl.getFromTo(from, nb);
+	}
+	
+	@Override
+	public List<Computer> getComputersNamedFromTo(String search, int from, int to){
+		return computerDAOImpl.getNamedFromTo(search, from, to);
 	}
 
 	@Override

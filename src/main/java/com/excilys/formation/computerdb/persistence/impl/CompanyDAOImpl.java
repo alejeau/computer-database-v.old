@@ -36,7 +36,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getFromTo(int from, int to) {
 		list = new ArrayList<>();
-		String query = "SELECT * FROM company LIMIT ?, ?";
+		String query = "SELECT * FROM company ORDER BY name LIMIT ?, ? ";
 
 		try {
 			pstmt = this.connection.prepareStatement(query);
@@ -126,7 +126,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<Company> getAll() {
 		list = new ArrayList<>();
-		String query = "SELECT * FROM company";
+		String query = "SELECT * FROM company ORDER BY name";
 
 		try {
 			stmt = this.connection.createStatement();

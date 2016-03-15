@@ -37,10 +37,88 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
+	public
+	List<Computer> getNamedFromTo(String name, int from, int to) {
+		list = new ArrayList<>();
+		String query = "SELECT * FROM computer WHERE name LIKE ? ORDER BY name LIMIT ?, ?;";
+
+		try {
+			pstmt = this.connection.prepareStatement(query);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(1, "%" + name + "%");
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setInt(2, from);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setInt(3, to);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		try {
+			while (rs.next()) {
+				Company c = null;
+				Computer computer = null;
+				long id = -1;
+
+				try {
+					id = rs.getLong("company_id");
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+
+				c = this.companyDAOImpl.getCompanyById(id);
+				try {
+					computer = ComputerMapper.map(rs, c);
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+
+				list.add(computer);
+			}
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		this.closeAll();
+
+		return list;
+	}
+
+	@Override
 	public List<Computer> getFromTo(int from, int to) {
 		list = new ArrayList<>();
 
-		String query = "SELECT * FROM computer LIMIT ?, ?";
+		String query = "SELECT * FROM computer ORDER BY name LIMIT ?, ?";
 
 		try {
 			pstmt = this.connection.prepareStatement(query);
@@ -150,11 +228,59 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		return nbEntries;
 	}
+	
+	@Override
+	public int getNbEntriesNamed(String name){
+		int nbEntries = 0;
+		String query = "SELECT COUNT(*) as nb_computers FROM computer WHERE name LIKE ?;";
+
+		try {
+			pstmt = this.connection.prepareStatement(query);
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(1, "%" + name + "%");
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		try {
+			if (rs.next()) {
+				try {
+					nbEntries = rs.getInt("nb_computers");
+				} catch (SQLException e) {
+					logger.fatal(e.getMessage());
+					this.closeAll();
+					throw new DAOException(e.getMessage());
+				}
+			}
+		} catch (SQLException e) {
+			logger.fatal(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		this.closeAll();
+
+		return nbEntries;
+	}
 
 	@Override
 	public List<Computer> getAll() {
 		list = new ArrayList<>();
-		String query = "SELECT * FROM computer";
+		String query = "SELECT * FROM computer ORDER BY name";
 
 		try {
 			stmt = this.connection.createStatement();
