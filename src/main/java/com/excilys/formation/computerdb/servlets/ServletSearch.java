@@ -79,5 +79,12 @@ public class ServletSearch extends HttpServlet {
 			int nb = Integer.parseInt(pageNb);
 			this.cspager.goToPageNumber(nb);
 		}
+		
+		String displayBy = null;
+		displayBy = request.getParameter("displayBy");
+		if (displayBy != null) {
+			int db = Integer.parseInt(displayBy);
+			this.cspager.setObjectsPerPages(db);
+		}
 	}
 }

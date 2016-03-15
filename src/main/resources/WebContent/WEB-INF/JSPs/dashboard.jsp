@@ -97,10 +97,18 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
+				<a href="<c:out value="${ currentPath }" />?displayBy=10" class="btn btn-default">10</a>
+				<a href="<c:out value="${ currentPath }" />?displayBy=15" class="btn btn-default">15</a>
+				<a href="<c:out value="${ currentPath }" />?displayBy=50" class="btn btn-default">50</a>
+				<a href="<c:out value="${ currentPath }" />?displayBy=100" class="btn btn-default">100</a>
+			</div>
+			<!-- 
+			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button type="button" class="btn btn-default">10</button>
 				<button type="button" class="btn btn-default">50</button>
 				<button type="button" class="btn btn-default">100</button>
 			</div>
+			-->
 		</div>
 	</footer>
 	<script src="<c:out value="${ pathSource }" />js/jquery.min.js"></script>

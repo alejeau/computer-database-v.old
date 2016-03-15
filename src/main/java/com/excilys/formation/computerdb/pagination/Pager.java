@@ -26,8 +26,10 @@ public abstract class Pager {
 	public int getNbEntries() {
 		return this.nbEntries;
 	}
+	
+	public abstract void setObjectsPerPages(int nb);
 
-	protected abstract boolean goToPageNumber(int page);
+	public abstract boolean goToPageNumber(int page);
 
 	/**
 	 * 

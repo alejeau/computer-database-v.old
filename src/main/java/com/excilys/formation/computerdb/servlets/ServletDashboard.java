@@ -68,5 +68,12 @@ public class ServletDashboard extends HttpServlet {
 			int nb = Integer.parseInt(pageNb);
 			this.pager.goToPageNumber(nb);
 		}
+		
+		String displayBy = null;
+		displayBy = request.getParameter("displayBy");
+		if (displayBy != null) {
+			int db = Integer.parseInt(displayBy);
+			this.pager.setObjectsPerPages(db);
+		}
 	}
 }

@@ -29,6 +29,10 @@
 		<url-pattern>/access/add</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>ServletEdit</servlet-name>
+		<url-pattern>/access/edit</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>ServletSearch</servlet-name>
 		<url-pattern>/access/search</url-pattern>
 	</servlet-mapping>

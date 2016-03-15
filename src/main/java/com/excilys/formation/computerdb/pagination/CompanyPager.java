@@ -47,14 +47,22 @@ public class CompanyPager extends Pager {
 		this.updateList();
 		return true;
 	}
+
+	@Override
+	public void setObjectsPerPages(int nb) {
+		this.objectsPerPages = nb;
+		this.list = new ArrayList<Company>(this.objectsPerPages);
+		this.nbEntries = services.getNbCompanies();
+		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
+		this.updateList();
+		
+	}
+	
+	
 	/**
 	 * Reloads the list with the current page from the database
 	 */
 	protected void updateList() {
 		this.list = services.getCompaniesFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
-	}
-
-	public void finalize() {
-		this.list = null;
 	}
 }
