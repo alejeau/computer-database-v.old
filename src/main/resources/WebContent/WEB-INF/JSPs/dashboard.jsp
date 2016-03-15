@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="<c:out value="${ pathSource }" />css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="<c:out value="${ pathSource }" />css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="<c:out value="${ pathSource }" />css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="access"> Application -
+			<a class="navbar-brand" href="<c:out value="${ pathDashboard }" />"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -23,7 +23,7 @@
 			<h1 id="homeTitle"><c:out value="${ nbComputers }" /> Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="<c:out value="${ pathSearchComputer }" />" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
@@ -86,13 +86,13 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
+				<li><a href="<c:out value="${ currentPath }" />?page=prev" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach var="i" begin="${ currentPageNumber }" end="${ currentPageNumber + 4 }" step="1" >
-				<li><a href="#"><c:out value="${ i }" /></a></li>
+				<c:forEach var="i" begin="${ currentPageNumber }" end="${ currentPageNumber + 4 < maxPageNumber ? currentPageNumber + 4 : maxPageNumber - 1 }" step="1" >
+				<li><a href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ i }" />"><c:out value="${ i + 1 }" /></a></li>
 				</c:forEach>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="<c:out value="${ currentPath }" />?page=next" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
@@ -103,8 +103,8 @@
 			</div>
 		</div>
 	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
+	<script src="<c:out value="${ pathSource }" />js/jquery.min.js"></script>
+	<script src="<c:out value="${ pathSource }" />js/bootstrap.min.js"></script>
+	<script src="<c:out value="${ pathSource }" />js/dashboard.js"></script>
 </body>
 </html>

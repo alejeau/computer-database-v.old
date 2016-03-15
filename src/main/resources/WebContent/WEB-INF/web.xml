@@ -15,6 +15,10 @@
 		<servlet-name>ServletEdit</servlet-name>
 		<servlet-class>com.excilys.formation.computerdb.servlets.ServletEditComputer</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>ServletSearch</servlet-name>
+		<servlet-class>com.excilys.formation.computerdb.servlets.ServletSearch</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>ServletDashboard</servlet-name>
@@ -25,8 +29,8 @@
 		<url-pattern>/access/add</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ServletEdit</servlet-name>
-		<url-pattern>/access/edit</url-pattern>
+		<servlet-name>ServletSearch</servlet-name>
+		<url-pattern>/access/search</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

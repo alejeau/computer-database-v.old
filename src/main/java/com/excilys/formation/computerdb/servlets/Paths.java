@@ -5,5 +5,9 @@ public class Paths {
 	public static final String PATH_COMPUTER_ADD 	= "/computer-database/access/add";
 	public static final String PATH_COMPUTER_EDIT 	= "/computer-database/access/edit";
 	public static final String PATH_COMPUTER_SEARCH = "/computer-database/access/search";
+	
+	public static final String PREVIOUS_PAGE = "prev";
+	public static final String NEXT_PAGE 	 = "next";
+	
 
 }
