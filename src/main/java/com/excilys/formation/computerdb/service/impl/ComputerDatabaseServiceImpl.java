@@ -1,7 +1,10 @@
 package com.excilys.formation.computerdb.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.formation.computerdb.dto.ComputerDTO;
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
@@ -73,10 +76,25 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public void createComputer(Computer c) {
 		computerDAOImpl.createComputer(c);
 	}
+	
+	@Override
+	public void createComputer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
+		Computer c = null;
+		c = new Computer(name, intro, outro, comp);
+		computerDAOImpl.createComputer(c);
+	}
 
 	@Override
-	public void updateComputer(Computer c) {
-		computerDAOImpl.updateComputer(c);
+	public void createComputer(long id, String name, String intro, String outro, Company comp) throws ComputerCreationException {
+		Computer c = null;
+		c = new Computer(id, name, intro, outro, comp);
+		computerDAOImpl.createComputer(c);
+	}
+
+	@Override
+	public void updateComputer(Computer computer) {
+		this.computerDAOImpl.updateComputer(computer);
+		
 	}
 
 	@Override
@@ -87,6 +105,21 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public void deleteComputer(String name) {
 		computerDAOImpl.deleteComputer(name);
+	}
+
+	@Override
+	public ComputerDTO computerToComputerDTO(Computer computer) {
+		return new ComputerDTO(computer);
+	}
+
+	@Override
+	public List<ComputerDTO> computersToComputersDTO(List<Computer> computers) {
+		List<ComputerDTO> dtoList = new ArrayList<>();
+		for (Computer comp : computers) {
+			dtoList.add(new ComputerDTO(comp));
+		}
+		
+		return dtoList;
 	}
 
 }

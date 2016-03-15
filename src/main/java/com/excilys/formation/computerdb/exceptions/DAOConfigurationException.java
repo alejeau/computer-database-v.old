@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.exception;
+package com.excilys.formation.computerdb.exceptions;
 
 public class DAOConfigurationException extends RuntimeException {
 	private static final long serialVersionUID = -5508554477303108122L;

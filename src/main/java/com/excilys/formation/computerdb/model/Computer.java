@@ -2,6 +2,8 @@ package com.excilys.formation.computerdb.model;
 
 import java.time.LocalDate;
 
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
+
 public class Computer implements Comparable<Computer> {
 
 	public static final String TIMESTAMP_ZERO = "0000-00-00";
@@ -50,9 +52,14 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
+	 * @throws ComputerCreationException 
 	 */
-	public Computer(String name, String intro, String outro, Company comp) {
+	public Computer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
+		if (name != null) {
 		this.name = name;
+		} else {
+			throw new ComputerCreationException("Can't create a Computer without name!");
+		}
 
 		if ((intro == null) || (intro.equals(""))) {
 			this.intro = null;

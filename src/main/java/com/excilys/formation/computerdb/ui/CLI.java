@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.CompanyPager;
@@ -271,7 +272,11 @@ public class CLI {
 			System.out.println("Error! No name given!");
 		} else {
 			Company cy = service.getCompanyByName(infos[3]);
-			service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
+			try {
+				service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
+			} catch (ComputerCreationException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 

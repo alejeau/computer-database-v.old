@@ -4,8 +4,8 @@
 	version="3.0">
 
 	<servlet>
-		<servlet-name>ServletMain</servlet-name>
-		<servlet-class>com.excilys.formation.computerdb.servlets.ServletMain</servlet-class>
+		<servlet-name>ServletDashboard</servlet-name>
+		<servlet-class>com.excilys.formation.computerdb.servlets.ServletDashboard</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>ServletAdd</servlet-name>
@@ -17,7 +17,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>ServletMain</servlet-name>
+		<servlet-name>ServletDashboard</servlet-name>
 		<url-pattern>/access</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>

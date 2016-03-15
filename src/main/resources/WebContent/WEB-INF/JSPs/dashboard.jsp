@@ -32,7 +32,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="access/add">Add
+					<a class="btn btn-success" id="addComputer" href="<c:out value="${ pathAddComputer }" />" >Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -70,8 +70,8 @@
 				<tbody id="results">
 				<c:forEach items="${ computers }" var="computer" >
 					<tr>
-						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick=""><c:out value="${ computer.name }" /></a></td>
+						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }" />"></td>
+						<td><a href="<c:out value="${ pathEditComputer }" />" onclick=""><c:out value="${ computer.name }" /></a></td>
 						<td><c:out value="${ computer.intro }" /></td>
 						<td><c:out value="${ computer.outro }" /></td>
 						<td><c:out value="${ computer.company }" /></td>

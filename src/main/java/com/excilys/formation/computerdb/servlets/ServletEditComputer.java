@@ -17,7 +17,6 @@ public class ServletEditComputer extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 613906361639763913L;
-	protected static final String VIEW = "/WEB-INF/static/views/editComputer.jsp";
 	protected ComputerDatabaseServiceImpl services;
 
 	public ServletEditComputer() {
@@ -25,9 +24,12 @@ public class ServletEditComputer extends HttpServlet {
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
+		request.setAttribute("pathAddComputer", Paths.PATH_ADD_COMPUTER);
+		request.setAttribute("pathEditComputer", Paths.PATH_EDIT_COMPUTER);
 		List<Company> companyList = services.getAllCompanies();
 		Collections.sort(companyList);
 		request.setAttribute("companies",  companyList);
-		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		this.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
 	}
 }

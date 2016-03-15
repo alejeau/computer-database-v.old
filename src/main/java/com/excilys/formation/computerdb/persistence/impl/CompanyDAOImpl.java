@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.excilys.formation.computerdb.exception.DAOException;
+import com.excilys.formation.computerdb.exceptions.DAOException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDAO;
 import com.excilys.formation.computerdb.persistence.ConnectionFactory;
