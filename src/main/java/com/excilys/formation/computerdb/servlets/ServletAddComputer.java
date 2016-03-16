@@ -43,7 +43,7 @@ public class ServletAddComputer extends HttpServlet {
 		setRequestAndResponse(request, response, null);
 		this.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
 	}
-	
+
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response, String[] errors)
 			throws ServletException, IOException {
 		List<Company> companyList = services.getAllCompanies();

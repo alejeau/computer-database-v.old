@@ -55,10 +55,8 @@ public class CompanyPager extends Pager {
 		this.nbEntries = services.getNbCompanies();
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		this.updateList();
-		
 	}
-	
-	
+
 	/**
 	 * Reloads the list with the current page from the database
 	 */

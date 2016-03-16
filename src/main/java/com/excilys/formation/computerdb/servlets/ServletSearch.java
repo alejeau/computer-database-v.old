@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerSearchPager;
@@ -41,7 +42,6 @@ public class ServletSearch extends HttpServlet {
 		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
 		request.setAttribute("pathSource", "../");
 		request.setAttribute("currentPath", Paths.PATH_COMPUTER_SEARCH);
-		
 	}
 
 	private void setRequestPath(HttpServletRequest request) {
@@ -57,8 +57,18 @@ public class ServletSearch extends HttpServlet {
 		search = request.getParameter("search");
 		if ((search != null) && !search.equals("")) {
 			try {
-				this.cspager.setSearch(search);
-				this.cspager.goToPageNumber(0);
+				try {
+					this.cspager.setSearch(search);
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+				try {
+					this.cspager.goToPageNumber(0);
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			} catch (PagerSearchException e) {
 				System.out.println(e.getMessage());
 			}
@@ -68,24 +78,44 @@ public class ServletSearch extends HttpServlet {
 		move = request.getParameter("page");
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
-				this.cspager.getPreviousPage();
+				try {
+					this.cspager.getPreviousPage();
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			} else if (move.equals(Paths.NEXT_PAGE)) {
-				this.cspager.getNextPage();
-			} 
+				try {
+					this.cspager.getNextPage();
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
 		}
 
 		String pageNb = null;
 		pageNb = request.getParameter("pageNb");
 		if (pageNb != null) {
 			int nb = Integer.parseInt(pageNb);
-			this.cspager.goToPageNumber(nb);
+			try {
+				this.cspager.goToPageNumber(nb);
+			} catch (ComputerCreationException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		
+
 		String displayBy = null;
 		displayBy = request.getParameter("displayBy");
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
-			this.cspager.setObjectsPerPages(db);
+			try {
+				this.cspager.setObjectsPerPages(db);
+			} catch (ComputerCreationException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }

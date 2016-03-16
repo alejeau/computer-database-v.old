@@ -268,7 +268,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		return company;
 	}
 
-	private static void close(ResultSet rs, PreparedStatement pstmt) { 
+	private static void close(ResultSet rs, PreparedStatement pstmt) {
 		if (rs != null) {
 			try {
 				rs.close();

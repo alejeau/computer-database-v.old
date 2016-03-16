@@ -13,18 +13,18 @@ public interface ComputerDatabaseService {
 	int getNbComputersNamed(String search);
 	Company getCompanyById(Long id);
 	Company getCompanyByName(String name);
-	Computer getComputerById(Long id);
-	Computer getComputerByName(String name);
+	Computer getComputerById(Long id) throws ComputerCreationException;
+	Computer getComputerByName(String name) throws ComputerCreationException;
 	List<Company> getAllCompanies();
 	List<Company> getCompaniesFromTo(int from, int nb);
-	List<Computer> getAllComputers();
-	List<Computer> getComputersFromTo(int from, int nb);
-	List<Computer> getComputersNamedFromTo(String search, int from, int to);
+	List<Computer> getAllComputers() throws ComputerCreationException;
+	List<Computer> getComputersFromTo(int from, int nb) throws ComputerCreationException;
+	List<Computer> getComputersNamedFromTo(String search, int from, int to) throws ComputerCreationException;
 	void createComputer(Computer c);
-	
+
 	/**
-	 * 
-	 * @param name the computer's name 
+	 *
+	 * @param name the computer's name
 	 * @param intro the date of introduction
 	 * @param outro the date of end
 	 * @param comp the computer's manufacturer

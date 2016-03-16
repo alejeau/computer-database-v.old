@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.exceptions.DAOException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -38,7 +39,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public
-	List<Computer> getNamedFromTo(String name, int from, int to) {
+	List<Computer> getNamedFromTo(String name, int from, int to) throws ComputerCreationException {
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer WHERE name LIKE ? ORDER BY name LIMIT ?, ?;";
 
@@ -115,7 +116,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getFromTo(int from, int to) {
+	public List<Computer> getFromTo(int from, int to) throws ComputerCreationException {
 		list = new ArrayList<>();
 
 		String query = "SELECT * FROM computer ORDER BY name LIMIT ?, ?";
@@ -228,9 +229,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		return nbEntries;
 	}
-	
+
 	@Override
-	public int getNbEntriesNamed(String name){
+	public int getNbEntriesNamed(String name) {
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_computers FROM computer WHERE name LIKE ?;";
 
@@ -278,7 +279,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getAll() {
+	public List<Computer> getAll() throws ComputerCreationException {
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer ORDER BY name";
 
@@ -334,7 +335,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public Computer getComputerById(long id) {
+	public Computer getComputerById(long id) throws ComputerCreationException {
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE id = ?";
 
@@ -393,7 +394,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		return computer;
 	}
 
-	public Computer getComputerByName(String name) {
+	public Computer getComputerByName(String name) throws ComputerCreationException {
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE name = ?";
 

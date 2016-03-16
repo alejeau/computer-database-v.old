@@ -11,22 +11,22 @@ public class ComputerDTO {
 	String intro;
 	String outro;
 	String company;
-	
-	public ComputerDTO(Computer c){
+
+	public ComputerDTO(Computer c) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
 		Company  cy = c.getCompany();
 		final String EMPTY = "";
 		long cid = c.getId();
-		
-		this.id 	 = 	(cid > -1l) ? (cid) : (-1l);
+
+		this.id 	 = 	(cid > -1L) ? (cid) : (-1L);
 		this.name 	 = 	c.getName();
 		this.intro   = 	(i  != null) ? (i.toString()) : (EMPTY);
 		this.outro   = 	(o  != null) ? (o.toString()) : (EMPTY);
 		this.company =  (cy != null) ? (cy.getName()) : (EMPTY);
 	}
-	
+
 	public ComputerDTO(long cid, String name, String intro, String outro, String company) {
-		this.id = (cid > -1l) ? (cid) : (-1l);
+		this.id = (cid > -1L) ? (cid) : (-1L);
 		this.name = name;
 		this.intro = intro;
 		this.outro = outro;

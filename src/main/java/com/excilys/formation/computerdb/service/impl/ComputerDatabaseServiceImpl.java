@@ -50,12 +50,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public Computer getComputerById(Long id) {
+	public Computer getComputerById(Long id) throws ComputerCreationException {
 		return computerDAOImpl.getComputerById(id);
 	}
 
 	@Override
-	public Computer getComputerByName(String name) {
+	public Computer getComputerByName(String name) throws ComputerCreationException {
 		return computerDAOImpl.getComputerByName(name);
 	}
 
@@ -65,7 +65,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Computer> getAllComputers() {
+	public List<Computer> getAllComputers() throws ComputerCreationException {
 		return computerDAOImpl.getAll();
 	}
 
@@ -75,12 +75,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Computer> getComputersFromTo(int from, int nb) {
+	public List<Computer> getComputersFromTo(int from, int nb) throws ComputerCreationException {
 		return computerDAOImpl.getFromTo(from, nb);
 	}
-	
+
 	@Override
-	public List<Computer> getComputersNamedFromTo(String search, int from, int to){
+	public List<Computer> getComputersNamedFromTo(String search, int from, int to) throws ComputerCreationException {
 		return computerDAOImpl.getNamedFromTo(search, from, to);
 	}
 
@@ -88,7 +88,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public void createComputer(Computer c) {
 		computerDAOImpl.createComputer(c);
 	}
-	
+
 	@Override
 	public void createComputer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
 		Computer c = null;
@@ -106,7 +106,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public void updateComputer(Computer computer) {
 		this.computerDAOImpl.updateComputer(computer);
-		
+
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		for (Computer comp : computers) {
 			dtoList.add(new ComputerDTO(comp));
 		}
-		
+
 		return dtoList;
 	}
 

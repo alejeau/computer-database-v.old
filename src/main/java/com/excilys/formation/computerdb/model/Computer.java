@@ -22,9 +22,14 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
+	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {
-		this.name = name;
+	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) throws ComputerCreationException {
+		if ((name == null) || (name.equals(""))) {
+			throw new ComputerCreationException("Can't create a Computer without name!");
+		} else {
+			this.name = name;
+		}
 		this.intro = intro;
 		this.outro = outro;
 		this.company = comp;
@@ -37,10 +42,15 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
+	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) {
+	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) throws ComputerCreationException {
 		this.id = id;
-		this.name = name;
+		if ((name == null) || (name.equals(""))) {
+			throw new ComputerCreationException("Can't create a Computer without name!");
+		} else {
+			this.name = name;
+		}
 		this.intro = intro;
 		this.outro = outro;
 		this.company = comp;
@@ -52,13 +62,13 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
-	 * @throws ComputerCreationException 
+	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
 	public Computer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
-		if (name != null) {
-		this.name = name;
-		} else {
+		if ((name == null) || (name.equals(""))) {
 			throw new ComputerCreationException("Can't create a Computer without name!");
+		} else {
+			this.name = name;
 		}
 
 		if ((intro == null) || (intro.equals(""))) {
@@ -85,10 +95,15 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
+	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(long id, String name, String intro, String outro, Company comp) {
+	public Computer(long id, String name, String intro, String outro, Company comp) throws ComputerCreationException {
 		this.id = id;
-		this.name = name;
+		if ((name == null) || (name.equals(""))) {
+			throw new ComputerCreationException("Can't create a Computer without name!");
+		} else {
+			this.name = name;
+		}
 
 		if (intro == null) {
 			this.intro = null;

@@ -26,13 +26,13 @@ public abstract class Pager {
 	public int getNbEntries() {
 		return this.nbEntries;
 	}
-	
-	public abstract void setObjectsPerPages(int nb);
 
-	public abstract boolean goToPageNumber(int page);
+	public abstract void setObjectsPerPages(int nb) throws Exception;
+
+	public abstract boolean goToPageNumber(int page) throws Exception;
 
 	/**
-	 * 
+	 * Returns true if there is a previous page available, false else
 	 * @return true if there is a previous page available, false else
 	 */
 	protected boolean prevPage() {
@@ -44,7 +44,7 @@ public abstract class Pager {
 	}
 
 	/**
-	 * 
+	 * Returns true if there is a next page available, false else
 	 * @return true if there is a next page available, false else
 	 */
 	protected boolean nextPage() {

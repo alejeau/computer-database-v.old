@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -20,7 +21,12 @@ public class ServletDashboard extends HttpServlet {
 	protected List<Computer> list = null;
 
 	public ServletDashboard() {
-		this.pager = new ComputerPager(10);
+		try {
+			this.pager = new ComputerPager(10);
+		} catch (ComputerCreationException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
@@ -57,7 +63,12 @@ public class ServletDashboard extends HttpServlet {
 		reset = request.getParameter("reset");
 		if (reset != null) {
 			if (reset.equals("true")) {
-				this.pager.goToPageNumber(0);
+				try {
+					this.pager.goToPageNumber(0);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -65,24 +76,44 @@ public class ServletDashboard extends HttpServlet {
 		move = request.getParameter("page");
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
-				this.pager.getPreviousPage();
+				try {
+					this.pager.getPreviousPage();
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			} else if (move.equals(Paths.NEXT_PAGE)) {
-				this.pager.getNextPage();
-			} 
+				try {
+					this.pager.getNextPage();
+				} catch (ComputerCreationException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
 		}
 
 		String pageNb = null;
 		pageNb = request.getParameter("pageNb");
 		if (pageNb != null) {
 			int nb = Integer.parseInt(pageNb);
-			this.pager.goToPageNumber(nb);
+			try {
+				this.pager.goToPageNumber(nb);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		String displayBy = null;
 		displayBy = request.getParameter("displayBy");
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
-			this.pager.setObjectsPerPages(db);
+			try {
+				this.pager.setObjectsPerPages(db);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }
