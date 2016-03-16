@@ -35,7 +35,6 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public int getNbComputersNamed(String search) {
 		int nb = computerDAOImpl.getNbEntriesNamed(search);
-		System.out.println("nb = " + nb);
 		return nb;
 	}
 
