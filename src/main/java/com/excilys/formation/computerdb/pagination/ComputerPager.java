@@ -18,12 +18,12 @@ public class ComputerPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 
 	public List<Computer> getPreviousPage() throws ComputerCreationException {
 		if (prevPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -34,7 +34,7 @@ public class ComputerPager extends Pager {
 
 	public List<Computer> getNextPage() throws ComputerCreationException {
 		if (nextPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -45,7 +45,7 @@ public class ComputerPager extends Pager {
 		}
 
 		this.currentPageNumber = page;
-		this.updateList();
+		this.update();
 		return true;
 	}
 
@@ -55,8 +55,7 @@ public class ComputerPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		revalidatePageNumber();
-		this.updateList();
+		this.update();
 	}
 
 	public void revalidatePageNumber() {
@@ -72,7 +71,10 @@ public class ComputerPager extends Pager {
 	 * Reloads the list with the current page from the database
 	 * @throws ComputerCreationException 
 	 */
-	protected void updateList() throws ComputerCreationException {
+	protected void update() throws ComputerCreationException {
+		this.nbEntries = services.getNbComputers();
+		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
+		revalidatePageNumber();
 		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 }

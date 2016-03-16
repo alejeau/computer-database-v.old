@@ -32,12 +32,12 @@ public class ComputerSearchPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 
 	public List<Computer> getPreviousPage() throws ComputerCreationException {
 		if (prevPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -48,7 +48,7 @@ public class ComputerSearchPager extends Pager {
 
 	public List<Computer> getNextPage() throws ComputerCreationException {
 		if (nextPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -59,7 +59,7 @@ public class ComputerSearchPager extends Pager {
 		}
 
 		this.currentPageNumber = page;
-		this.updateList();
+		this.update();
 		return true;
 	}
 
@@ -76,7 +76,7 @@ public class ComputerSearchPager extends Pager {
 		}
 		this.nbEntries = services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.update();
 	}
 
 	public void setObjectsPerPages(int obj) throws ComputerCreationException {
@@ -84,14 +84,26 @@ public class ComputerSearchPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.update();
+	}
+
+	public void revalidatePageNumber() {
+		if (this.currentPageNumber > this.maxPageNumber) {
+			this.currentPageNumber = this.maxPageNumber;
+		}
+		if (this.currentPageNumber < 0) {
+			this.currentPageNumber = 0;
+		}
 	}
 
 	/**
 	 * Reloads the list with the current page from the database
 	 * @throws ComputerCreationException 
 	 */
-	protected void updateList() throws ComputerCreationException {
+	protected void update() throws ComputerCreationException {
+		this.nbEntries = services.getNbComputers();
+		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
+		revalidatePageNumber();
 		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 }

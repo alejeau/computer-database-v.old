@@ -17,12 +17,12 @@ public class CompanyPager extends Pager {
 		this.list = new ArrayList<Company>(this.objectsPerPages);
 		this.nbEntries = services.getNbCompanies();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.list = services.getCompaniesFromTo(currentPageNumber * this.objectsPerPages, this.objectsPerPages);
 	}
 
 	public List<Company> getPreviousPage() {
 		if (prevPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -33,7 +33,7 @@ public class CompanyPager extends Pager {
 
 	public List<Company> getNextPage() {
 		if (nextPage()) {
-			this.updateList();
+			this.update();
 		}
 		return this.list;
 	}
@@ -44,7 +44,7 @@ public class CompanyPager extends Pager {
 		}
 
 		this.currentPageNumber = page;
-		this.updateList();
+		this.update();
 		return true;
 	}
 
@@ -54,13 +54,26 @@ public class CompanyPager extends Pager {
 		this.list = new ArrayList<Company>(this.objectsPerPages);
 		this.nbEntries = services.getNbCompanies();
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		this.updateList();
+		this.update();
 	}
 
+
+	public void revalidatePageNumber() {
+		if (this.currentPageNumber > this.maxPageNumber) {
+			this.currentPageNumber = this.maxPageNumber;
+		}
+		if (this.currentPageNumber < 0) {
+			this.currentPageNumber = 0;
+		}
+	}
+	
 	/**
 	 * Reloads the list with the current page from the database
 	 */
-	protected void updateList() {
+	protected void update() {
+		this.nbEntries = services.getNbCompanies();
+		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
+		revalidatePageNumber();
 		this.list = services.getCompaniesFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 }

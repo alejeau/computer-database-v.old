@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,22 +30,23 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name"
+                                	data-validation="length alphanumeric" data-validation-length="min1" >
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date"
+                                	data-validation="date" data-validation-format="yyyy-mm-dd" >
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date"
+                                	data-validation="date" data-validation-format="yyyy-mm-dd" >
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId" >
-                                	<c:forEach items="${ companies }" var="company" >
-                                	<option value="<c:out value="${ company.id }" />" ><c:out value="${ company.name }" /></option>" />
-                                	</c:forEach>
+                                	<cst:companies/>
                                 </select>
                             </div>            
                         </fieldset>
@@ -58,5 +60,8 @@
             </div>
         </div>
     </section>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/validator.min.js"></script>
+	<script> $.validate(); </script>
 </body>
 </html>

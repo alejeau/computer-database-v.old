@@ -88,11 +88,17 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
+				<li><a href="<c:out value="${ currentPath }" />?pageNb=0" aria-label="Previous"> <span
+						aria-hidden="true">First</span>
+				</a></li>
 				<li><a href="<c:out value="${ currentPath }" />?page=prev" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<cst:pager/>
 				<li><a href="<c:out value="${ currentPath }" />?page=next" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
+				<li><a href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ maxPageNumber }" />" aria-label="Previous"> <span
+						aria-hidden="true">Last</span>
 				</a></li>
 			</ul>
 
