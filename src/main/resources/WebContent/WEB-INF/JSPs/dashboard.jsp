@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<c:out value="${ pathDashboard }" />"> Application -
+			<a class="navbar-brand" href="<c:out value="${ pathDashboardReset }" />"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -21,6 +22,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle"><c:out value="${ nbComputers }" /> Computers found</h1>
+			
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="<c:out value="${ pathSearchComputer }" />" method="GET" class="form-inline">
@@ -89,9 +91,7 @@
 				<li><a href="<c:out value="${ currentPath }" />?page=prev" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach var="i" begin="${ currentPageNumber }" end="${ currentPageNumber + 4 < maxPageNumber ? currentPageNumber + 4 : maxPageNumber - 1 }" step="1" >
-				<li><a href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ i }" />"><c:out value="${ i + 1 }" /></a></li>
-				</c:forEach>
+				<cst:pager/>
 				<li><a href="<c:out value="${ currentPath }" />?page=next" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

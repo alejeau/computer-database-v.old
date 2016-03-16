@@ -9,5 +9,5 @@ public class Paths {
 	public static final String PREVIOUS_PAGE = "prev";
 	public static final String NEXT_PAGE 	 = "next";
 	
-
+	public static final String PATH_DASHBOARD_RESET = "/computer-database/access?reset=true";
 }

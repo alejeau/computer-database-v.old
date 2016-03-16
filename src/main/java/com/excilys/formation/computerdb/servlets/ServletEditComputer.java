@@ -27,6 +27,7 @@ public class ServletEditComputer extends HttpServlet {
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
+		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 		List<Company> companyList = services.getAllCompanies();
 		Collections.sort(companyList);
 		request.setAttribute("companies",  companyList);

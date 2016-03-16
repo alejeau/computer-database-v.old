@@ -49,9 +49,18 @@ public class ServletDashboard extends HttpServlet {
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
 		request.setAttribute("pathSearchComputer", Paths.PATH_COMPUTER_SEARCH);
+		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 	}
 
 	private void process(HttpServletRequest request) {
+		String reset = null;
+		reset = request.getParameter("reset");
+		if (reset != null) {
+			if (reset.equals("true")) {
+				this.pager.goToPageNumber(0);
+			}
+		}
+
 		String move = null;
 		move = request.getParameter("page");
 		if (move != null) {
@@ -68,7 +77,7 @@ public class ServletDashboard extends HttpServlet {
 			int nb = Integer.parseInt(pageNb);
 			this.pager.goToPageNumber(nb);
 		}
-		
+
 		String displayBy = null;
 		displayBy = request.getParameter("displayBy");
 		if (displayBy != null) {

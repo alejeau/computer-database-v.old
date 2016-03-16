@@ -54,10 +54,19 @@ public class ComputerPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
+		revalidatePageNumber();
 		this.updateList();
-		
 	}
-
+	
+	public void revalidatePageNumber(){
+		if (this.currentPageNumber > this.maxPageNumber) {
+			this.currentPageNumber = this.maxPageNumber;
+		}
+		if (this.currentPageNumber < 0) {
+			this.currentPageNumber = 0;
+		}
+	}
+	
 	/**
 	 * Reloads the list with the current page from the database
 	 */

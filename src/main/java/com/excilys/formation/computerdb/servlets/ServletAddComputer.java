@@ -52,6 +52,7 @@ public class ServletAddComputer extends HttpServlet {
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
+		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 
 		request.setAttribute("companies",  companyList);
 	}
