@@ -101,8 +101,8 @@ public class ComputerSearchPager extends Pager {
 	 * @throws ComputerCreationException 
 	 */
 	protected void update() throws ComputerCreationException {
-		this.nbEntries = services.getNbComputers();
-		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
+		this.nbEntries = this.services.getNbComputersNamed(this.search);
+		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		revalidatePageNumber();
 		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
 	}

@@ -68,13 +68,10 @@
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
-		</dependency>
-		<dependency>
+		</dependency><dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
-			<type>jar</type>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

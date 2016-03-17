@@ -31,7 +31,7 @@ public class ServletSearch extends HttpServlet {
 		process(request);
 
 		setRequestAndResponse(request, response);
-		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
+		this.getServletContext().getRequestDispatcher(Views.SEARCH_COMPUTER).forward(request, response);
 	}
 
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
