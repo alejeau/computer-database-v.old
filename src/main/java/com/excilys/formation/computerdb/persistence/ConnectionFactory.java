@@ -7,15 +7,15 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-
+import com.excilys.formation.computerdb.exceptions.connections.ConnectionErrorException;
 import java.sql.Connection;
 
 public class ConnectionFactory {
-	private static final String FILE_PROPERTIES				= "dao.properties";
-	private static final String PROPERTY_URL				= "url";
-	private static final String PROPERTY_DRIVER				= "driver";
-	private static final String PROPERTY_NOM_UTILISATEUR	= "utilisateur";
-	private static final String PROPERTY_MOT_DE_PASSE		= "password";
+	private static final String FILE_PROPERTIES		= "dao.properties";
+	private static final String PROPERTY_URL		= "url";
+	private static final String PROPERTY_DRIVER		= "driver";
+	private static final String PROPERTY_USERNAME	= "utilisateur";
+	private static final String PROPERTY_PASSWORD	= "password";
 
 	protected static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
 
@@ -23,7 +23,7 @@ public class ConnectionFactory {
 
 	private static Properties properties;
 
-	protected Connection connec = null;
+//	protected Connection connec = null;
 
 	/**
 	 * Returns a Singleton of ConnectionFactory
@@ -53,11 +53,7 @@ public class ConnectionFactory {
 			LOGGER.error("Failed to load driver!");
 		}
 
-		try {
-			connec = DriverManager.getConnection(properties.getProperty(PROPERTY_URL), properties.getProperty(PROPERTY_NOM_UTILISATEUR), properties.getProperty(PROPERTY_MOT_DE_PASSE));
-		} catch (SQLException e) {
-			LOGGER.error("Failed to retrieve Connection!");
-		}
+		
 	}
 
 	/**
@@ -65,17 +61,25 @@ public class ConnectionFactory {
 	 * @return the connection initialized by the constructor
 	 */
 	public Connection getConnection() {
+		Connection connec = null;
+		try {
+			connec = DriverManager.getConnection(properties.getProperty(PROPERTY_URL), properties.getProperty(PROPERTY_USERNAME), properties.getProperty(PROPERTY_PASSWORD));
+		} catch (SQLException e) {
+			LOGGER.fatal("Failed to retrieve Connection!");
+			LOGGER.fatal("Connection infos:\turl: " + properties.getProperty(PROPERTY_URL) + "\tusername: " + properties.getProperty(PROPERTY_USERNAME));
+			throw new ConnectionErrorException("Failed to retrieve Connection!");
+		}
 		return connec;
 	}
 
 	/**
 	 * Closes the connection initialized by the constructor
 	 */
-	public void close() {
-		try {
-			this.connec.close();
-		} catch (SQLException e) {
-			LOGGER.error("Couldn't close the connection!");
-		}
-	}
+//	public void close() {
+//		try {
+//			this.connec.close();
+//		} catch (SQLException e) {
+//			LOGGER.error("Couldn't close the connection!");
+//		}
+//	}
 }

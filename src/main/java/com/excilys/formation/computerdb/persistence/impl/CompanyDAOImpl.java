@@ -11,35 +11,36 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.excilys.formation.computerdb.exceptions.DAOException;
+import com.excilys.formation.computerdb.mapper.CompanyMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDAO;
 import com.excilys.formation.computerdb.persistence.ConnectionFactory;
-import com.excilys.formation.computerdb.persistence.mapper.CompanyMapper;
 
 public enum CompanyDAOImpl implements CompanyDAO {
 	INSTANCE;
 
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(CompanyDAOImpl.class);
-	protected Connection connection = null;
 	protected Statement stmt = null;
 	protected PreparedStatement pstmt = null;
 	protected ResultSet rs = null;
 	protected List<Company> list = null;
 
 	private CompanyDAOImpl() {
-		this.connectionFactory = ConnectionFactory.getInstance();
-		this.connection = this.connectionFactory.getConnection();
+		connectionFactory = ConnectionFactory.getInstance();
 		this.list = new ArrayList<Company>();
 	}
 
 	@Override
 	public List<Company> getFromTo(int from, int to) {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+	
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name LIMIT ?, ? ";
 
 		try {
-			pstmt = this.connection.prepareStatement(query);
+			pstmt = connection.prepareStatement(query);
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
 			this.closeAll();
@@ -84,11 +85,14 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public int getNbEntries() {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_companys FROM company";
 
 		try {
-			stmt = this.connection.createStatement();
+			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
 			this.closeAll();
@@ -125,11 +129,14 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public List<Company> getAll() {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name";
 
 		try {
-			stmt = this.connection.createStatement();
+			stmt = connection.createStatement();
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
 			this.closeAll();
@@ -191,6 +198,9 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	}
 
 	public Company getCompanyById(long id) {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		
 		pstmt = null;
 		rs = null;
 		Company company = null;
@@ -199,19 +209,19 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		try {
 			pstmt = connection.prepareStatement(query);
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setLong(1, id);
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 
@@ -221,15 +231,18 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 
-		CompanyDAOImpl.close(rs, pstmt);
+		CompanyDAOImpl.close(rs, pstmt, connection);
 		return company;
 	}
 
 	public Company getCompanyByName(String name) {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		
 		pstmt = null;
 		rs = null;
 		Company company = null;
@@ -238,19 +251,19 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		try {
 			pstmt = connection.prepareStatement(query);
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			pstmt.setString(1, name);
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 		try {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 
@@ -260,15 +273,15 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt);
+			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
 
-		CompanyDAOImpl.close(rs, pstmt);
+		CompanyDAOImpl.close(rs, pstmt, connection);
 		return company;
 	}
 
-	private static void close(ResultSet rs, PreparedStatement pstmt) {
+	private static void close(ResultSet rs, PreparedStatement pstmt, Connection connec) {
 		if (rs != null) {
 			try {
 				rs.close();
@@ -285,6 +298,13 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				e.printStackTrace();
 			}
 			pstmt = null;
+		}
+		if (connec != null){
+			try {
+				connec.close();
+			} catch (SQLException e) {
+			}
+			connec = null;
 		}
 	}
 }

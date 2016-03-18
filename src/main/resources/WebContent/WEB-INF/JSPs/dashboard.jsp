@@ -14,7 +14,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="<c:out value="${ pathDashboardReset }" />"> Application -
+			<a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -86,27 +86,18 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
+<c:set var="PAGE_NB " value="?pageNb=" />
+<c:set var="DISPLAY_BY " value="?displayBy=" />
 		<div class="container text-center">
 			<ul class="pagination">
-<%-- 				<li><a href="<c:out value="${ currentPath }" />?pageNb=0" aria-label="Previous"> <span --%>
-<!-- 						aria-hidden="true">First</span> -->
-<!-- 				</a></li> -->
-<%-- 				<li><a href="<c:out value="${ currentPath }" />?page=prev" aria-label="Previous"> <span --%>
-<!-- 						aria-hidden="true">&laquo;</span> -->
-<!-- 				</a></li> -->
 				<cst:pager/>
-<%-- 				<li><a href="<c:out value="${ currentPath }" />?page=next" aria-label="Next"> <span aria-hidden="true">&raquo;</span> --%>
-<!-- 				</a></li> -->
-<%-- 				<li><a href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ maxPageNumber-1 }" />" aria-label="Previous"> <span --%>
-<!-- 						aria-hidden="true">Last</span> -->
-<!-- 				</a></li> -->
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="<c:out value="${ currentPath }" />?displayBy=10" class="btn btn-default">10</a>
-				<a href="<c:out value="${ currentPath }" />?displayBy=15" class="btn btn-default">15</a>
-				<a href="<c:out value="${ currentPath }" />?displayBy=50" class="btn btn-default">50</a>
-				<a href="<c:out value="${ currentPath }" />?displayBy=100" class="btn btn-default">100</a>
+				<a href="<cst:links linkTo="display" displayBy="10" />" class="btn btn-default">10</a>
+				<a href="<cst:links linkTo="display" displayBy="15" />" class="btn btn-default">15</a>
+				<a href="<cst:links linkTo="display" displayBy="50" />" class="btn btn-default">50</a>
+				<a href="<cst:links linkTo="display" displayBy="100" />" class="btn btn-default">100</a>
 			</div>
 			<!-- 
 			<div class="btn-group btn-group-sm pull-right" role="group">

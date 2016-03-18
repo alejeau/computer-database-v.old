@@ -13,7 +13,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<c:out value="${ pathDashboardReset }" />"> Application - Computer Database </a>
+            <a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application - Computer Database </a>
         </div>
     </header>
 	

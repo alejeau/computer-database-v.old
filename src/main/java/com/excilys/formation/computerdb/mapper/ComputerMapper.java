@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.persistence.mapper;
+package com.excilys.formation.computerdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
