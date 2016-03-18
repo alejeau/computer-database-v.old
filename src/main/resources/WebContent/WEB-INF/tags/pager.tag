@@ -1,5 +1,6 @@
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 
 <c:set var="range" scope="page"
 	value="${ maxPageNumber-1 < 7 ? maxPageNumber-1 : 7 }" />
@@ -28,15 +29,14 @@
 </a></li>
 
 <c:forEach var="i" begin="${ start }" end="${ stop }" step="1">
-	<li><a
-		href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ i }" />"><c:out
+	<li><a href='<cst:links linkTo="page" pageNb="${ i }"/>'><c:out
 				value="${ i + 1 }" /></a></li>
 </c:forEach>
 
-<li><a href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ currentPageNumber+1 > maxPageNumber-1 ? maxPageNumber-1 : currentPageNumber+1 }" />"
+<li><a href='<cst:links linkTo="page" pageNb="${ currentPageNumber+1 > maxPageNumber-1 ? maxPageNumber-1 : currentPageNumber+1 }" />'
 	aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 </a></li>
 <li><a
-	href="<c:out value="${ currentPath }" />?pageNb=<c:out value="${ maxPageNumber-1 < 0 ? stop : maxPageNumber-1 }" />"
+	href='<cst:links linkTo="page" pageNb="${ maxPageNumber-1 < 0 ? stop : maxPageNumber-1 }" />'
 	aria-label="Previous"> <span aria-hidden="true">Last</span>
 </a></li>
