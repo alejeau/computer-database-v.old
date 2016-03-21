@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
+import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -43,7 +44,7 @@ public class ServletDashboard extends HttpServlet {
 		request.setAttribute("nbComputers", this.pager.getNbEntries());
 		request.setAttribute("currentPageNumber", this.pager.getCurrentPageNumber());
 		request.setAttribute("maxPageNumber", this.pager.getMaxPageNumber());
-		request.setAttribute("computers", this.services.computersToComputersDTO(this.pager.getCurrentPage()));
+		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.pager.getCurrentPage()));
 		request.setAttribute("pathSource", "");
 		request.setAttribute("currentPath", Paths.PATH_DASHBOARD);
 

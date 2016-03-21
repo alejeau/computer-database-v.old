@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
+import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerSearchPager;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -38,7 +39,7 @@ public class ServletSearch extends HttpServlet {
 		setRequestPath(request);
 		request.setAttribute("nbComputers", this.cspager.getNbEntries());
 		request.setAttribute("currentPageNumber", this.cspager.getCurrentPageNumber());
-		request.setAttribute("computers", this.services.computersToComputersDTO(this.cspager.getCurrentPage()));
+		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.cspager.getCurrentPage()));
 		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
 		request.setAttribute("pathSource", "../");
 		request.setAttribute("currentPath", Paths.PATH_COMPUTER_SEARCH);

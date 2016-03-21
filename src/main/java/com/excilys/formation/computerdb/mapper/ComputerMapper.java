@@ -15,6 +15,12 @@ public class ComputerMapper {
 		String intro = rs.getString("introduced");
 		String outro = rs.getString("discontinued");
 
-		return new Computer(id, name, intro, outro, company);
+		return new Computer.ComputerBuilder()
+			.id(id)
+			.name(name)
+			.intro(intro)
+			.outro(outro)
+			.company(company)
+			.build();
 	}
 }

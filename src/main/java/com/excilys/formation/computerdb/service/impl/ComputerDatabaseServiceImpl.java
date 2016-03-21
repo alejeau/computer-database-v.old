@@ -2,9 +2,7 @@ package com.excilys.formation.computerdb.service.impl;
 
 import java.util.List;
 
-import com.excilys.formation.computerdb.dto.ComputerDTO;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
-import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
@@ -116,16 +114,6 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public void deleteComputer(String name) {
 		computerDAOImpl.deleteComputer(name);
-	}
-
-	@Override
-	public ComputerDTO computerToComputerDTO(Computer computer) {
-		return ComputerDTOMapper.map(computer);
-	}
-
-	@Override
-	public List<ComputerDTO> computersToComputersDTO(List<Computer> computers) {
-		return ComputerDTOMapper.map(computers);
 	}
 
 }

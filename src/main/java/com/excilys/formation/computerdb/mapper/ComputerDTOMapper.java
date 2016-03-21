@@ -7,12 +7,12 @@ import com.excilys.formation.computerdb.dto.ComputerDTO;
 import com.excilys.formation.computerdb.model.Computer;
 
 public class ComputerDTOMapper {
-	
-	public static ComputerDTO map(Computer c){
+
+	public static ComputerDTO toDTO(Computer c) {
 		return new ComputerDTO(c);
 	}
-	
-	public static List<ComputerDTO> map(List<Computer> computers){
+
+	public static List<ComputerDTO> toDTO(List<Computer> computers) {
 		List<ComputerDTO> list = new ArrayList<>();
 		for (Computer c : computers) {
 			list.add(new ComputerDTO(c));

@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.exceptions.DAOException;
 import com.excilys.formation.computerdb.mapper.ComputerMapper;
@@ -20,7 +21,7 @@ import com.excilys.formation.computerdb.persistence.ConnectionFactory;
 
 public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
-	//*
+	
 	private ConnectionFactory connectionFactory;
 	protected final Logger logger = Logger.getLogger(ComputerDAOImpl.class);
 	protected CompanyDAOImpl companyDAOImpl;
@@ -495,8 +496,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			nbRow = -1;
 		} else {
 			String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
-			String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Computer.TIMESTAMP_ZERO;
-			String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Computer.TIMESTAMP_ZERO;
+			String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
+			String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
 			boolean hasACompany = computer.hasACompany();
 			if (hasACompany) {
 				query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
@@ -559,8 +560,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		
 		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?";
 		int champs = 4;
-		String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Computer.TIMESTAMP_ZERO;
-		String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Computer.TIMESTAMP_ZERO;
+		String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
+		String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
 		boolean hasACompany = computer.hasACompany();
 		if (hasACompany) {
 			query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
