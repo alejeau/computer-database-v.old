@@ -2,17 +2,15 @@ package com.excilys.formation.computerdb.model;
 
 import java.time.LocalDate;
 
+import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 
 public class Computer implements Comparable<Computer> {
-
-	public static final String TIMESTAMP_ZERO = "0000-00-00";
-
-	String name = null;
-	LocalDate intro = null;
-	LocalDate outro = null;
-	Company company = null;
-	long id = -1;
+	protected long id = -1;
+	protected String name = null;
+	protected LocalDate intro = null;
+	protected LocalDate outro = null;
+	protected Company company = null;
 
 	public Computer() { }
 
@@ -182,6 +180,14 @@ public class Computer implements Comparable<Computer> {
 		return id;
 	}
 
+	public static String getTimestampZero() {
+		return Time.TIMESTAMP_ZERO;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	/**
 	 * Checks whether the computer is associated to manufacturing company
 	 * @return true if there is a manufacturing company associated to the computer, false else
@@ -264,5 +270,71 @@ public class Computer implements Comparable<Computer> {
 	@Override
 	public int compareTo(Computer c) {
 		return this.compareTo(c);
+	}
+
+	public static class ComputerBuilder {
+		private long nestedId = -1;
+		private String nestedName = null;
+		private LocalDate nestedIntro = null;
+		private LocalDate nestedOutro = null;
+		private Company nestedCompany = null;
+
+
+		public ComputerBuilder() {}
+
+		public ComputerBuilder(final long cId, final String cName) {
+			this.nestedId = cId;
+			this.nestedName = cName;
+		}
+
+		public ComputerBuilder id(final long cId) {
+			this.nestedId = cId;
+			return this;
+		}
+
+		public ComputerBuilder name(String cName) {
+			this.nestedName = cName;
+			return this;
+		}
+
+		public ComputerBuilder intro(LocalDate cIntro) {
+			this.nestedIntro = cIntro;
+			return this;
+		}
+
+		public ComputerBuilder intro(String cIntro) {
+			if ((cIntro == null) || (cIntro.equals(""))) {
+				this.nestedIntro = null;
+			} else {
+				cIntro = cIntro.split(" ")[0];
+				this.nestedIntro = LocalDate.parse(cIntro);
+			}
+			return this;
+		}
+		
+		public ComputerBuilder outro(LocalDate cOutro) {
+			this.nestedOutro = cOutro;
+			return this;
+		}
+		
+		public ComputerBuilder outro(String cOutro) {
+			if ((cOutro == null) || (cOutro.equals(""))) {
+				this.nestedOutro = null;
+			} else {
+				cOutro = cOutro.split(" ")[0];
+				this.nestedOutro = LocalDate.parse(cOutro);
+			}
+			return this;
+		}
+
+		public ComputerBuilder company(Company cCompany) {
+			this.nestedCompany = cCompany;
+			return this;
+		}
+
+		public Computer build() throws ComputerCreationException {
+			return new Computer(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
+		}
+
 	}
 }
