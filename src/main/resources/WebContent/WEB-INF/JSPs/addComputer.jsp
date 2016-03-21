@@ -25,17 +25,17 @@
                     <form action="<c:out value="${ pathAddComputer }" />" method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName">Computer name</label> <cst:errors error="name" />
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name"
                                 	data-validation="length alphanumeric" data-validation-length="min1" >
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced">Introduced date</label> <cst:errors error="intro" /> <cst:errors error="dates" />
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date"
                                 	data-validation="date" data-validation-format="yyyy-mm-dd" >
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued">Discontinued date</label> <cst:errors error="outro" /> <cst:errors error="dates" />
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date"
                                 	data-validation="date" data-validation-format="yyyy-mm-dd" >
                             </div>

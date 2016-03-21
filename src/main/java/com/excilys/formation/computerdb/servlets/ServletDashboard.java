@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
@@ -22,12 +21,7 @@ public class ServletDashboard extends HttpServlet {
 	protected List<Computer> list = null;
 
 	public ServletDashboard() {
-		try {
-			this.pager = new ComputerPager(10);
-		} catch (ComputerCreationException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+		this.pager = new ComputerPager(10);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
@@ -77,19 +71,9 @@ public class ServletDashboard extends HttpServlet {
 		move = request.getParameter("page");
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
-				try {
-					this.pager.getPreviousPage();
-				} catch (ComputerCreationException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-				}
+				this.pager.getPreviousPage();
 			} else if (move.equals(Paths.NEXT_PAGE)) {
-				try {
-					this.pager.getNextPage();
-				} catch (ComputerCreationException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-				}
+				this.pager.getNextPage();
 			}
 		}
 

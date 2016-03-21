@@ -17,12 +17,11 @@ import com.excilys.formation.computerdb.mapper.ComputerMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDAO;
-import com.excilys.formation.computerdb.persistence.ConnectionFactory;
 
 public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
 	
-	private ConnectionFactory connectionFactory;
+	private ConnectionFactoryImpl connectionFactory;
 	protected final Logger logger = Logger.getLogger(ComputerDAOImpl.class);
 	protected CompanyDAOImpl companyDAOImpl;
 	protected Connection connection = null;
@@ -32,15 +31,67 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	protected List<Computer> list = null;
 
 	private ComputerDAOImpl() {
-		this.connectionFactory = ConnectionFactory.getInstance();
+		this.connectionFactory = ConnectionFactoryImpl.getInstance();
 		this.connection = this.connectionFactory.getConnection();
 		this.companyDAOImpl = CompanyDAOImpl.INSTANCE;
 		this.list = new ArrayList<Computer>();
 	}
+	
+	@Override
+	public
+	boolean exists(String name){
+		boolean exists = false;
+		this.connection = this.connectionFactory.getConnection();
+		
+		list = new ArrayList<>();
+		String query = "SELECT * FROM computer WHERE name=? ORDER BY name;";
+
+		try {
+			pstmt = this.connection.prepareStatement(query);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(1, name);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			rs = pstmt.executeQuery();
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		try {
+			if (rs.next()) {
+				exists = true;
+			}
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			this.closeAll();
+			throw new DAOException(e.getMessage());
+		}
+
+		this.closeAll();
+
+		return exists;
+	}
+	
+	@Override
+	public
+	boolean exists(Computer computer) {
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public
-	List<Computer> getNamedFromTo(String name, int from, int to) throws ComputerCreationException {
+	List<Computer> getNamedFromTo(String name, int offset, int limit) {
 		this.connection = this.connectionFactory.getConnection();
 		
 		list = new ArrayList<>();
@@ -61,14 +112,14 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(2, from);
+			pstmt.setInt(2, offset);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(3, to);
+			pstmt.setInt(3, limit);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			this.closeAll();
@@ -98,6 +149,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 				c = this.companyDAOImpl.getCompanyById(id);
 				try {
+					this.closeAll();
 					computer = ComputerMapper.map(rs, c);
 				} catch (SQLException e) {
 					logger.error(e.getMessage());
@@ -119,7 +171,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getFromTo(int from, int to) throws ComputerCreationException {
+	public List<Computer> getFromTo(int offset, int limit) {
 		this.connection = this.connectionFactory.getConnection();
 		
 		list = new ArrayList<>();
@@ -134,14 +186,14 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(1, from);
+			pstmt.setInt(1, offset);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			this.closeAll();
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(2, to);
+			pstmt.setInt(2, limit);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			this.closeAll();
@@ -288,7 +340,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public List<Computer> getAll() throws ComputerCreationException {
+	public List<Computer> getAll() {
 		this.connection = this.connectionFactory.getConnection();
 		
 		list = new ArrayList<>();
@@ -346,7 +398,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public Computer getComputerById(long id) throws ComputerCreationException {
+	public Computer getComputerById(long id) {
 		this.connection = this.connectionFactory.getConnection();
 		
 		Computer computer = null;
@@ -407,7 +459,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		return computer;
 	}
 
-	public Computer getComputerByName(String name) throws ComputerCreationException {
+	public Computer getComputerByName(String name) {
 		this.connection = this.connectionFactory.getConnection();
 		
 		Computer computer = null;
@@ -479,18 +531,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		this.connection = this.connectionFactory.getConnection();
 		
 		int nbRow = 0;
-		Computer tmp = null;
-		
-		try {
-			tmp = getComputerByName(computer.getName());
-		} catch (ComputerCreationException e) {
-			logger.error("createComuter error: Couldn't check whether the computer already was in the database!");
-			String error = "createComputer error: Computer is null:"; 
-			if (computer != null) {
-				error = "createComputer error: Computer: " + computer.toString();
-			}
-			logger.error(error);
-		}
+		Computer tmp = null;		
+		tmp = getComputerByName(computer.getName());
 		
 		if (tmp == null){
 			nbRow = -1;

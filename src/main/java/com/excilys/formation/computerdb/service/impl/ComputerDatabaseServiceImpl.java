@@ -1,13 +1,15 @@
 package com.excilys.formation.computerdb.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
+import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
+import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	INSTANCE;
@@ -18,6 +20,10 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
 		companyDAOImpl 	= CompanyDAOImpl.INSTANCE;
+	}
+	@Override
+	public boolean alreadyExists(String name){
+		return this.computerDAOImpl.exists(name);
 	}
 
 	@Override
@@ -47,12 +53,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public Computer getComputerById(Long id) throws ComputerCreationException {
+	public Computer getComputerById(Long id) {
 		return computerDAOImpl.getComputerById(id);
 	}
 
 	@Override
-	public Computer getComputerByName(String name) throws ComputerCreationException {
+	public Computer getComputerByName(String name) {
 		return computerDAOImpl.getComputerByName(name);
 	}
 
@@ -62,7 +68,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Computer> getAllComputers() throws ComputerCreationException {
+	public List<Computer> getAllComputers() {
 		return computerDAOImpl.getAll();
 	}
 
@@ -72,38 +78,69 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Computer> getComputersFromTo(int from, int nb) throws ComputerCreationException {
+	public List<Computer> getComputersFromTo(int from, int nb) {
 		return computerDAOImpl.getFromTo(from, nb);
 	}
 
 	@Override
-	public List<Computer> getComputersNamedFromTo(String search, int from, int to) throws ComputerCreationException {
+	public List<Computer> getComputersNamedFromTo(String search, int from, int to) {
 		return computerDAOImpl.getNamedFromTo(search, from, to);
 	}
 
 	@Override
-	public void createComputer(Computer c) {
+	public List<Problem> createComputer(Computer c) {
+		List<Problem> listErrors = new ArrayList<>();
+
 		computerDAOImpl.createComputer(c);
+		return listErrors;
 	}
 
 	@Override
-	public void createComputer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
-		Computer c = null;
-		c = new Computer(name, intro, outro, comp);
-		computerDAOImpl.createComputer(c);
+	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
+		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
+
+		if (listErrors == null){
+			Computer c = null;
+			c = new Computer.Builder()
+					.name(name)
+					.intro(intro)
+					.outro(outro)
+					.company(comp)
+					.build();
+			computerDAOImpl.createComputer(c);
+		}
+		
+		return listErrors;
 	}
 
 	@Override
-	public void createComputer(long id, String name, String intro, String outro, Company comp) throws ComputerCreationException {
-		Computer c = null;
-		c = new Computer(id, name, intro, outro, comp);
-		computerDAOImpl.createComputer(c);
+	public List<Problem> createComputer(long id, String name, String intro, String outro, Company comp) {
+		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
+
+		if (listErrors == null){
+			Computer c = null;
+			c = new Computer.Builder()
+					.id(id)
+					.name(name)
+					.intro(intro)
+					.outro(outro)
+					.company(comp)
+					.build();
+			computerDAOImpl.createComputer(c);
+		}
+		
+		return listErrors;
 	}
 
 	@Override
-	public void updateComputer(Computer computer) {
-		this.computerDAOImpl.updateComputer(computer);
-
+	public List<Problem> updateComputer(Computer computer) {
+		List<Problem> listErrors = ComputerValidator.validateComputer(computer.getName(), computer.getIntro().toString(), computer.getOutro().toString());
+		
+		if (listErrors == null) {
+			this.computerDAOImpl.updateComputer(computer);
+		}
+			
+		return listErrors;
 	}
 
 	@Override

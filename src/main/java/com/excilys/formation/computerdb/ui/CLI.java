@@ -3,7 +3,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.CompanyPager;
@@ -34,11 +33,8 @@ public class CLI {
 		this.sc = sc;
 		this.service = ComputerDatabaseServiceImpl.INSTANCE;
 		this.companyPager = new CompanyPager(10);
-		try {
-			this.computerPager = new ComputerPager(10);
-		} catch (ComputerCreationException e) {
-			System.out.println(e.getMessage());
-		}
+		this.computerPager = new ComputerPager(10);
+		
 	}
 
 	/**
@@ -130,11 +126,7 @@ public class CLI {
 	 */
 	protected void displayAllComputers() {
 		List<Computer> comps = null;
-		try {
-			comps = service.getAllComputers();
-		} catch (ComputerCreationException e) {
-			System.out.println(e.getMessage());
-		}
+		comps = service.getAllComputers();
 		System.out.println("comps.size() : " + comps.size());
 		for (Computer comp : comps) {
 			System.out.println(comp.toString());
@@ -162,26 +154,14 @@ public class CLI {
 					this.computerList = this.computerPager.getCurrentPage();
 					break;
 				case 2: // Previous page
-					try {
-						this.computerList = this.computerPager.getPreviousPage();
-					} catch (ComputerCreationException e) {
-						System.out.println(e.getMessage());
-					}
+					this.computerList = this.computerPager.getPreviousPage();
 					break;
 				case 3: // Next page
-					try {
-						this.computerList = this.computerPager.getNextPage();
-					} catch (ComputerCreationException e) {
-						System.out.println(e.getMessage());
-					}
+					this.computerList = this.computerPager.getNextPage();
 					break;
 				case 4:
 					int pageNumber = getPageNumber();
-					try {
-						this.computerPager.goToPageNumber(pageNumber);
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
+					this.computerPager.goToPageNumber(pageNumber);
 					this.computerList = this.computerPager.getCurrentPage();
 					break;
 				default:
@@ -280,11 +260,7 @@ public class CLI {
 		name = this.sc.nextLine();
 		System.out.println();
 		Computer c = null;
-		try {
-			c = service.getComputerByName(name);
-		} catch (ComputerCreationException e) {
-			System.out.println(e.getMessage());
-		}
+		c = service.getComputerByName(name);
 		if (c != null) {
 			System.out.println(c.toString());
 		} else {
@@ -302,11 +278,7 @@ public class CLI {
 			System.out.println("Error! No name given!");
 		} else {
 			Company cy = service.getCompanyByName(infos[3]);
-			try {
-				service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
-			} catch (ComputerCreationException e) {
-				System.out.println(e.getMessage());
-			}
+			service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
 		}
 	}
 
@@ -321,11 +293,7 @@ public class CLI {
 		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
 		} else {
-			try {
-				computer = this.service.getComputerByName(infos[0]);
-			} catch (ComputerCreationException e) {
-				System.out.println(e.getMessage());
-			}
+			computer = this.service.getComputerByName(infos[0]);
 			computer.setIntro(infos[1]);
 			computer.setOutro(infos[2]);
 			Company cy = this.service.getCompanyByName(infos[3]);

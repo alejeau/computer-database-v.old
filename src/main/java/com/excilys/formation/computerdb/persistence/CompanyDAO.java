@@ -6,6 +6,6 @@ import com.excilys.formation.computerdb.model.Company;
 
 public interface CompanyDAO {
 	public List<Company> getAll();
-	public List<Company> getFromTo(int from, int nb);
+	public List<Company> getFromTo(int offset, int limit);
 	public int getNbEntries();
 }

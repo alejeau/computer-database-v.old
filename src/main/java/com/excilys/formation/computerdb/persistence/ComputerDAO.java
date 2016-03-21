@@ -2,19 +2,20 @@ package com.excilys.formation.computerdb.persistence;
 
 import java.util.List;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Computer;
 
 public interface ComputerDAO {
-	List<Computer> getAll() throws ComputerCreationException;
-	List<Computer> getNamedFromTo(String name, int from, int to) throws ComputerCreationException;
-	List<Computer> getFromTo(int from, int to) throws ComputerCreationException;
+	boolean exists(String name);
+	boolean exists(Computer computer);
+	List<Computer> getAll() ;
+	List<Computer> getFromTo(int offset, int limit) ;
+	List<Computer> getNamedFromTo(String name, int offset, int limit) ;
 	int getNbEntries();
 	int getNbEntriesNamed(String name);
 	int createComputer(Computer computer);
 	void updateComputer(Computer computer);
-	Computer getComputerById(long id) throws ComputerCreationException;
-	Computer getComputerByName(String name) throws ComputerCreationException;
+	Computer getComputerById(long id) ;
+	Computer getComputerByName(String name) ;
 	void deleteComputer(long id);
 	void deleteComputer(String name);
 }

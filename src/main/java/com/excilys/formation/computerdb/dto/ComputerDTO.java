@@ -6,11 +6,11 @@ import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 
 public class ComputerDTO {
-	long   id = -1;
-	String name;
-	String intro;
-	String outro;
-	String company;
+	protected long   id = -1;
+	protected String name;
+	protected String intro;
+	protected String outro;
+	protected String company;
 
 	public ComputerDTO(Computer c) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
@@ -71,5 +71,50 @@ public class ComputerDTO {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	
+	public static class ComputerDTOBuilder {
+		private long nestedId = -1;
+		private String nestedName = null;
+		private String nestedIntro = null;
+		private String nestedOutro = null;
+		private String nestedCompany = null;
+
+
+		public ComputerDTOBuilder() {}
+
+		public ComputerDTOBuilder(final long id, final String name) {
+			this.nestedId = id;
+			this.nestedName = name;
+		}
+
+		public ComputerDTOBuilder id(final long id) {
+			this.nestedId = id;
+			return this;
+		}
+
+		public ComputerDTOBuilder name(final String name) {
+			this.nestedName = name;
+			return this;
+		}
+
+		public ComputerDTOBuilder intro(final String intro) {
+			this.nestedIntro = intro;
+			return this;
+		}
+		
+		public ComputerDTOBuilder outro(final String outro) {
+			this.nestedOutro = outro;
+			return this;
+		}
+
+		public ComputerDTOBuilder company(final String company) {
+			this.nestedCompany = company;
+			return this;
+		}
+
+		public ComputerDTO build() {
+			return new ComputerDTO(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
+		}
 	}
 }

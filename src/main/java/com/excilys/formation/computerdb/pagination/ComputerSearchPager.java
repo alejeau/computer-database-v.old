@@ -3,7 +3,6 @@ package com.excilys.formation.computerdb.pagination;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -20,7 +19,7 @@ public class ComputerSearchPager extends Pager {
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
-	public ComputerSearchPager(String search, int objectsPerPages) throws PagerSearchException, ComputerCreationException {
+	public ComputerSearchPager(String search, int objectsPerPages) throws PagerSearchException {
 		super(objectsPerPages);
 		if (search != null) {
 			this.search = search;
@@ -35,7 +34,7 @@ public class ComputerSearchPager extends Pager {
 		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 
-	public List<Computer> getPreviousPage() throws ComputerCreationException {
+	public List<Computer> getPreviousPage() {
 		if (prevPage()) {
 			this.update();
 		}
@@ -46,14 +45,14 @@ public class ComputerSearchPager extends Pager {
 		return this.list;
 	}
 
-	public List<Computer> getNextPage() throws ComputerCreationException {
+	public List<Computer> getNextPage() {
 		if (nextPage()) {
 			this.update();
 		}
 		return this.list;
 	}
 
-	public boolean goToPageNumber(int page) throws ComputerCreationException {
+	public boolean goToPageNumber(int page) {
 		if (page > this.maxPageNumber) {
 			return false;
 		}
@@ -68,7 +67,7 @@ public class ComputerSearchPager extends Pager {
 		return this.nbEntries;
 	}
 
-	public void setSearch(String search) throws PagerSearchException, ComputerCreationException {
+	public void setSearch(String search) throws PagerSearchException {
 		if (search != null) {
 			this.search = search;
 		} else {
@@ -79,7 +78,7 @@ public class ComputerSearchPager extends Pager {
 		this.update();
 	}
 
-	public void setObjectsPerPages(int obj) throws ComputerCreationException {
+	public void setObjectsPerPages(int obj) {
 		this.objectsPerPages = obj;
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputersNamed(this.search);
@@ -98,9 +97,9 @@ public class ComputerSearchPager extends Pager {
 
 	/**
 	 * Reloads the list with the current page from the database
-	 * @throws ComputerCreationException 
+	 * @
 	 */
-	protected void update() throws ComputerCreationException {
+	protected void update() {
 		this.nbEntries = this.services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		revalidatePageNumber();

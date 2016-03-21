@@ -24,7 +24,7 @@ public class CompanyMapper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new Company.CompanyBuilder()
+		return new Company.Builder()
 				.id(id)
 				.name(name)
 				.build();

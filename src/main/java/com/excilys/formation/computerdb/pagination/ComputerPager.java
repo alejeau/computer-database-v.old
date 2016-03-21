@@ -3,7 +3,6 @@ package com.excilys.formation.computerdb.pagination;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
@@ -12,7 +11,7 @@ public class ComputerPager extends Pager {
 	protected List<Computer> list = null;
 	protected ComputerDatabaseServiceImpl services = null;
 
-	public ComputerPager(int objectsPerPages) throws ComputerCreationException {
+	public ComputerPager(int objectsPerPages) {
 		super(objectsPerPages);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
@@ -21,7 +20,7 @@ public class ComputerPager extends Pager {
 		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
 	}
 
-	public List<Computer> getPreviousPage() throws ComputerCreationException {
+	public List<Computer> getPreviousPage() {
 		if (prevPage()) {
 			this.update();
 		}
@@ -32,14 +31,14 @@ public class ComputerPager extends Pager {
 		return this.list;
 	}
 
-	public List<Computer> getNextPage() throws ComputerCreationException {
+	public List<Computer> getNextPage() {
 		if (nextPage()) {
 			this.update();
 		}
 		return this.list;
 	}
 
-	public boolean goToPageNumber(int page) throws Exception {
+	public boolean goToPageNumber(int page) {
 		if (page > this.maxPageNumber) {
 			return false;
 		}
@@ -50,7 +49,7 @@ public class ComputerPager extends Pager {
 	}
 
 	@Override
-	public void setObjectsPerPages(int nb) throws Exception {
+	public void setObjectsPerPages(int nb) {
 		this.objectsPerPages = nb;
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputers();
@@ -69,9 +68,9 @@ public class ComputerPager extends Pager {
 
 	/**
 	 * Reloads the list with the current page from the database
-	 * @throws ComputerCreationException 
+	 * @
 	 */
-	protected void update() throws ComputerCreationException {
+	protected void update() {
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
 		revalidatePageNumber();

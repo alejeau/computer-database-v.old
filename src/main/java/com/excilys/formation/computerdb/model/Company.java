@@ -82,25 +82,25 @@ public class Company implements Comparable<Company> {
 		return name;
 	}
 	
-	public static class CompanyBuilder {
+	public static class Builder {
 		private long nestedId = -1;
 		private String nestedName = null;
 		
-		public CompanyBuilder(final long cId, final String cName) {
-			this.nestedId = cId;
-			this.nestedName = cName;
+		public Builder(final long id, final String name) {
+			this.nestedId = id;
+			this.nestedName = name;
 		}
 		
-		public CompanyBuilder() {
+		public Builder() {
 		}
 
-		public CompanyBuilder id(final long cId) {
-			this.nestedId = cId;
+		public Builder id(final long id) {
+			this.nestedId = id;
 			return this;
 		}
 		
-		public CompanyBuilder name(String cName) {
-			this.nestedName = cName;
+		public Builder name(String name) {
+			this.nestedName = name;
 			return this;
 		}
 		

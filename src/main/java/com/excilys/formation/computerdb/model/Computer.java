@@ -3,7 +3,6 @@ package com.excilys.formation.computerdb.model;
 import java.time.LocalDate;
 
 import com.excilys.formation.computerdb.constants.Time;
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 
 public class Computer implements Comparable<Computer> {
 	protected long id = -1;
@@ -20,14 +19,9 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
-	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) throws ComputerCreationException {
-		if ((name == null) || (name.equals(""))) {
-			throw new ComputerCreationException("Can't create a Computer without name!");
-		} else {
-			this.name = name;
-		}
+	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {	
+		this.name = name;
 		this.intro = intro;
 		this.outro = outro;
 		this.company = comp;
@@ -40,15 +34,10 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
-	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) throws ComputerCreationException {
+	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.id = id;
-		if ((name == null) || (name.equals(""))) {
-			throw new ComputerCreationException("Can't create a Computer without name!");
-		} else {
-			this.name = name;
-		}
+		this.name = name;
 		this.intro = intro;
 		this.outro = outro;
 		this.company = comp;
@@ -60,14 +49,9 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
-	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(String name, String intro, String outro, Company comp) throws ComputerCreationException {
-		if ((name == null) || (name.equals(""))) {
-			throw new ComputerCreationException("Can't create a Computer without name!");
-		} else {
+	public Computer(String name, String intro, String outro, Company comp) {
 			this.name = name;
-		}
 
 		if ((intro == null) || (intro.equals(""))) {
 			this.intro = null;
@@ -93,15 +77,10 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
-	 * @throws ComputerCreationException if the name of the computer is null or empty
 	 */
-	public Computer(long id, String name, String intro, String outro, Company comp) throws ComputerCreationException {
+	public Computer(long id, String name, String intro, String outro, Company comp) {
 		this.id = id;
-		if ((name == null) || (name.equals(""))) {
-			throw new ComputerCreationException("Can't create a Computer without name!");
-		} else {
-			this.name = name;
-		}
+		this.name = name;
 
 		if (intro == null) {
 			this.intro = null;
@@ -272,7 +251,7 @@ public class Computer implements Comparable<Computer> {
 		return this.compareTo(c);
 	}
 
-	public static class ComputerBuilder {
+	public static class Builder {
 		private long nestedId = -1;
 		private String nestedName = null;
 		private LocalDate nestedIntro = null;
@@ -280,61 +259,55 @@ public class Computer implements Comparable<Computer> {
 		private Company nestedCompany = null;
 
 
-		public ComputerBuilder() {}
+		public Builder() {}
 
-		public ComputerBuilder(final long cId, final String cName) {
-			this.nestedId = cId;
-			this.nestedName = cName;
-		}
-
-		public ComputerBuilder id(final long cId) {
-			this.nestedId = cId;
+		public Builder id(final long id) {
+			this.nestedId = id;
 			return this;
 		}
 
-		public ComputerBuilder name(String cName) {
-			this.nestedName = cName;
+		public Builder name(final String name) {
+			this.nestedName = name;
 			return this;
 		}
 
-		public ComputerBuilder intro(LocalDate cIntro) {
-			this.nestedIntro = cIntro;
+		public Builder intro(final LocalDate intro) {
+			this.nestedIntro = intro;
 			return this;
 		}
 
-		public ComputerBuilder intro(String cIntro) {
-			if ((cIntro == null) || (cIntro.equals(""))) {
+		public Builder intro(final String intro) {
+			if ((intro == null) || (intro.equals(""))) {
 				this.nestedIntro = null;
 			} else {
-				cIntro = cIntro.split(" ")[0];
-				this.nestedIntro = LocalDate.parse(cIntro);
+				String tmp = intro.split(" ")[0];
+				this.nestedIntro = LocalDate.parse(tmp);
 			}
 			return this;
 		}
 		
-		public ComputerBuilder outro(LocalDate cOutro) {
-			this.nestedOutro = cOutro;
+		public Builder outro(final LocalDate outro) {
+			this.nestedOutro = outro;
 			return this;
 		}
 		
-		public ComputerBuilder outro(String cOutro) {
-			if ((cOutro == null) || (cOutro.equals(""))) {
+		public Builder outro(final String outro) {
+			if ((outro == null) || (outro.equals(""))) {
 				this.nestedOutro = null;
 			} else {
-				cOutro = cOutro.split(" ")[0];
-				this.nestedOutro = LocalDate.parse(cOutro);
+				String tmp = outro.split(" ")[0];
+				this.nestedOutro = LocalDate.parse(tmp);
 			}
 			return this;
 		}
 
-		public ComputerBuilder company(Company cCompany) {
-			this.nestedCompany = cCompany;
+		public Builder company(final Company company) {
+			this.nestedCompany = company;
 			return this;
 		}
 
-		public Computer build() throws ComputerCreationException {
+		public Computer build() {
 			return new Computer(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
 		}
-
 	}
 }

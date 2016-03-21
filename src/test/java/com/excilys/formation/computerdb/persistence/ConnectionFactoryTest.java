@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.formation.computerdb.persistence.ConnectionFactory;
+import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 
 public class ConnectionFactoryTest {
 
@@ -23,16 +23,16 @@ public class ConnectionFactoryTest {
 	
 	@Test
 	public void factory(){
-		ConnectionFactory cf = null;
-		cf = ConnectionFactory.getInstance();
+		ConnectionFactoryImpl cf = null;
+		cf = ConnectionFactoryImpl.getInstance();
 		assertNotEquals(null, cf);
 	}
 	
 	@Test
 	public void getConnection(){
 		Connection connec = null;
-		ConnectionFactory cf = null;
-		cf = ConnectionFactory.getInstance();
+		ConnectionFactoryImpl cf = null;
+		cf = ConnectionFactoryImpl.getInstance();
 		connec = cf.getConnection();
 		assertNotEquals(null, connec);
 	}
@@ -40,8 +40,8 @@ public class ConnectionFactoryTest {
 	@Test
 	public void getValidConnection(){
 		Connection connec = null;
-		ConnectionFactory cf = null;
-		cf = ConnectionFactory.getInstance();
+		ConnectionFactoryImpl cf = null;
+		cf = ConnectionFactoryImpl.getInstance();
 		connec = cf.getConnection();
 		boolean isValid = false;
 		try {
