@@ -9,6 +9,7 @@
 <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="../css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="../css/errors.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -25,19 +26,19 @@
                     <form action="<c:out value="${ pathAddComputer }" />" method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label> <cst:errors error="name" />
+                                <label for="computerName">Computer name</label> <span class="errmsg"><cst:errors error="name" /></span>
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name"
-                                	data-validation="length alphanumeric" data-validation-length="min1" >
+                                	data-validation="custom" data-validation-regexp="^[\wÀ-ÿ]+[\wÀ-ÿ_\-' \+]*$" >
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label> <cst:errors error="intro" /> <cst:errors error="dates" />
+                                <label for="introduced">Introduced date</label> <span class="errmsg"><cst:errors error="intro" /> <cst:errors error="dates" /></span>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date"
-                                	data-validation="date" data-validation-format="yyyy-mm-dd" >
+                                	data-validation="custom" data-validation-regexp="^^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})-(1[0-2]{1}|0[1-9]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$|^$" >
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label> <cst:errors error="outro" /> <cst:errors error="dates" />
+                                <label for="discontinued">Discontinued date</label> <span class="errmsg"><cst:errors error="outro" /> <cst:errors error="dates" /></span>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date"
-                                	data-validation="date" data-validation-format="yyyy-mm-dd" >
+                                	data-validation="custom" data-validation-regexp="^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})-(1[0-2]{1}|0[1-9]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$|^$" >
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>

@@ -34,7 +34,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public List<Company> getFromTo(int offset, int limit) {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
-	
+
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name LIMIT ?, ? ";
 
@@ -86,7 +86,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public int getNbEntries() {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
-		
+
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_companys FROM company";
 
@@ -130,7 +130,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public List<Company> getAll() {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
-		
+
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name";
 
@@ -160,16 +160,20 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
 		}
-		
+
 		CompanyDAOImpl.close(rs, pstmt, connection);
 
 		return list;
 	}
 
 	public Company getCompanyById(long id) {
+		if (id == -1l) {
+			return null;
+		}
+
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
-		
+
 		pstmt = null;
 		rs = null;
 		Company company = null;
@@ -211,7 +215,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	public Company getCompanyByName(String name) {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
-		
+
 		pstmt = null;
 		rs = null;
 		Company company = null;

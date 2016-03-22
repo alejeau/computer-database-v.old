@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.formation.computerdb.dto.ProblemDTO;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -32,19 +33,15 @@ public class ServletAddComputer extends HttpServlet {
 		String name	 = request.getParameter("computerName");
 		String intro = request.getParameter("introduced");
 		String outro = request.getParameter("discontinued");
-		
+
 		listPbs = ComputerValidator.validateComputer(name, intro, outro);
-		
+
 		if (listPbs == null) {
-			long   cid 	 = Long.valueOf(request.getParameter("companyId"));
+			long   cid = Long.valueOf(request.getParameter("companyId"));
 			Company cy = this.services.getCompanyById(cid);
 			this.services.createComputer(name, intro, outro, cy);
-		} else {
-			System.out.println("There were errors!");
-			for (Problem p : listPbs)
-				System.out.println(p);
 		}
-		
+
 		setRequestAndResponse(request, response, listPbs);
 		this.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
 	}
@@ -58,8 +55,8 @@ public class ServletAddComputer extends HttpServlet {
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
 		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
-		
-		request.setAttribute("listErrors", listPbs);
+
+		request.setAttribute("mapErrors", ProblemDTO.toHashMap(listPbs));
 
 		request.setAttribute("companies",  companyList);
 	}

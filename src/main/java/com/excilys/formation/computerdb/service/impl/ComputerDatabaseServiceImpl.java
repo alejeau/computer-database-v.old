@@ -97,8 +97,9 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
-		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
-
+		List<Problem> listErrors = null;
+		listErrors = ComputerValidator.validateComputer(name, intro, outro);
+		System.out.println("listErrors = " + listErrors);
 		if (listErrors == null){
 			Computer c = null;
 			c = new Computer.Builder()
@@ -107,6 +108,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 					.outro(outro)
 					.company(comp)
 					.build();
+			System.out.println("c = " + c);
 			computerDAOImpl.createComputer(c);
 		}
 		
