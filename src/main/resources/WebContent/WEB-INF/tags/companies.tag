@@ -4,5 +4,5 @@
 
 <option value="-1" />Choose a company</option>
 <c:forEach items="${ companies }" var="company">
-	<option value="<c:out value="${ company.id }" />"><c:out value="${ company.name }" /></option>" />
+	<option value="<c:out value="${ company.id }" />" <c:out value="${ (selectedId == company.id) ? 'selected' : '' }" /> ><c:out value="${ company.name }" /></option>
 </c:forEach>

@@ -46,7 +46,7 @@ public class ComputerValidatorTest {
 	
 	@Test
 	public void validateDates1(){
-		Problem pb = null;
+		List<Problem> pb = null;
 		pb = ComputerValidator.validateDates("", "");
 //		System.out.println(pb);
 		assertNull(pb);
@@ -54,7 +54,7 @@ public class ComputerValidatorTest {
 	
 	@Test
 	public void validateDates2(){
-		Problem pb = null;
+		List<Problem> pb = null;
 		pb = ComputerValidator.validateDates(null, "");
 //		System.out.println(pb);
 		assertNull(pb);
@@ -62,7 +62,7 @@ public class ComputerValidatorTest {
 	
 	@Test
 	public void validateDates3(){
-		Problem pb = null;
+		List<Problem> pb = null;
 		pb = ComputerValidator.validateDates("", null);
 //		System.out.println(pb);
 		assertNull(pb);
@@ -70,7 +70,7 @@ public class ComputerValidatorTest {
 	
 	@Test
 	public void validateDates4(){
-		Problem pb = null;
+		List<Problem> pb = null;
 		pb = ComputerValidator.validateDates(null, null);
 //		System.out.println(pb);
 		assertNull(pb);

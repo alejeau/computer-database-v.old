@@ -294,11 +294,12 @@ public class CLI {
 			System.out.println("Error! No name given!");
 		} else {
 			computer = this.service.getComputerByName(infos[0]);
+			String oldName = computer.getName();
 			computer.setIntro(infos[1]);
 			computer.setOutro(infos[2]);
 			Company cy = this.service.getCompanyByName(infos[3]);
 			computer.setCompany(cy);
-			this.service.updateComputer(computer);
+			this.service.updateComputer(computer, oldName);
 		}
 	}
 

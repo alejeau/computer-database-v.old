@@ -17,8 +17,7 @@
 <c:set var="stop" scope="page" value="${ tmp <= 0 ? range-1 : stop }" />
 
 <c:set var="tmp" scope="page" value="${ stop }" />
-<c:set var="stop" scope="page"
-	value="${ tmp > maxPageNumber - 1 ? maxPageNumber  - 1 : stop }" />
+<c:set var="stop" scope="page" value="${ tmp > maxPageNumber - 1 ? maxPageNumber  - 1 : stop }" />
 <c:set var="stop" scope="page" value="${ stop < 0 ? 0 : stop }" />
 
 <li><a href="<c:out value="${ currentPath }" />?pageNb=0"

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.errors.Problem;
+import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class ComputerValidator {
@@ -30,7 +31,22 @@ public class ComputerValidator {
 		}
 		return pb;
 	}
-	
+
+	public static Problem validateNewName(String newName, String oldName) {
+		String field = FIELD_NAME;
+		Problem pb = null;
+		if (newName == null) {
+			pb = new Problem(field, "can't be null!");
+		} else if (newName.equals("")) {
+			pb = new Problem(field, "can't be empty!");
+		} else if (newName.startsWith(" ")) {
+			pb = new Problem(field, "can't start with space (' ') char !");
+		} else if (!newName.equals(oldName) && services.alreadyExists(newName)) {
+			pb = new Problem(field, "A computer with this name (\"" + newName + "\") already exists!");
+		}
+		return pb;
+	}
+
 	private static boolean canBeCompared(String date) {
 		if ((date != null) && (!date.equals(""))) {
 			return true;
@@ -87,22 +103,93 @@ public class ComputerValidator {
 	 * @param outro date of end of life  of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
+	public static List<Problem> validateComputer(Computer c){
+		List<Problem> listErrors = null;
+		String i = null, o = null;
+		
+		if (c.getIntro() != null) {
+			i = c.getIntro().toString();
+		}
+
+		if (c.getOutro() != null) {
+			o = c.getOutro().toString();
+		}
+		
+		listErrors = addToList(listErrors, ComputerValidator.validateName(c.getName()));
+		listErrors = addToList(listErrors, ComputerValidator.validateDates(i, o));
+
+		return listErrors;
+	}
+
+	/**
+	 * Checks whether data parameters are valid or not
+	 * @param name name of the computer
+	 * @param intro date of introduction of the computer
+	 * @param outro date of end of life  of the computer
+	 * @return null if everything went well, a list of Problem else
+	 */
 	public static List<Problem> validateComputer(String name, String intro, String outro){
 		List<Problem> listErrors = null;
 
 		listErrors = addToList(listErrors, ComputerValidator.validateName(name));
+
+		listErrors = addToList(listErrors, ComputerValidator.validateDates(intro, outro));
+
+		return listErrors;
+	}
+
+	/**
+	 * Checks whether data parameters are valid or not
+	 * @param newName new name of the computer
+	 * @param oldName old name of the computer
+	 * @param intro date of introduction of the computer
+	 * @param outro date of end of life  of the computer
+	 * @return null if everything went well, a list of Problem else
+	 */
+	public static List<Problem> validateNewComputer(Computer c, String oldName){
+		List<Problem> listErrors = null;
+		String i = null, o = null;
 		
+		if (c.getIntro() != null) {
+			i = c.getIntro().toString();
+		}
+
+		if (c.getOutro() != null) {
+			o = c.getOutro().toString();
+		}
+		
+
+		listErrors = addToList(listErrors, ComputerValidator.validateNewName(c.getName(), oldName));
+
+		listErrors = addToList(listErrors, ComputerValidator.validateDates(i, o));
+
+		return listErrors;
+	}
+
+	/**
+	 * Checks whether data parameters are valid or not
+	 * @param newName new name of the computer
+	 * @param oldName old name of the computer
+	 * @param intro date of introduction of the computer
+	 * @param outro date of end of life  of the computer
+	 * @return null if everything went well, a list of Problem else
+	 */
+	public static List<Problem> validateNewComputer(String newName, String oldName, String intro, String outro){
+		List<Problem> listErrors = null;
+
+		listErrors = addToList(listErrors, ComputerValidator.validateNewName(newName, oldName));
+
 		listErrors = addToList(listErrors, ComputerValidator.validateDates(intro, outro));
 
 		return listErrors;
 	}
 
 	protected static List<Problem> addToList(List<Problem> list, Problem p){
-		if (list == null) {
-			list = new ArrayList<Problem>();
-		}
-		
 		if (p != null) {
+			if (list == null) {
+				list = new ArrayList<Problem>();
+			}
+
 			list.add(p);
 		}
 
@@ -110,11 +197,11 @@ public class ComputerValidator {
 	}
 
 	protected static List<Problem> addToList(List<Problem> list, List<Problem> listToAdd){
-		if (list == null) {
-			list = new ArrayList<Problem>();
-		}
-
 		if (listToAdd != null) {
+			if (list == null) {
+				list = new ArrayList<Problem>();
+			}
+
 			list.addAll(listToAdd);
 		}
 

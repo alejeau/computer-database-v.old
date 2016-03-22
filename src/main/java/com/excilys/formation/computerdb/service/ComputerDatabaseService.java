@@ -40,7 +40,7 @@ public interface ComputerDatabaseService {
 	 * @param comp the computer's manufacturer
 	 */
 	List<Problem> createComputer(long id, String name, String intro, String outro, Company comp);
-	List<Problem> updateComputer(Computer c);
+	List<Problem> updateComputer(Computer c, String oldName);
 	void deleteComputer(Long id);
 	void deleteComputer(String name);
 }

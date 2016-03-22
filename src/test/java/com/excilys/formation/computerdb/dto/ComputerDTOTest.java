@@ -1,10 +1,12 @@
 package com.excilys.formation.computerdb.dto;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.excilys.formation.computerdb.model.Computer;
 
 public class ComputerDTOTest {
 
@@ -18,7 +20,18 @@ public class ComputerDTOTest {
 
 	@Test
 	public void ComputerDTO() {
-//		ComputerDTO c = new ComputerDTO();
+		String nil = null;
+		Computer c = new Computer(0, "n", nil, nil, null);
+		ComputerDTO cdto = new ComputerDTO(c);
+		assertNotNull(cdto);
+	}
+
+	@Test
+	public void ComputerDTOCompany() {
+		String nil = null;
+		Computer c = new Computer(0, "n", nil, nil, null);
+		ComputerDTO cdto = new ComputerDTO(c);
+		assertNotNull(cdto);
 	}
 
 }

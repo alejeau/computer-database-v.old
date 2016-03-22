@@ -111,7 +111,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			System.out.println("c = " + c);
 			computerDAOImpl.createComputer(c);
 		}
-		
+
 		return listErrors;
 	}
 
@@ -130,18 +130,18 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 					.build();
 			computerDAOImpl.createComputer(c);
 		}
-		
+
 		return listErrors;
 	}
 
 	@Override
-	public List<Problem> updateComputer(Computer computer) {
-		List<Problem> listErrors = ComputerValidator.validateComputer(computer.getName(), computer.getIntro().toString(), computer.getOutro().toString());
-		
+	public List<Problem> updateComputer(Computer computer, String oldName) {
+		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
+
 		if (listErrors == null) {
 			this.computerDAOImpl.updateComputer(computer);
 		}
-			
+
 		return listErrors;
 	}
 
