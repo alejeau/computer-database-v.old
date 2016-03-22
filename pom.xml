@@ -93,6 +93,13 @@
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${bonecp.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
 		
 <!-- 		Provided -->
 		<dependency>
@@ -116,6 +123,7 @@
 		
 <!-- 		runtime -->
 		<mysql.version>5.1.38</mysql.version>
+		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		
 <!-- 		provided -->
 		<javax.version>7.0</javax.version>
