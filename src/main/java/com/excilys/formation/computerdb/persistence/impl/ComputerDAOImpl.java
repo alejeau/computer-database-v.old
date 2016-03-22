@@ -97,7 +97,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		connection = this.connectionFactory.getConnection();
 		
 		list = new ArrayList<>();
-		String query = "SELECT * FROM computer WHERE name LIKE ? ORDER BY name LIMIT ?, ?;";
+//		String query = "SELECT * FROM computer WHERE name LIKE ? ORDER BY name LIMIT ?, ?;";
+		String query = "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?) ORDER BY name LIMIT ? OFFSET ?";
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -114,7 +115,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			throw new DAOException(e.getMessage());
 		}
 		try {
-			pstmt.setInt(2, offset);
+			pstmt.setString(2, "%" + name + "%");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
@@ -122,6 +123,13 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		try {
 			pstmt.setInt(3, limit);
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			close(rs, null, pstmt, connection, logger);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setInt(4, offset);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
@@ -306,7 +314,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		connection = this.connectionFactory.getConnection();
 		
 		int nbEntries = 0;
-		String query = "SELECT COUNT(*) as nb_computers FROM computer WHERE name LIKE ?;";
+//		String query = "SELECT COUNT(*) as nb_computers FROM computer WHERE name LIKE ?;";
+		String query = "SELECT count(*) as nb_computers FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -317,6 +326,13 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 		try {
 			pstmt.setString(1, "%" + name + "%");
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			close(rs, null, pstmt, connection, logger);
+			throw new DAOException(e.getMessage());
+		}
+		try {
+			pstmt.setString(2, "%" + name + "%");
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
