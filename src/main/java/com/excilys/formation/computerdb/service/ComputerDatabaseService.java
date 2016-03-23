@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.service;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.formation.computerdb.errors.Problem;

@@ -54,4 +54,13 @@ public abstract class Pager {
 		}
 		return false;
 	}
+	
+	/**
+	 * Reloads the list with the current page from the database
+	 * and updates the number of computers and its dependencies
+	 * in order to keep the informations displayed accurate.
+	 *//**
+	 * Reloads the list with the current page from the database
+	 */
+	public abstract void update();
 }

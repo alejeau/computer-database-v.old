@@ -50,6 +50,7 @@ public class ServletSearch extends HttpServlet {
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
 		request.setAttribute("pathSearchComputer", Paths.PATH_COMPUTER_SEARCH);
+		request.setAttribute("pathComputerDelete", Paths.PATH_COMPUTER_DELETE);
 		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 	}
 

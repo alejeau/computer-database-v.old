@@ -113,8 +113,11 @@ public class ComputerSearchPager extends Pager {
 	 * Reloads the list with the current page from the database
 	 * and updates the number of computers and its dependencies
 	 * in order to keep the informations displayed accurate.
+	 *//**
+	 * Reloads the list with the current page from the database
 	 */
-	protected void update() {
+	@Override
+	public void update() {
 		this.nbEntries = this.services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		revalidatePageNumber();

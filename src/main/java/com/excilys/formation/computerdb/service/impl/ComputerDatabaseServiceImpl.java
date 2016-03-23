@@ -171,18 +171,17 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			
 			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				e.printStackTrace();
 			}
 		}

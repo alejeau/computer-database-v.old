@@ -13,45 +13,42 @@ import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
-public class ServletDashboard extends HttpServlet {
-	private static final long serialVersionUID = -2466894131493728982L;
-	ComputerDatabaseServiceImpl services = null;
+public class ServletDelete extends HttpServlet {
+	private static final long serialVersionUID = -8028981819003214136L;
+
 
 	protected ComputerPager pager;
 	protected List<Computer> list = null;
 
-	public ServletDashboard() {
+	public ServletDelete() {
 		this.pager = new ComputerPager(10);
-		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		process(request);
+//		process(request);
 
-		setRequestAndResponse(request, response);
-		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
-	}
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("I'm in the post!!!");
-		process(request);
-		delete(request);
 //		setRequestAndResponse(request, response);
-//		doGet(request, response);
-//		response.sendRedirect(Paths.PATH_DASHBOARD);
+		response.sendRedirect(Paths.PATH_DASHBOARD);
 //		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		delete(request);
+		
+		response.sendRedirect(Paths.PATH_DASHBOARD);
+//		setRequestAndResponse(request, response);
+	}
 
-	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setRequestPath(request);
 
 		request.setAttribute("nbComputers", this.pager.getNbEntries());
 		request.setAttribute("currentPageNumber", this.pager.getCurrentPageNumber());
 		request.setAttribute("maxPageNumber", this.pager.getMaxPageNumber());
 		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.pager.getCurrentPage()));
-		request.setAttribute("pathSource", "");
+		request.setAttribute("pathSource", "../");
 		request.setAttribute("currentPath", Paths.PATH_DASHBOARD);
+
 	}
 
 	private void setRequestPath(HttpServletRequest request) {
@@ -112,10 +109,9 @@ public class ServletDashboard extends HttpServlet {
 			}
 		}
 	}
-
+	
 	public void delete(HttpServletRequest request) {
 		String del = request.getParameter("selection");
-		System.out.println("del = " + del);
 		if (!del.equals("")) {
 			String[] list = del.split(",");
 			int len = list.length;

@@ -40,34 +40,10 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		try {
 			pstmt = connection.prepareStatement(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			pstmt.setInt(1, offset);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			pstmt.setInt(2, limit);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			rs = pstmt.executeQuery();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
+			
 			while (rs.next()) {
 				Company company = CompanyMapper.map(rs);
 				list.add(company);
@@ -76,9 +52,10 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			logger.fatal(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
+		} finally {
+			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
-
-		CompanyDAOImpl.close(rs, pstmt, connection);
+		
 		return list;
 	}
 
@@ -92,37 +69,18 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		try {
 			stmt = connection.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
 			rs = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
 			if (rs.next()) {
-				try {
-					nbEntries = rs.getInt("nb_companys");
-				} catch (SQLException e) {
-					logger.fatal(e.getMessage());
-					CompanyDAOImpl.close(rs, pstmt, connection);
-					throw new DAOException(e.getMessage());
-				}
+				nbEntries = rs.getInt("nb_companys");
 			}
 		} catch (SQLException e) {
 			logger.fatal(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
+		} finally {
+			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
 
-		CompanyDAOImpl.close(rs, pstmt, connection);
 		return nbEntries;
 	}
 
@@ -136,21 +94,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		try {
 			stmt = connection.createStatement();
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
 			rs = stmt.executeQuery(query);
-		} catch (SQLException e) {
-			logger.fatal(e.getMessage());
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		try {
 			while (rs.next()) {
 				Company company = CompanyMapper.map(rs);
 				list.add(company);
@@ -159,9 +103,9 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			logger.fatal(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
+		} finally {
+			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
-
-		CompanyDAOImpl.close(rs, pstmt, connection);
 
 		return list;
 	}
@@ -181,34 +125,18 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		try {
 			pstmt = connection.prepareStatement(query);
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			pstmt.setLong(1, id);
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			rs = pstmt.executeQuery();
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		// si l'entrée existe
-		try {
+			
 			if (rs.next()) {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
+		} finally {
+			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
-
-		CompanyDAOImpl.close(rs, pstmt, connection);
 		return company;
 	}
 
@@ -223,34 +151,18 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		try {
 			pstmt = connection.prepareStatement(query);
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			pstmt.setString(1, name);
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-		try {
 			rs = pstmt.executeQuery();
-		} catch (SQLException e) {
-			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
-		}
-
-		// si l'entrée existe
-		try {
+			
 			if (rs.next()) {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
 			CompanyDAOImpl.close(rs, pstmt, connection);
 			throw new DAOException(e.getMessage());
+		} finally {
+			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
-
-		CompanyDAOImpl.close(rs, pstmt, connection);
 		return company;
 	}
 	
@@ -273,7 +185,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			try {
 				rs.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new DAOException(e.getMessage());
 			}
 			rs = null;
 		}
@@ -282,7 +194,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			try {
 				pstmt.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new DAOException(e.getMessage());
 			}
 			pstmt = null;
 		}
@@ -290,6 +202,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			try {
 				connec.close();
 			} catch (SQLException e) {
+				throw new DAOException(e.getMessage());
 			}
 			connec = null;
 		}

@@ -85,7 +85,7 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 			// Configuring pool size
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
-			config.setPartitionCount(2);
+			config.setPartitionCount(5);
 
 			// Creating pool from config via BoneCP object
 			connectionPool = new BoneCP(config);

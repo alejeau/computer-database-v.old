@@ -66,11 +66,8 @@ public class ComputerPager extends Pager {
 		}
 	}
 
-	/**
-	 * Reloads the list with the current page from the database
-	 * @
-	 */
-	protected void update() {
+	@Override
+	public void update() {
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
 		revalidatePageNumber();

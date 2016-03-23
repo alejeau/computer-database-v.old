@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -41,7 +42,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action='<c:out value="${ pathComputerDelete }"/>' method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -51,10 +52,9 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
+							style="vertical-align: top;"> - <a href="${request.getContextPath()}"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
@@ -99,13 +99,6 @@
 				<a href="<cst:links linkTo="display" displayBy="50" />" class="btn btn-default">50</a>
 				<a href="<cst:links linkTo="display" displayBy="100" />" class="btn btn-default">100</a>
 			</div>
-			<!-- 
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
-			</div>
-			-->
 		</div>
 	</footer>
 	<script src="<c:out value="${ pathSource }" />js/jquery.min.js"></script>
