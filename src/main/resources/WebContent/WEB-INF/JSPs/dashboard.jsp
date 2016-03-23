@@ -28,7 +28,7 @@
 					<form id="searchForm" action="<c:out value="${ pathSearchComputer }" />" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
+							class="form-control" placeholder="Search name" value='<c:out value="${ param.search != null ? param.search : '' }" />' /> <input
 							type="submit" id="searchsubmit" name="searchSubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
