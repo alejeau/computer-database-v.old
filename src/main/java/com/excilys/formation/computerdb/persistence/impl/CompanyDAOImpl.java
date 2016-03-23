@@ -26,7 +26,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	protected List<Company> list = null;
 
 	private CompanyDAOImpl() {
-		connectionFactory = ConnectionFactoryImpl.getInstance();
+		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		this.list = new ArrayList<Company>();
 	}
 
@@ -252,6 +252,20 @@ public enum CompanyDAOImpl implements CompanyDAO {
 
 		CompanyDAOImpl.close(rs, pstmt, connection);
 		return company;
+	}
+	
+	@Override
+	public void deleteCompany(long id, Connection connection) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String query = "DELETE FROM company WHERE id = ?";
+
+		pstmt = connection.prepareStatement(query);
+		pstmt.setLong(1, id);
+		pstmt.executeUpdate();
+	
+		close(rs, pstmt, null);
 	}
 
 	private static void close(ResultSet rs, PreparedStatement pstmt, Connection connec) {

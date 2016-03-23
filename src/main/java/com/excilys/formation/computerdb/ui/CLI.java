@@ -45,15 +45,16 @@ public class CLI {
 		System.out.println("***************************");
 		System.out.println("******** Main Menu ********");
 		System.out.println("***************************");
-		System.out.println("1) List all computers");
-		System.out.println("2) List computers by pages");
-		System.out.println("3) List all companies");
-		System.out.println("4) List companies by pages");
-		System.out.println("5) Show computer details");
-		System.out.println("6) Create new computer");
-		System.out.println("7) Update a computer");
-		System.out.println("8) Delete a computer");
-		System.out.println("9) Quit");
+		System.out.println(" 1) List all computers");
+		System.out.println(" 2) List computers by pages");
+		System.out.println(" 3) List all companies");
+		System.out.println(" 4) List companies by pages");
+		System.out.println(" 5) Show computer details");
+		System.out.println(" 6) Create new computer");
+		System.out.println(" 7) Update a computer");
+		System.out.println(" 8) Delete a computer");
+		System.out.println(" 9) Delete a company and all its computers");
+		System.out.println("10) Quit");
 
 		System.out.println("What do you choose ? ");
 	}
@@ -67,8 +68,9 @@ public class CLI {
 		sc.nextLine();
 		System.out.println(tmpChoice);
 		String j = "";
-		if (tmpChoice.length() == 1) {
-			for (int i = 1; i < 10; i++) {
+		int len = tmpChoice.length();
+		if ((len > 0) && (len < 3)) {
+			for (int i = 1; i < 11; i++) {
 				j = String.valueOf(i);
 				if (j.equals(tmpChoice)) {
 					choice = i;
@@ -111,7 +113,10 @@ public class CLI {
 		case 8: // Delete a computer
 			deleteComputer();
 			break;
-		case 9: // Quit
+		case 9: // Delete a company and all computers related to it
+			deleteCompany();
+			break;
+		case 10: // Quit
 			b = false;
 			break;
 		default:
@@ -312,6 +317,14 @@ public class CLI {
 		String name = sc.nextLine();
 		this.service.deleteComputer(name);
 
+	}
+	
+	protected void deleteCompany(){
+		System.out.println("Company deletion menu");
+		System.out.println("Please specify the name of the company you want to delete (and all its affiliated computers)");
+		String name = sc.nextLine();
+		Company c = this.service.getCompanyByName(name);
+		this.service.deleteCompany(c);
 	}
 
 	/**

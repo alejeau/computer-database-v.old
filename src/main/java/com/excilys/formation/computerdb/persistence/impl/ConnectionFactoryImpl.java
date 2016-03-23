@@ -12,26 +12,27 @@ import com.jolbox.bonecp.BoneCPConfig;
 
 import java.sql.Connection;
 
-public class ConnectionFactoryImpl implements ConnectionFactory {
-	private static final ConnectionFactoryImpl INSTANCE = new ConnectionFactoryImpl();
+public enum ConnectionFactoryImpl implements ConnectionFactory {
+//	public static final ConnectionFactoryImpl INSTANCE = new ConnectionFactoryImpl();
+	INSTANCE;
 	
 	// Config parameters
-	private static final String FILE_PROPERTIES = "dao.properties";
-	private static final String PROPERTY_URL = "url";
-	private static final String PROPERTY_DRIVER = "driver";
-	private static final String PROPERTY_USERNAME = "utilisateur";
-	private static final String PROPERTY_PASSWORD = "password";
+	private final String FILE_PROPERTIES = "dao.properties";
+	private final String PROPERTY_URL = "url";
+	private final String PROPERTY_DRIVER = "driver";
+	private final String PROPERTY_USERNAME = "utilisateur";
+	private final String PROPERTY_PASSWORD = "password";
 
-	private static String USERNAME;
-	private static String PASSWORD;
-	private static String URL;
-	private static String DRIVER;
+	private String USERNAME;
+	private String PASSWORD;
+	private String URL;
+	private String DRIVER;
 
 	
-	private static Properties properties;
+	private Properties properties;
 	
 	// Logger
-	private static final Logger LOGGER = Logger.getLogger(ConnectionFactoryImpl.class);
+	private final Logger LOGGER = Logger.getLogger(ConnectionFactoryImpl.class);
 
 	private BoneCP connectionPool = null;
 

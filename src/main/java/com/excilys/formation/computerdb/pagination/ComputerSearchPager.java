@@ -53,11 +53,13 @@ public class ComputerSearchPager extends Pager {
 	}
 
 	public boolean goToPageNumber(int page) {
-		if (page > this.maxPageNumber) {
+		this.currentPageNumber = page;
+		revalidatePageNumber();
+		
+		if (this.currentPageNumber != page) {
 			return false;
 		}
 
-		this.currentPageNumber = page;
 		this.update();
 		return true;
 	}
@@ -67,6 +69,10 @@ public class ComputerSearchPager extends Pager {
 		return this.nbEntries;
 	}
 
+	/**
+	 * Sets the new keyword for search, 
+	 * and updates the pager accordingly.
+	 */
 	public void setSearch(String search) throws PagerSearchException {
 		if (search != null) {
 			this.search = search;
@@ -78,6 +84,10 @@ public class ComputerSearchPager extends Pager {
 		this.update();
 	}
 
+	/**
+	 * Sets a new number of objects per pages, 
+	 * and updates the pager accordingly.
+	 */
 	public void setObjectsPerPages(int obj) {
 		this.objectsPerPages = obj;
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
@@ -85,7 +95,11 @@ public class ComputerSearchPager extends Pager {
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		this.update();
 	}
-
+	
+	/**
+	 * Checks whether the current page number is valid, 
+	 * and validates it otherwise.  
+	 */
 	public void revalidatePageNumber() {
 		if (this.currentPageNumber > this.maxPageNumber) {
 			this.currentPageNumber = this.maxPageNumber;
@@ -97,7 +111,8 @@ public class ComputerSearchPager extends Pager {
 
 	/**
 	 * Reloads the list with the current page from the database
-	 * @
+	 * and updates the number of computers and its dependencies
+	 * in order to keep the informations displayed accurate.
 	 */
 	protected void update() {
 		this.nbEntries = this.services.getNbComputersNamed(this.search);

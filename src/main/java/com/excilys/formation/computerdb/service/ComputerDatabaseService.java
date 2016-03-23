@@ -1,5 +1,6 @@
 package com.excilys.formation.computerdb.service;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.formation.computerdb.errors.Problem;
@@ -41,6 +42,9 @@ public interface ComputerDatabaseService {
 	 */
 	List<Problem> createComputer(long id, String name, String intro, String outro, Company comp);
 	List<Problem> updateComputer(Computer c, String oldName);
+	
 	void deleteComputer(Long id);
 	void deleteComputer(String name);
+	void deleteComputers(long[] listId);
+	void deleteCompany(Company c);
 }

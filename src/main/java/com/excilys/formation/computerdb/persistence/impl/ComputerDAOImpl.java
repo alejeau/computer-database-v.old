@@ -27,9 +27,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	protected List<Computer> list = null;
 
 	private ComputerDAOImpl() {
-		this.connectionFactory = ConnectionFactoryImpl.getInstance();
+		this.connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		this.companyDAOImpl = CompanyDAOImpl.INSTANCE;
-		this.list = new ArrayList<Computer>();
+//		this.list = new ArrayList<Computer>();
 	}
 	
 	@Override
@@ -775,6 +775,36 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		}
 
 		close(rs, null, pstmt, connection, logger);
+	}
+	
+	@Override
+	public void deleteComputers(long[] listId, Connection connection) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String query = "DELETE FROM computer WHERE id = ?";
+
+		pstmt = connection.prepareStatement(query);
+		for (long id : listId) {
+			pstmt.setLong(1, id);
+			pstmt.executeUpdate();
+		}
+	
+		close(rs, null, pstmt, null, logger);
+	}
+	
+	@Override
+	public void deleteComputersWhereCompanyIdEquals(long id, Connection connection) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String query = "DELETE FROM computer WHERE company_id = ?";
+
+		pstmt = connection.prepareStatement(query);
+		pstmt.setLong(1, id);
+		pstmt.executeUpdate();
+	
+		close(rs, null, pstmt, null, logger);
 	}
 
 	private static void close(ResultSet rs, Statement stmt, PreparedStatement pstmt, Connection connection, Logger logger) {

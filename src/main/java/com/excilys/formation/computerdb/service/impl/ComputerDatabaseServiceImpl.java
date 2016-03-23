@@ -1,5 +1,7 @@
 package com.excilys.formation.computerdb.service.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
+import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
@@ -16,10 +19,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	private ComputerDAOImpl computerDAOImpl;
 	private CompanyDAOImpl companyDAOImpl;
+	private ConnectionFactoryImpl connectionFactory;
 
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
 		companyDAOImpl 	= CompanyDAOImpl.INSTANCE;
+		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 	}
 	@Override
 	public boolean alreadyExists(String name){
@@ -155,4 +160,54 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		computerDAOImpl.deleteComputer(name);
 	}
 
+	@Override
+	public void deleteComputers(long[] listId) {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		try {
+			connection.setAutoCommit(false);
+			
+			computerDAOImpl.deleteComputers(listId, connection);
+			
+			connection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void deleteCompany(Company c) {
+		Connection connection = null;
+		connection = connectionFactory.getConnection();
+		if (c != null) {
+			long id = c.getId();
+			try {
+				connection.setAutoCommit(false);
+				
+				computerDAOImpl.deleteComputersWhereCompanyIdEquals(id, connection);
+				companyDAOImpl.deleteCompany(id, connection);
+				
+				connection.commit();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }
