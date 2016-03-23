@@ -5,6 +5,7 @@
 	<artifactId>computer-database</artifactId>
 	<version>3.0-SNAPSHOT</version>
 	<name>computer-database</name>
+	<packaging>war</packaging>
 
 	<build>
 		<plugins>

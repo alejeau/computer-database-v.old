@@ -8,7 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
@@ -22,7 +23,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
 
 	private ConnectionFactoryImpl connectionFactory;
-	protected final Logger logger = Logger.getLogger(ComputerDAOImpl.class);
+	protected final Logger logger = LoggerFactory.getLogger(ComputerDAOImpl.class);
 	protected CompanyDAOImpl companyDAOImpl;
 	protected List<Computer> list = null;
 
@@ -87,23 +88,10 @@ public enum ComputerDAOImpl implements ComputerDAO {
 				Company c = null;
 				Computer computer = null;
 				long id = -1;
-
-				try {
-					id = rs.getLong("company_id");
-				} catch (SQLException e) {
-					logger.error(e.getMessage());
-					close(rs, null, pstmt, connection, logger);
-					throw new DAOException(e.getMessage());
-				}
+				id = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(id);
-				try {
-					computer = ComputerMapper.map(rs, c);
-				} catch (SQLException e) {
-					logger.error(e.getMessage());
-					close(rs, null, pstmt, connection, logger);
-					throw new DAOException(e.getMessage());
-				}
+				computer = ComputerMapper.map(rs, c);
 
 				list.add(computer);
 			}
@@ -138,14 +126,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 				Company c = null;
 				Computer computer = null;
 				long id = -1;
-
-				try {
-					id = rs.getLong("company_id");
-				} catch (SQLException e) {
-					logger.error(e.getMessage());
-					close(rs, null, pstmt, connection, logger);
-					throw new DAOException(e.getMessage());
-				}
+				id = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(id);
 				computer = ComputerMapper.map(rs, c);
@@ -308,8 +289,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 				c = this.companyDAOImpl.getCompanyById(idc);
 				computer = ComputerMapper.map(rs, c);
-			} else
-				System.out.println("No entry!");
+			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
@@ -344,9 +324,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
 			String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
 			String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
+			logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES (" + computer.getName() + ", " + intro + ", " + outro + ")\"");
 			boolean hasACompany = computer.hasACompany();
 			if (hasACompany) {
 				query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+				logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES (" + computer.getName() + ", " + intro + ", " + outro + ", " + computer.getCompany().getId() + ")\"");
 			}
 
 			try {
@@ -414,6 +396,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		connection = this.connectionFactory.getConnection();
+		logger.info("Computer deletion: \"DELETE FROM computer WHERE id = " + id + "\"");
 
 		String query = "DELETE FROM computer WHERE id = ?";
 
@@ -437,6 +420,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		connection = this.connectionFactory.getConnection();
+		logger.info("Computer deletion: \"DELETE FROM computer WHERE name = " + name + "\"");
 
 		String query = "DELETE FROM computer WHERE name = ?";
 
@@ -463,6 +447,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		pstmt = connection.prepareStatement(query);
 		for (long id : listId) {
+			logger.info("Computer deletion: \"DELETE FROM computer WHERE id = " + id + "\"");
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 		}
@@ -475,6 +460,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
+		logger.info("Computer deletion: \"DELETE FROM computer WHERE company_id = " + id + "\"");
 		String query = "DELETE FROM computer WHERE company_id = ?";
 
 		pstmt = connection.prepareStatement(query);

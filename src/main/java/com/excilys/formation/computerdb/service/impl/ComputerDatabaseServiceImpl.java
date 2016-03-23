@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -20,6 +23,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	private ComputerDAOImpl computerDAOImpl;
 	private CompanyDAOImpl companyDAOImpl;
 	private ConnectionFactoryImpl connectionFactory;
+	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
@@ -164,6 +168,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public void deleteComputers(long[] listId) {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
+		logger.info("Starting mass computer deletion...");
 		try {
 			connection.setAutoCommit(false);
 			
@@ -174,23 +179,24 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.error(e1.getMessage());
 			}
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
+		logger.info("Mass deletion done.");
 	}
 	
 	@Override
 	public void deleteCompany(Company c) {
 		Connection connection = null;
 		connection = connectionFactory.getConnection();
+		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
 		if (c != null) {
 			long id = c.getId();
 			try {
@@ -204,19 +210,18 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 				try {
 					connection.rollback();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					logger.error(e1.getMessage());
 				}
 				e.printStackTrace();
 			} finally {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
 		}
+		logger.info("Deletion of company \"" + c.getName() + "\" its related computers done.");
 	}
 	
 }

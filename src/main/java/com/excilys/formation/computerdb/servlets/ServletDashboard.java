@@ -33,13 +33,7 @@ public class ServletDashboard extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("I'm in the post!!!");
-		process(request);
 		delete(request);
-//		setRequestAndResponse(request, response);
-//		doGet(request, response);
-//		response.sendRedirect(Paths.PATH_DASHBOARD);
-//		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
 
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response)

@@ -34,6 +34,10 @@ public class ServletSearch extends HttpServlet {
 		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
 
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		delete(request);
+	}
+
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setRequestPath(request);
 		request.setAttribute("nbComputers", this.cspager.getNbEntries());
@@ -87,6 +91,21 @@ public class ServletSearch extends HttpServlet {
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
 			this.cspager.setObjectsPerPages(db);
+		}
+	}
+
+	public void delete(HttpServletRequest request) {
+		String del = request.getParameter("selection");
+		System.out.println("del = " + del);
+		if (!del.equals("")) {
+			String[] list = del.split(",");
+			int len = list.length;
+			long[] listId = new long[len];
+			for (int i = 0; i < len; i++) {
+				listId[i] = Long.valueOf(list[i]);
+			}
+			ComputerDatabaseServiceImpl.INSTANCE.deleteComputers(listId);
+			this.cspager.update();
 		}
 	}
 }

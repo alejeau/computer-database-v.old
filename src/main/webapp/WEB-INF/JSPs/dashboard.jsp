@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action='<c:out value="${ pathComputerDelete }"/>' method="POST">
+		<form id="deleteForm" action='<c:out value="${request.getContextPath()}"/>' method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
