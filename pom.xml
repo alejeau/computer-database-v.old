@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>3.0-SNAPSHOT</version>
+	<version>0.3.0-RELEASE</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
