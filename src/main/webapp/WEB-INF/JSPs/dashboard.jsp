@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action='<c:out value="${request.getContextPath()}"/>' method="POST">
+		<form id="deleteForm" action='<c:out value="${ currentUrl }"/>' method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -54,17 +54,15 @@
 						<!-- Table header for Computer Name -->
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="${request.getContextPath()}"
+							style="vertical-align: top;"> - <a href="${ currentUrl }"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="${ currentUrl }&field=name">Computer name</a></th>
+						<th><a href="${ currentUrl }&field=introduced">Introduced date</a></th>
+						<th><a href="${ currentUrl }&field=discontinued">Discontinued date</a></th>
+						<th><a href="${ currentUrl }&field=company.name">Company</a></th>
 
 					</tr>
 				</thead>

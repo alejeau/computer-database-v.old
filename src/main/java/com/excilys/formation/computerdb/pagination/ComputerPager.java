@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class ComputerPager extends Pager {
@@ -17,7 +18,7 @@ public class ComputerPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
-		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
+		this.list = services.getComputersFromToSortedBy(currentPageNumber * objectsPerPages, objectsPerPages, this.field, this.ascending);
 	}
 
 	public List<Computer> getPreviousPage() {
@@ -36,6 +37,16 @@ public class ComputerPager extends Pager {
 			this.update();
 		}
 		return this.list;
+	}
+	
+	public void setOrder(boolean ascending) {
+		this.ascending = ascending;
+		update();
+	}
+	
+	public void setField(Fields field) {
+		this.field = field;
+		update();
 	}
 
 	public boolean goToPageNumber(int page) {
@@ -71,6 +82,6 @@ public class ComputerPager extends Pager {
 		this.nbEntries = services.getNbComputers();
 		this.maxPageNumber = (int) Math.ceil(nbEntries / this.objectsPerPages);
 		revalidatePageNumber();
-		this.list = services.getComputersFromTo(currentPageNumber * objectsPerPages, objectsPerPages);
+		this.list = services.getComputersFromToSortedBy(currentPageNumber * objectsPerPages, objectsPerPages, this.field, this.ascending);
 	}
 }

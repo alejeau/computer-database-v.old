@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class ComputerSearchPager extends Pager {
@@ -31,7 +32,7 @@ public class ComputerSearchPager extends Pager {
 		this.list = new ArrayList<Computer>(this.objectsPerPages);
 		this.nbEntries = services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
-		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
+		this.list = services.getComputersNamedFromToSortedBy(search, currentPageNumber * objectsPerPages, objectsPerPages, this.field, this.ascending);
 	}
 
 	public List<Computer> getPreviousPage() {
@@ -96,6 +97,16 @@ public class ComputerSearchPager extends Pager {
 		this.update();
 	}
 	
+	public void setOrder(boolean ascending) {
+		this.ascending = ascending;
+		update();
+	}
+	
+	public void setField(Fields field) {
+		this.field = field;
+		update();
+	}
+	
 	/**
 	 * Checks whether the current page number is valid, 
 	 * and validates it otherwise.  
@@ -121,6 +132,6 @@ public class ComputerSearchPager extends Pager {
 		this.nbEntries = this.services.getNbComputersNamed(this.search);
 		this.maxPageNumber = (int) Math.ceil(this.nbEntries / this.objectsPerPages);
 		revalidatePageNumber();
-		this.list = services.getComputersNamedFromTo(search, currentPageNumber * objectsPerPages, objectsPerPages);
+		this.list = services.getComputersNamedFromToSortedBy(search, currentPageNumber * objectsPerPages, objectsPerPages, this.field, this.ascending);
 	}
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
+import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class ServletDashboard extends HttpServlet {
@@ -19,6 +20,9 @@ public class ServletDashboard extends HttpServlet {
 
 	protected ComputerPager pager;
 	protected List<Computer> list = null;
+	protected String url = null;
+	protected Fields field = Fields.NAME;
+	protected boolean ascending = true;
 
 	public ServletDashboard() {
 		this.pager = new ComputerPager(10);
@@ -45,6 +49,7 @@ public class ServletDashboard extends HttpServlet {
 		request.setAttribute("maxPageNumber", this.pager.getMaxPageNumber());
 		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.pager.getCurrentPage()));
 		request.setAttribute("pathSource", "");
+		request.setAttribute("currentUrl", url);
 		request.setAttribute("currentPath", Paths.PATH_DASHBOARD);
 	}
 
@@ -59,16 +64,46 @@ public class ServletDashboard extends HttpServlet {
 	}
 
 	private void process(HttpServletRequest request) {
+		this.url = Paths.PATH_DASHBOARD;
 		String reset = null;
 		reset = request.getParameter("reset");
 		if (reset != null) {
 			if (reset.equals("true")) {
 				try {
 					this.pager.goToPageNumber(0);
+					if (this.url.contains("?")) {
+						this.url += "&";
+					} else {
+						this.url += "?";
+					}
+					this.url += "reset=true";
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}
+			}
+		}
+
+		String stringField = request.getParameter("field");
+		if ((stringField != null) && !stringField.equals("") && !stringField.equals("null")) {
+			Fields tmp = this.field;
+			if (stringField.equals(Fields.NAME.toString())) {
+				this.field = Fields.NAME;
+			} else if (stringField.equals(Fields.INTRO_DATE.toString())) {
+				this.field = Fields.INTRO_DATE;
+			} else if (stringField.equals(Fields.OUTRO_DATE.toString())) {
+				this.field = Fields.OUTRO_DATE;
+			} else if (stringField.equals(Fields.COMPANY.toString())) {
+				this.field = Fields.COMPANY;
+			}
+
+			if (tmp.toString().equals(field.toString())) {
+				ascending = !ascending;
+				this.pager.setOrder(ascending);
+			} else {
+				this.pager.setField(this.field);
+				ascending = true;
+				this.pager.setOrder(ascending);
 			}
 		}
 
@@ -77,8 +112,20 @@ public class ServletDashboard extends HttpServlet {
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
 				this.pager.getPreviousPage();
+				if (this.url.contains("?")) {
+					this.url += "&";
+				} else {
+					this.url += "?";
+				}
+				this.url += "page=prev";
 			} else if (move.equals(Paths.NEXT_PAGE)) {
 				this.pager.getNextPage();
+				if (this.url.contains("?")) {
+					this.url += "&";
+				} else {
+					this.url += "?";
+				}
+				this.url += "page=next";
 			}
 		}
 
@@ -88,6 +135,12 @@ public class ServletDashboard extends HttpServlet {
 			int nb = Integer.parseInt(pageNb);
 			try {
 				this.pager.goToPageNumber(nb);
+				if (this.url.contains("?")) {
+					this.url += "&";
+				} else {
+					this.url += "?";
+				}
+				this.url += "pageNb=" + this.pager.getCurrentPageNumber();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -98,6 +151,12 @@ public class ServletDashboard extends HttpServlet {
 		displayBy = request.getParameter("displayBy");
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
+			if (this.url.contains("?")) {
+				this.url += "&";
+			} else {
+				this.url += "?";
+			}
+			this.url += "displayBy=" + this.pager.getObjectsPerPages();
 			try {
 				this.pager.setObjectsPerPages(db);
 			} catch (Exception e) {

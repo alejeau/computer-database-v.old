@@ -5,6 +5,7 @@ import java.util.List;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.persistence.Fields;
 
 public interface ComputerDatabaseService {
 	boolean alreadyExists(String name);
@@ -18,8 +19,8 @@ public interface ComputerDatabaseService {
 	List<Company> getAllCompanies();
 	List<Company> getCompaniesFromTo(int from, int nb);
 	List<Computer> getAllComputers();
-	List<Computer> getComputersFromTo(int from, int nb);
-	List<Computer> getComputersNamedFromTo(String search, int from, int to);
+	List<Computer> getComputersFromToSortedBy(int from, int nb, Fields field, boolean ascending);
+	List<Computer> getComputersNamedFromToSortedBy(String search, int from, int to, Fields field, boolean ascending);
 	List<Problem> createComputer(Computer c);
 
 	/**

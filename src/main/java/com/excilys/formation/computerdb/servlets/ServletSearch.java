@@ -12,6 +12,7 @@ import com.excilys.formation.computerdb.exceptions.PagerSearchException;
 import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerSearchPager;
+import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public class ServletSearch extends HttpServlet {
@@ -19,7 +20,10 @@ public class ServletSearch extends HttpServlet {
 	ComputerDatabaseServiceImpl services = null;
 
 	protected ComputerSearchPager cspager;
+	protected String url = null;
 	protected String search = null;
+	protected Fields field = Fields.NAME;
+	protected boolean ascending = true;
 	protected List<Computer> list = null;
 
 	public ServletSearch() {
@@ -45,6 +49,7 @@ public class ServletSearch extends HttpServlet {
 		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.cspager.getCurrentPage()));
 		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
 		request.setAttribute("pathSource", "../");
+		request.setAttribute("currentUrl", this.url);
 		request.setAttribute("currentPath", Paths.PATH_COMPUTER_SEARCH);
 	}
 
@@ -59,13 +64,42 @@ public class ServletSearch extends HttpServlet {
 	}
 
 	private void process(HttpServletRequest request) {
+		this.url = Paths.PATH_COMPUTER_SEARCH;
 		search = request.getParameter("search");
 		if ((search != null) && !search.equals("")) {
 			try {
 				this.cspager.setSearch(search);
-				this.cspager.goToPageNumber(0);
+				if (url.contains("?")) {
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "search=" + search;
 			} catch (PagerSearchException e) {
 				System.out.println(e.getMessage());
+			}
+		}
+
+		String stringField = request.getParameter("field");
+		if ((stringField != null) && !stringField.equals("") && !stringField.equals("null")) {
+			Fields tmp = this.field;
+			if (stringField.equals(Fields.NAME.toString())) {
+				this.field = Fields.NAME;
+			} else if (stringField.equals(Fields.INTRO_DATE.toString())) {
+				this.field = Fields.INTRO_DATE;
+			} else if (stringField.equals(Fields.OUTRO_DATE.toString())) {
+				this.field = Fields.OUTRO_DATE;
+			} else if (stringField.equals(Fields.COMPANY.toString())) {
+				this.field = Fields.NAME;
+			}
+
+			if (tmp.toString().equals(field.toString())) {
+				ascending = !ascending;
+				this.cspager.setOrder(ascending);
+			} else {
+				this.cspager.setField(this.field);
+				ascending = true;
+				this.cspager.setOrder(ascending);
 			}
 		}
 
@@ -74,8 +108,20 @@ public class ServletSearch extends HttpServlet {
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
 				this.cspager.getPreviousPage();
+				if (url.contains("?")) {
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "page=prev";
 			} else if (move.equals(Paths.NEXT_PAGE)) {
 				this.cspager.getNextPage();
+				if (url.contains("?")) {
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "page=next";
 			}
 		}
 
@@ -83,20 +129,41 @@ public class ServletSearch extends HttpServlet {
 		pageNb = request.getParameter("pageNb");
 		if (pageNb != null) {
 			int nb = Integer.parseInt(pageNb);
-			this.cspager.goToPageNumber(nb);
+			try {
+				this.cspager.goToPageNumber(nb);
+				if (url.contains("?")) {
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "pageNb=" + this.cspager.getCurrentPageNumber();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		String displayBy = null;
 		displayBy = request.getParameter("displayBy");
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
-			this.cspager.setObjectsPerPages(db);
+			try {
+				this.cspager.setObjectsPerPages(db);
+				if (url.contains("?")) {
+					url += "&";
+				} else {
+					url += "?";
+				}
+				url += "displayBy=" + this.cspager.getObjectsPerPages();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void delete(HttpServletRequest request) {
 		String del = request.getParameter("selection");
-		System.out.println("del = " + del);
 		if (!del.equals("")) {
 			String[] list = del.split(",");
 			int len = list.length;

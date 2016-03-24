@@ -18,6 +18,7 @@ import com.excilys.formation.computerdb.mapper.ComputerMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDAO;
+import com.excilys.formation.computerdb.persistence.Fields;
 
 public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;
@@ -42,6 +43,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer WHERE name=? ORDER BY name;";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -69,20 +71,41 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<Computer> getNamedFromTo(String name, int offset, int limit) {
+		return getNamedFromToSortedBy(name, offset, limit, Fields.NONE, true);
+	}
+
+	@Override
+	public 
+	List<Computer> getNamedFromToSortedBy(String name, int offset, int limit, Fields field, boolean ascending) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		connection = this.connectionFactory.getConnection();
-
+		int offsetNbr = 1;
+		int limitNbr  = 2;
+		
 		list = new ArrayList<>();
-		String query = "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?) ORDER BY name LIMIT ? OFFSET ?";
+		String query = "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
+		if (field != Fields.NONE) {
+			String order = (ascending) ? "ASC" : "DESC";
+			if (field == Fields.COMPANY) {
+				query += " LEFT JOIN company on computer.company_id=company.id";
+			}
+			query += " ORDER BY " + field.toString() + " " + order;
+			offsetNbr = 3;
+			limitNbr  = 4;
+		}
+		query += " LIMIT ?, ?;";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, "%" + name + "%");
-			pstmt.setString(2, "%" + name + "%");
-			pstmt.setInt(3, limit);
-			pstmt.setInt(4, offset);
+			if (field != Fields.NONE) {
+				pstmt.setString(1, "%" + name + "%");
+				pstmt.setString(2, "%" + name + "%");
+			}
+			pstmt.setInt(offsetNbr, offset);
+			pstmt.setInt(limitNbr, limit);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Company c = null;
@@ -108,6 +131,11 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<Computer> getFromTo(int offset, int limit) {
+		return getFromToSortedBy(offset, limit, Fields.NONE, true);
+	}
+
+	@Override
+	public List<Computer> getFromToSortedBy(int offset, int limit, Fields field, boolean ascending) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -115,7 +143,16 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		list = new ArrayList<>();
 
-		String query = "SELECT * FROM computer ORDER BY name LIMIT ?, ?";
+		String query = "SELECT * FROM computer";
+		if (field != Fields.NONE) {
+			String order = (ascending) ? "ASC" : "DESC";
+			if (field == Fields.COMPANY) {
+				query += " LEFT JOIN company on computer.company_id=company.id";
+			}
+			query += " ORDER BY " + field.toString() + " " + order;
+		}
+		query += " LIMIT ?, ?;";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -154,6 +191,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_computers FROM computer";
+		logger.debug(query);
 
 		try {
 			stmt = connection.createStatement();
@@ -181,6 +219,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		int nbEntries = 0;
 		String query = "SELECT count(*) as nb_computers FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -203,13 +242,26 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<Computer> getAll() {
+		return getAllSortedBy(Fields.NONE, true);
+	}
+
+	@Override
+	public List<Computer> getAllSortedBy(Fields field, boolean ascending) {
 		Connection connection = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		connection = this.connectionFactory.getConnection();
 
 		list = new ArrayList<>();
-		String query = "SELECT * FROM computer ORDER BY name";
+		String query = "SELECT * FROM computer";
+		if (field != Fields.NONE) {
+			String order = (ascending) ? "ASC" : "DESC";
+			if (field == Fields.COMPANY) {
+				query += " LEFT JOIN company on computer.company_id=company.id";
+			}
+			query += " ORDER BY " + field.toString() + " " + order + ";";
+		}
+		logger.debug(query);
 
 		try {
 			stmt = connection.createStatement();
@@ -244,6 +296,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE id = ?";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -276,6 +329,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE name = ?";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -330,6 +384,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 				query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 				logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES (" + computer.getName() + ", " + intro + ", " + outro + ", " + computer.getCompany().getId() + ")\"");
 			}
+			logger.debug(query);
 
 			try {
 				pstmt = connection.prepareStatement(query);
@@ -368,6 +423,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 			champs = 5;
 		}
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -399,6 +455,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		logger.info("Computer deletion: \"DELETE FROM computer WHERE id = " + id + "\"");
 
 		String query = "DELETE FROM computer WHERE id = ?";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -423,6 +480,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		logger.info("Computer deletion: \"DELETE FROM computer WHERE name = " + name + "\"");
 
 		String query = "DELETE FROM computer WHERE name = ?";
+		logger.debug(query);
 
 		try {
 			pstmt = connection.prepareStatement(query);
@@ -444,6 +502,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		ResultSet rs = null;
 
 		String query = "DELETE FROM computer WHERE id = ?";
+		logger.debug(query);
 
 		pstmt = connection.prepareStatement(query);
 		for (long id : listId) {
@@ -462,6 +521,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 
 		logger.info("Computer deletion: \"DELETE FROM computer WHERE company_id = " + id + "\"");
 		String query = "DELETE FROM computer WHERE company_id = ?";
+		logger.debug(query);
 
 		pstmt = connection.prepareStatement(query);
 		pstmt.setLong(1, id);

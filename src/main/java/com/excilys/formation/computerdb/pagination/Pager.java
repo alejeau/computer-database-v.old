@@ -1,10 +1,14 @@
 package com.excilys.formation.computerdb.pagination;
 
+import com.excilys.formation.computerdb.persistence.Fields;
+
 public abstract class Pager {
 	protected int currentPageNumber;
 	protected int maxPageNumber;
 	protected int objectsPerPages;
 	protected int nbEntries;
+	Fields field = Fields.NAME;
+	boolean ascending = true;
 
 	Pager(int objectsPerPages) {
 		this.currentPageNumber = 0;
@@ -53,6 +57,17 @@ public abstract class Pager {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Sets the sort option to the parameters given
+	 * @param field the field to sort by
+	 * @param ascending whether to sort by ascending or descending field
+	 */
+	public void sortBy(Fields field, boolean ascending) {
+		this.field = field;
+		this.ascending = ascending;
+		this.update();
 	}
 	
 	/**

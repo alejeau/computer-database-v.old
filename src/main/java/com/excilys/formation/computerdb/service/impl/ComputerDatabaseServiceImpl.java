@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
@@ -87,13 +88,13 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Computer> getComputersFromTo(int from, int nb) {
-		return computerDAOImpl.getFromTo(from, nb);
+	public List<Computer> getComputersFromToSortedBy(int from, int nb, Fields field, boolean ascending) {
+		return computerDAOImpl.getFromToSortedBy(from, nb, field, ascending);
 	}
 
 	@Override
-	public List<Computer> getComputersNamedFromTo(String search, int from, int to) {
-		return computerDAOImpl.getNamedFromTo(search, from, to);
+	public List<Computer> getComputersNamedFromToSortedBy(String search, int from, int to, Fields field, boolean ascending) {
+		return computerDAOImpl.getNamedFromToSortedBy(search, from, to, field, ascending);
 	}
 
 	@Override
