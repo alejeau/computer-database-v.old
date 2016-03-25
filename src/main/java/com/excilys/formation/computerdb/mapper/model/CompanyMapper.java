@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.mapper;
+package com.excilys.formation.computerdb.mapper.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
+import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerPager;
 import com.excilys.formation.computerdb.persistence.Fields;
@@ -16,14 +16,7 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 
 public class ServletDashboard extends HttpServlet {
 	private static final long serialVersionUID = -2466894131493728982L;
-	ComputerDatabaseServiceImpl services = null;
-
-	protected ComputerPager pager;
-	protected List<Computer> list = null;
-	protected String url = null;
-	protected Fields field = Fields.NAME;
-	protected boolean ascending = true;
-
+	
 	public ServletDashboard() {
 		this.pager = new ComputerPager(10);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
@@ -32,7 +25,7 @@ public class ServletDashboard extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		process(request);
 
-		setRequestAndResponse(request, response);
+		setRequestAndResponse(request);
 		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
 
@@ -40,14 +33,14 @@ public class ServletDashboard extends HttpServlet {
 		delete(request);
 	}
 
-	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response)
+	private void setRequestAndResponse(HttpServletRequest request)
 			throws ServletException, IOException {
 		setRequestPath(request);
 
 		request.setAttribute("nbComputers", this.pager.getNbEntries());
 		request.setAttribute("currentPageNumber", this.pager.getCurrentPageNumber());
 		request.setAttribute("maxPageNumber", this.pager.getMaxPageNumber());
-		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.pager.getCurrentPage()));
+		request.setAttribute("computers", PageDtoMapper.toDTO(this.pager.getCurrentPage()));
 		request.setAttribute("pathSource", "");
 		request.setAttribute("currentUrl", url);
 		request.setAttribute("currentPath", Paths.PATH_DASHBOARD);

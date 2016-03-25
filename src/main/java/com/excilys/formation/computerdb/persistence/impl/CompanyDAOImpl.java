@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
-import com.excilys.formation.computerdb.mapper.CompanyMapper;
+import com.excilys.formation.computerdb.mapper.model.CompanyMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDAO;
 

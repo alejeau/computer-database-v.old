@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
-import com.excilys.formation.computerdb.mapper.ComputerDTOMapper;
+import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.ComputerSearchPager;
 import com.excilys.formation.computerdb.persistence.Fields;
@@ -46,7 +46,7 @@ public class ServletSearch extends HttpServlet {
 		setRequestPath(request);
 		request.setAttribute("nbComputers", this.cspager.getNbEntries());
 		request.setAttribute("currentPageNumber", this.cspager.getCurrentPageNumber());
-		request.setAttribute("computers", ComputerDTOMapper.toDTO(this.cspager.getCurrentPage()));
+		request.setAttribute("computers", PageDtoMapper.toDTO(this.cspager.getCurrentPage()));
 		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
 		request.setAttribute("pathSource", "../");
 		request.setAttribute("currentUrl", this.url);
