@@ -90,13 +90,13 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public Page<Company> getCompanyPage(int pageNumber, Page<Company> p) {
-		List<Company> l = companyDAOImpl.getFromTo(pageNumber, p.getObjectsPerPages());
+		List<Company> l = companyDAOImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
 		return new Page<Company>(l, pageNumber, p.getMaxPageNumber(), p.getNbEntries());
 	}
 
 	@Override
 	public SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp) {
-		List<Computer> l = computerDAOImpl.getFromToSortedBy(pageNumber, sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		List<Computer> l = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setPage(l);
 		
@@ -105,7 +105,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public SearchPage<Computer> getComputersNamedFromToSortedBy(int pageNumber, SearchPage<Computer> sp) {
-		List<Computer> l = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber, sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		List<Computer> l = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setPage(l);
 		

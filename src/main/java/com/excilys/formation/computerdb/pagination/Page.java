@@ -27,7 +27,7 @@ public class Page<T> {
 	 * @param nbEntries the number of entries
 	 */
 	public Page(List<T> list, int currentPageNumber, int maxPageNumber, int nbEntries) {
-		this.page = new LinkedList<T>(list);
+		this.page = list;
 		this.objectsPerPages = this.page.size();
 		
 		this.nbEntries = nbEntries;

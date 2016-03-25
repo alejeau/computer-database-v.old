@@ -5,14 +5,14 @@ import java.time.LocalDate;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 
-public class ComputerDTO {
+public class ComputerDto {
 	protected long   id = -1;
 	protected String name;
 	protected String intro;
 	protected String outro;
 	protected String company;
 
-	public ComputerDTO(Computer c) {
+	public ComputerDto(Computer c) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
 		Company  cy = c.getCompany();
 		final String EMPTY = "";
@@ -25,7 +25,7 @@ public class ComputerDTO {
 		this.company =  (cy != null) ? (cy.getName()) : (EMPTY);
 	}
 
-	public ComputerDTO(long cid, String name, String intro, String outro, String company) {
+	public ComputerDto(long cid, String name, String intro, String outro, String company) {
 		this.id = (cid > -1L) ? (cid) : (-1L);
 		this.name = name;
 		this.intro = intro;
@@ -113,8 +113,8 @@ public class ComputerDTO {
 			return this;
 		}
 
-		public ComputerDTO build() {
-			return new ComputerDTO(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
+		public ComputerDto build() {
+			return new ComputerDto(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
 		}
 	}
 }

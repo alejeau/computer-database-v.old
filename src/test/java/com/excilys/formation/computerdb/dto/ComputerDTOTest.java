@@ -22,7 +22,7 @@ public class ComputerDTOTest {
 	public void ComputerDTO() {
 		String nil = null;
 		Computer c = new Computer(0, "n", nil, nil, null);
-		ComputerDTO cdto = new ComputerDTO(c);
+		ComputerDto cdto = new ComputerDto(c);
 		assertNotNull(cdto);
 	}
 
@@ -30,7 +30,7 @@ public class ComputerDTOTest {
 	public void ComputerDTOCompany() {
 		String nil = null;
 		Computer c = new Computer(0, "n", nil, nil, null);
-		ComputerDTO cdto = new ComputerDTO(c);
+		ComputerDto cdto = new ComputerDto(c);
 		assertNotNull(cdto);
 	}
 

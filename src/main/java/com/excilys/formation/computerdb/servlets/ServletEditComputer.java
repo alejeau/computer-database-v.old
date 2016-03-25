@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.formation.computerdb.dto.ComputerDTO;
+import com.excilys.formation.computerdb.dto.ComputerDto;
 import com.excilys.formation.computerdb.dto.ProblemDTO;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
@@ -35,8 +35,8 @@ public class ServletEditComputer extends HttpServlet {
 		Computer c = this.services.getComputerByName(name);
 		request = setComputerDisplay(request, c);
 		
-		List<Company> companyList = services.getAllCompanies();
-		request.setAttribute("companies",  companyList);
+//		List<Company> companyList = services.getAllCompanies();
+//		request.setAttribute("companies",  companyList);
 		this.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
 	}
 
@@ -81,8 +81,8 @@ public class ServletEditComputer extends HttpServlet {
 
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response, List<Problem> listPbs)
 			throws ServletException, IOException {
-		List<Company> companyList = services.getAllCompanies();
-		Collections.sort(companyList);
+//		List<Company> companyList = services.getAllCompanies();
+//		Collections.sort(companyList);
 
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
@@ -91,12 +91,12 @@ public class ServletEditComputer extends HttpServlet {
 
 		request.setAttribute("mapErrors", ProblemDTO.toHashMap(listPbs));
 
-		request.setAttribute("companies",  companyList);
+//		request.setAttribute("companies",  companyList);
 	}
 	
 	private HttpServletRequest setComputerDisplay(HttpServletRequest request, Computer c)
 			throws ServletException, IOException {
-		ComputerDTO cdto = new ComputerDTO(c);
+		ComputerDto cdto = new ComputerDto(c);
 		request.setAttribute("cdto",  cdto);
 
 		// If the company wasn't set, we set its name to "-1"

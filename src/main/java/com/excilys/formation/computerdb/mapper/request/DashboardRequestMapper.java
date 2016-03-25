@@ -2,16 +2,15 @@ package com.excilys.formation.computerdb.mapper.request;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.persistence.Fields;
-import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.servlets.Paths;
+import com.excilys.formation.computerdb.servlets.request.PageRequest;
 
 public class DashboardRequestMapper {
 	
-	public static HttpServletRequest map(HttpServletRequest request) {
+	public static PageRequest<Computer> mapDoGet(HttpServletRequest request) {
 		String url = Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 		
@@ -19,69 +18,78 @@ public class DashboardRequestMapper {
 		String pageNb = request.getParameter(UrlFields.URL_PAGE_NB);
 		String displayBy = request.getParameter(UrlFields.URL_DISPLAY_BY);
 		String ascending = request.getParameter(UrlFields.URL_ASCENDING);
-
-		if ((stringField != null) && !stringField.equals("") && !stringField.equals("null")) {
-			Fields field;
-			if (stringField.equals(Fields.NAME.toString())) {
-				field = Fields.NAME;
-			} else if (stringField.equals(Fields.INTRO_DATE.toString())) {
+		
+		// Retrieving and setting the sort field
+		if (notEmpty(stringField)) {
+			Fields field = Fields.NAME;
+			if (stringField.equals(Fields.INTRO_DATE.toString())) {
 				field = Fields.INTRO_DATE;
 			} else if (stringField.equals(Fields.OUTRO_DATE.toString())) {
 				field = Fields.OUTRO_DATE;
 			} else if (stringField.equals(Fields.COMPANY.toString())) {
 				field = Fields.COMPANY;
-			} else {
-				field = Fields.NAME;
 			}
 			
 			page.setField(field);
 			url = setUrl(url, UrlFields.URL_FIELD, field.toString());
+		} else {
+			page.setField(Fields.NAME);
+			url = setUrl(url, UrlFields.URL_FIELD, Fields.NAME.toString());
 		}
-		
-		if (ascending != null) {
+
+		// Retrieving and setting the ascending field
+		if (notEmpty(ascending)) {
 			boolean ascend = true;
 			if (ascending.equals("false")) {
 				ascend = false;
 			}
-			page.setAscending(false);
-			url = setUrl(url, UrlFields.URL_ASCENDING, "false");
+			
+			page.setAscending(ascend);
+			url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
+		} else {
+			page.setAscending(true);
+			url = setUrl(url, UrlFields.URL_ASCENDING, "true");
 		}
 
-		if (displayBy != null) {
+		// Retrieving and setting the display number
+		if (notEmpty(displayBy)) {
 			int db = 10;
 			try {
 				db = Integer.parseInt(displayBy);
+				System.out.println("displayBy = " + displayBy);
 			} catch (Exception e) {	}
+			
 			page.setObjectsPerPages(db);
 			url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(db));
+		} else {
+			page.setObjectsPerPages(10);
+			url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(10));
 		}
-		
-		if (pageNb != null) {
+
+		// Retrieving and setting the page number
+		if (notEmpty(pageNb)) {
 			int nb = 0;
 			try {
 				nb = Integer.parseInt(pageNb);
 			} catch (Exception e) {	}
-			page = ComputerDatabaseServiceImpl.INSTANCE.getComputerSortedPage(nb, page);
+			page.setCurrentPageNumber(nb);
 			url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(nb));
+		} else {
+			page.setCurrentPageNumber(0);
+			url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(0));
 		}
 
-		// Sending the paths to the project files
-		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
-		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
-		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
-		request.setAttribute("pathSearchComputer", Paths.PATH_COMPUTER_SEARCH);
-		request.setAttribute("pathComputerDelete", Paths.PATH_COMPUTER_DELETE);
-		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
-
-		
-		request.setAttribute("page", PageDtoMapper.toDTO(pager.getCurrentPage()));
-		request.setAttribute("pathSource", "");
-		request.setAttribute("currentUrl", url);
-		request.setAttribute("currentPath", Paths.PATH_DASHBOARD);
-		
-		return request;
+		return new PageRequest<>(page, url);
 	}
 	
+	/**
+	 * Adds var=value to the url, with the correct ? or &
+	 * 
+	 * @param url the current url
+	 * @param var the name of the var
+	 * @param value the value of the var
+	 * @return url + ?|& + var=value
+	 */
 	private static String setUrl(String url, String var, String value) {
 		if (url.contains("?")) {
 			url += "&";
@@ -90,6 +98,27 @@ public class DashboardRequestMapper {
 		}
 		url += var + "=" + value;
 		return url;
+	}
+	
+	public static long[] mapDoPost(HttpServletRequest request) {
+		String del = request.getParameter("selection");
+		long[] listId = null;
+		if (!del.equals("")) {
+			String[] list = del.split(",");
+			int len = list.length;
+			listId = new long[len];
+			for (int i = 0; i < len; i++) {
+				listId[i] = Long.valueOf(list[i]);
+			}
+		}
+		return listId;
+	}
+	
+	protected static boolean notEmpty(String s) {
+		if (s != null && !s.equals("") && !s.equals("null")) {
+			return true;
+		}
+		return false;
 	}
 
 }

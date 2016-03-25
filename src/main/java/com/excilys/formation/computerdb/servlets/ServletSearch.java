@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.formation.computerdb.exceptions.PagerSearchException;
 import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.ComputerSearchPager;
 import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
@@ -19,7 +18,7 @@ public class ServletSearch extends HttpServlet {
 	private static final long serialVersionUID = -2466894131493728982L;
 	ComputerDatabaseServiceImpl services = null;
 
-	protected ComputerSearchPager cspager;
+//	protected ComputerSearchPager cspager;
 	protected String url = null;
 	protected String search = null;
 	protected Fields field = Fields.NAME;
@@ -27,7 +26,7 @@ public class ServletSearch extends HttpServlet {
 	protected List<Computer> list = null;
 
 	public ServletSearch() {
-		this.cspager = new ComputerSearchPager(10);
+//		this.cspager = new ComputerSearchPager(10);
 		this.services = ComputerDatabaseServiceImpl.INSTANCE;
 	}
 
@@ -44,10 +43,10 @@ public class ServletSearch extends HttpServlet {
 
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setRequestPath(request);
-		request.setAttribute("nbComputers", this.cspager.getNbEntries());
-		request.setAttribute("currentPageNumber", this.cspager.getCurrentPageNumber());
-		request.setAttribute("computers", PageDtoMapper.toDTO(this.cspager.getCurrentPage()));
-		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
+//		request.setAttribute("nbComputers", this.cspager.getNbEntries());
+//		request.setAttribute("currentPageNumber", this.cspager.getCurrentPageNumber());
+//		request.setAttribute("computers", PageDtoMapper.toDTO(this.cspager.getCurrentPage()));
+//		request.setAttribute("maxPageNumber", this.cspager.getMaxPageNumber());
 		request.setAttribute("pathSource", "../");
 		request.setAttribute("currentUrl", this.url);
 		request.setAttribute("currentPath", Paths.PATH_COMPUTER_SEARCH);
@@ -68,7 +67,7 @@ public class ServletSearch extends HttpServlet {
 		search = request.getParameter("search");
 		if ((search != null) && !search.equals("")) {
 			try {
-				this.cspager.setSearch(search);
+//				this.cspager.setSearch(search);
 				if (url.contains("?")) {
 					url += "&";
 				} else {
@@ -95,11 +94,11 @@ public class ServletSearch extends HttpServlet {
 
 			if (tmp.toString().equals(field.toString())) {
 				ascending = !ascending;
-				this.cspager.setOrder(ascending);
+//				this.cspager.setOrder(ascending);
 			} else {
-				this.cspager.setField(this.field);
-				ascending = true;
-				this.cspager.setOrder(ascending);
+//				this.cspager.setField(this.field);
+//				ascending = true;
+//				this.cspager.setOrder(ascending);
 			}
 		}
 
@@ -107,7 +106,7 @@ public class ServletSearch extends HttpServlet {
 		move = request.getParameter("page");
 		if (move != null) {
 			if (move.equals(Paths.PREVIOUS_PAGE)) {
-				this.cspager.getPreviousPage();
+//				this.cspager.getPreviousPage();
 				if (url.contains("?")) {
 					url += "&";
 				} else {
@@ -115,7 +114,7 @@ public class ServletSearch extends HttpServlet {
 				}
 				url += "page=prev";
 			} else if (move.equals(Paths.NEXT_PAGE)) {
-				this.cspager.getNextPage();
+//				this.cspager.getNextPage();
 				if (url.contains("?")) {
 					url += "&";
 				} else {
@@ -130,13 +129,13 @@ public class ServletSearch extends HttpServlet {
 		if (pageNb != null) {
 			int nb = Integer.parseInt(pageNb);
 			try {
-				this.cspager.goToPageNumber(nb);
+//				this.cspager.goToPageNumber(nb);
 				if (url.contains("?")) {
 					url += "&";
 				} else {
 					url += "?";
 				}
-				url += "pageNb=" + this.cspager.getCurrentPageNumber();
+//				url += "pageNb=" + this.cspager.getCurrentPageNumber();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -148,13 +147,13 @@ public class ServletSearch extends HttpServlet {
 		if (displayBy != null) {
 			int db = Integer.parseInt(displayBy);
 			try {
-				this.cspager.setObjectsPerPages(db);
+//				this.cspager.setObjectsPerPages(db);
 				if (url.contains("?")) {
 					url += "&";
 				} else {
 					url += "?";
 				}
-				url += "displayBy=" + this.cspager.getObjectsPerPages();
+//				url += "displayBy=" + this.cspager.getObjectsPerPages();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -172,7 +171,7 @@ public class ServletSearch extends HttpServlet {
 				listId[i] = Long.valueOf(list[i]);
 			}
 			ComputerDatabaseServiceImpl.INSTANCE.deleteComputers(listId);
-			this.cspager.update();
+//			this.cspager.update();
 		}
 	}
 }

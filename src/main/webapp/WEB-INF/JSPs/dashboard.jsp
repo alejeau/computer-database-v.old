@@ -68,7 +68,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-				<c:forEach items="${ computers }" var="computer" >
+				<c:forEach items="${ PAGE.page }" var="computer" >
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }" />"></td>
 						<td><a href="<c:out value="${ pathEditComputer }?computer=${ computer.name }" />" onclick="" ><c:out value="${ computer.name }" /></a></td>

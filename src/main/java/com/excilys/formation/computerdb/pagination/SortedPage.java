@@ -72,12 +72,19 @@ public class SortedPage<T> extends Page<T> {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "SortedPage [field=" + field + ", ascending=" + ascending + ", currentPageNumber=" + currentPageNumber
+				+ ", maxPageNumber=" + maxPageNumber + ", objectsPerPages=" + objectsPerPages + ", nbEntries="
+				+ nbEntries + "]";
+	}
+
 	public static class Builder<T> {
 		private List<T> nestedPage = null;
 		private int nestedNbEntries = -1;
 		private int nestedMaxPageNumber = -1;
 		private int nestedCurrentPageNumber = -1;
-		private Fields nestedField = null;
+		private Fields nestedField = Fields.NAME;
 		private boolean nestedAscending = true;
 		
 		public Builder() {}
@@ -113,7 +120,7 @@ public class SortedPage<T> extends Page<T> {
 			return this;
 		}
 		
-		public Page<T> build() {
+		public SortedPage<T> build() {
 			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedNbEntries, nestedField, nestedAscending);
 		}
 	}

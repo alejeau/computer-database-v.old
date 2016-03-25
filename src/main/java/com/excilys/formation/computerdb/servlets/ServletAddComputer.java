@@ -48,8 +48,8 @@ public class ServletAddComputer extends HttpServlet {
 
 	private void setRequestAndResponse(HttpServletRequest request, HttpServletResponse response, List<Problem> listPbs)
 			throws ServletException, IOException {
-		List<Company> companyList = services.getAllCompanies();
-		Collections.sort(companyList);
+//		List<Company> companyList = services.getAllCompanies();
+//		Collections.sort(companyList);
 
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
@@ -58,7 +58,7 @@ public class ServletAddComputer extends HttpServlet {
 
 		request.setAttribute("mapErrors", ProblemDTO.toHashMap(listPbs));
 
-		request.setAttribute("companies",  companyList);
+//		request.setAttribute("companies",  companyList);
 	}
 
 }
