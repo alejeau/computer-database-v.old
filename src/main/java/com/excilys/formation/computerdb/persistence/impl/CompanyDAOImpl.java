@@ -11,7 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.formation.computerdb.exceptions.DAOException;
+import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.mapper.CompanyMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDAO;
@@ -52,7 +52,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
@@ -77,7 +77,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
@@ -103,7 +103,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
@@ -135,7 +135,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
@@ -162,7 +162,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			CompanyDAOImpl.close(rs, pstmt, connection);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			CompanyDAOImpl.close(rs, pstmt, connection);			
 		}
@@ -189,7 +189,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				rs.close();
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
-				throw new DAOException(e.getMessage());
+				throw new CompanyDaoException(e.getMessage());
 			}
 			rs = null;
 		}
@@ -199,7 +199,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				pstmt.close();
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
-				throw new DAOException(e.getMessage());
+				throw new CompanyDaoException(e.getMessage());
 			}
 			pstmt = null;
 		}
@@ -208,7 +208,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 				connec.close();
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
-				throw new DAOException(e.getMessage());
+				throw new CompanyDaoException(e.getMessage());
 			}
 			connec = null;
 		}

@@ -51,21 +51,13 @@ public class Computer implements Comparable<Computer> {
 	 * @param comp The manufacturer
 	 */
 	public Computer(String name, String intro, String outro, Company comp) {
-			this.name = name;
+		this.name = name;
 
-		if ((intro == null) || (intro.equals(""))) {
-			this.intro = null;
-		} else {
-			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
-		}
+		intro = intro.split(" ")[0];
+		this.intro = LocalDate.parse(intro);
 
-		if (outro == null || (outro.equals(""))) {
-			this.outro = null;
-		} else {
-			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
-		}
+		outro = outro.split(" ")[0];
+		this.outro = LocalDate.parse(outro);
 
 		this.company = comp;
 	}
@@ -82,19 +74,12 @@ public class Computer implements Comparable<Computer> {
 		this.id = id;
 		this.name = name;
 
-		if (intro == null) {
-			this.intro = null;
-		} else {
-			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
-		}
+		intro = intro.split(" ")[0];
+		this.intro = LocalDate.parse(intro);
 
-		if (outro == null) {
-			this.outro = null;
-		} else {
-			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
-		}
+		outro = outro.split(" ")[0];
+		this.outro = LocalDate.parse(outro);
+
 		this.company = comp;
 	}
 
@@ -119,12 +104,8 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro the date of start of production
 	 */
 	public void setIntro(String intro) {
-		if (intro == null) {
-			this.intro = null;
-		} else {
-			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
-		}
+		intro = intro.split(" ")[0];
+		this.intro = LocalDate.parse(intro);
 	}
 
 	public LocalDate getOutro() {
@@ -139,12 +120,8 @@ public class Computer implements Comparable<Computer> {
 	 * @param outro the date of start of production
 	 */
 	public void setOutro(String outro) {
-		if (outro == null) {
-			this.outro = null;
-		} else {
-			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
-		}
+		outro = outro.split(" ")[0];
+		this.intro = LocalDate.parse(outro);
 	}
 
 	public Company getCompany() {
@@ -285,12 +262,12 @@ public class Computer implements Comparable<Computer> {
 			}
 			return this;
 		}
-		
+
 		public Builder outro(final LocalDate outro) {
 			this.nestedOutro = outro;
 			return this;
 		}
-		
+
 		public Builder outro(final String outro) {
 			if ((outro == null) || (outro.equals(""))) {
 				this.nestedOutro = null;

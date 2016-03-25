@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.persistence.Fields;
+import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.pagination.SearchPage;
+import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
@@ -73,28 +75,41 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public List<Company> getAllCompanies() {
-		return companyDAOImpl.getAll();
+	public Page<Company> getAllCompanies() {
+		List<Company> l = companyDAOImpl.getAll();
+		int len = l.size();
+		return new Page<Company>(l, 1, 1, len);
 	}
 
 	@Override
-	public List<Computer> getAllComputers() {
-		return computerDAOImpl.getAll();
+	public Page<Computer> getAllComputers() {
+		List<Computer> l = computerDAOImpl.getAll();
+		int len = l.size();
+		return new Page<Computer>(l, 1, 1, len);
 	}
 
 	@Override
-	public List<Company> getCompaniesFromTo(int from, int nb) {
-		return companyDAOImpl.getFromTo(from, nb);
+	public Page<Company> getCompanyPage(int pageNumber, Page<Company> p) {
+		List<Company> l = companyDAOImpl.getFromTo(pageNumber, p.getObjectsPerPages());
+		return new Page<Company>(l, pageNumber, p.getMaxPageNumber(), p.getNbEntries());
 	}
 
 	@Override
-	public List<Computer> getComputersFromToSortedBy(int from, int nb, Fields field, boolean ascending) {
-		return computerDAOImpl.getFromToSortedBy(from, nb, field, ascending);
+	public SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp) {
+		List<Computer> l = computerDAOImpl.getFromToSortedBy(pageNumber, sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		sp.setCurrentPageNumber(pageNumber);
+		sp.setPage(l);
+		
+		return sp;
 	}
 
 	@Override
-	public List<Computer> getComputersNamedFromToSortedBy(String search, int from, int to, Fields field, boolean ascending) {
-		return computerDAOImpl.getNamedFromToSortedBy(search, from, to, field, ascending);
+	public SearchPage<Computer> getComputersNamedFromToSortedBy(int pageNumber, SearchPage<Computer> sp) {
+		List<Computer> l = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber, sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		sp.setCurrentPageNumber(pageNumber);
+		sp.setPage(l);
+		
+		return sp;
 	}
 
 	@Override

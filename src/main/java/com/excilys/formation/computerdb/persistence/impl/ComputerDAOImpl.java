@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
-import com.excilys.formation.computerdb.exceptions.DAOException;
+import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.mapper.ComputerMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -56,7 +56,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -121,7 +121,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -173,7 +173,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -202,7 +202,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -232,7 +232,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -279,7 +279,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, stmt, null, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, stmt, null, connection, logger);
 		}
@@ -313,7 +313,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -347,7 +347,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -398,7 +398,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
 				close(rs, null, pstmt, connection, logger);
-				throw new DAOException(e.getMessage());
+				throw new CompanyDaoException(e.getMessage());
 			} finally {
 				close(rs, null, pstmt, connection, logger);
 			}
@@ -439,7 +439,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -464,7 +464,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
@@ -489,7 +489,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			close(rs, null, pstmt, connection, logger);
-			throw new DAOException(e.getMessage());
+			throw new CompanyDaoException(e.getMessage());
 		} finally {
 			close(rs, null, pstmt, connection, logger);
 		}
