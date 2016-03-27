@@ -6,11 +6,11 @@ import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.persistence.Fields;
 import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.request.PageRequest;
+import com.excilys.formation.computerdb.servlets.request.SortedPageRequest;
 
 public class DashboardRequestMapper {
 	
-	public static PageRequest<Computer> mapDoGet(HttpServletRequest request) {
+	public static SortedPageRequest<Computer> mapDoGet(HttpServletRequest request) {
 		String url = Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 		
@@ -20,8 +20,8 @@ public class DashboardRequestMapper {
 		String ascending = request.getParameter(UrlFields.URL_ASCENDING);
 		
 		// Retrieving and setting the sort field
+		Fields field = Fields.NAME;
 		if (notEmpty(stringField)) {
-			Fields field = Fields.NAME;
 			if (stringField.equals(Fields.INTRO_DATE.toString())) {
 				field = Fields.INTRO_DATE;
 			} else if (stringField.equals(Fields.OUTRO_DATE.toString())) {
@@ -29,57 +29,41 @@ public class DashboardRequestMapper {
 			} else if (stringField.equals(Fields.COMPANY.toString())) {
 				field = Fields.COMPANY;
 			}
-			
-			page.setField(field);
-			url = setUrl(url, UrlFields.URL_FIELD, field.toString());
-		} else {
-			page.setField(Fields.NAME);
-			url = setUrl(url, UrlFields.URL_FIELD, Fields.NAME.toString());
 		}
+		page.setField(field);
+		url = setUrl(url, UrlFields.URL_FIELD, field.toString());
 
 		// Retrieving and setting the ascending field
+		boolean ascend = true;
 		if (notEmpty(ascending)) {
-			boolean ascend = true;
 			if (ascending.equals("false")) {
 				ascend = false;
 			}
-			
-			page.setAscending(ascend);
-			url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
-		} else {
-			page.setAscending(true);
-			url = setUrl(url, UrlFields.URL_ASCENDING, "true");
 		}
+		page.setAscending(ascend);
+		url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
 
 		// Retrieving and setting the display number
+		int db = 10;
 		if (notEmpty(displayBy)) {
-			int db = 10;
 			try {
 				db = Integer.parseInt(displayBy);
-				System.out.println("displayBy = " + displayBy);
 			} catch (Exception e) {	}
-			
-			page.setObjectsPerPages(db);
-			url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(db));
-		} else {
-			page.setObjectsPerPages(10);
-			url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(10));
 		}
+		page.setObjectsPerPages(db);
+		url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(db));
 
 		// Retrieving and setting the page number
+		int nb = 0;
 		if (notEmpty(pageNb)) {
-			int nb = 0;
 			try {
 				nb = Integer.parseInt(pageNb);
 			} catch (Exception e) {	}
-			page.setCurrentPageNumber(nb);
-			url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(nb));
-		} else {
-			page.setCurrentPageNumber(0);
-			url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(0));
 		}
+		page.setCurrentPageNumber(nb);
+		url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(nb));
 
-		return new PageRequest<>(page, url);
+		return new SortedPageRequest<>(page, url);
 	}
 	
 	/**
@@ -100,6 +84,11 @@ public class DashboardRequestMapper {
 		return url;
 	}
 	
+	/**
+	 * Returns the list of computer IDs to delete
+	 * @param request the request to process
+	 * @return the list of computer IDs to delete
+	 */
 	public static long[] mapDoPost(HttpServletRequest request) {
 		String del = request.getParameter("selection");
 		long[] listId = null;
@@ -114,6 +103,11 @@ public class DashboardRequestMapper {
 		return listId;
 	}
 	
+	/**
+	 * Checks if a String is not null, different than "" and different than "null".
+	 * @param s the String to check
+	 * @return true if the String is not null, different than "" and different than "null"
+	 */
 	protected static boolean notEmpty(String s) {
 		if (s != null && !s.equals("") && !s.equals("null")) {
 			return true;

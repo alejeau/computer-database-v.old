@@ -76,38 +76,46 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public Page<Company> getAllCompanies() {
-		List<Company> l = companyDAOImpl.getAll();
-		int len = l.size();
-		return new Page<Company>(l, 1, 1, len);
+		List<Company> list = companyDAOImpl.getAll();
+		int len = list.size();
+		return new Page<Company>(list, 1, 1, len);
 	}
 
 	@Override
 	public Page<Computer> getAllComputers() {
-		List<Computer> l = computerDAOImpl.getAll();
-		int len = l.size();
-		return new Page<Computer>(l, 1, 1, len);
+		List<Computer> list = computerDAOImpl.getAll();
+		int len = list.size();
+		return new Page<Computer>(list, 1, 1, len);
 	}
 
 	@Override
 	public Page<Company> getCompanyPage(int pageNumber, Page<Company> p) {
-		List<Company> l = companyDAOImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
-		return new Page<Company>(l, pageNumber, p.getMaxPageNumber(), p.getNbEntries());
+		int nbEntries = computerDAOImpl.getNbEntries();
+		List<Company> list = companyDAOImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
+		p.setPage(list);
+		p.setCurrentPageNumber(pageNumber);
+		p.setNbEntries(nbEntries);
+		return p;
 	}
 
 	@Override
 	public SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp) {
-		List<Computer> l = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		int nbEntries = computerDAOImpl.getNbEntries();
+		List<Computer> list = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
-		sp.setPage(l);
+		sp.setNbEntries(nbEntries);
+		sp.setPage(list);
 		
 		return sp;
 	}
 
 	@Override
 	public SearchPage<Computer> getComputersNamedFromToSortedBy(int pageNumber, SearchPage<Computer> sp) {
-		List<Computer> l = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		int nbEntries = computerDAOImpl.getNbEntries();
+		List<Computer> list = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
-		sp.setPage(l);
+		sp.setNbEntries(nbEntries);
+		sp.setPage(list);
 		
 		return sp;
 	}

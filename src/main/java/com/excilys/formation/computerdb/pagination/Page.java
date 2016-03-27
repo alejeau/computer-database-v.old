@@ -41,6 +41,7 @@ public class Page<T> {
 
 	public void setPage(List<T> page) {
 		this.page = page;
+		
 	}
 
 	public int getCurrentPageNumber() {
@@ -73,6 +74,11 @@ public class Page<T> {
 
 	public void setNbEntries(int nbEntries) {
 		this.nbEntries = nbEntries;
+		if (this.objectsPerPages > 0) {
+			double nbe = (double) this.nbEntries;
+			double opp = (double) this.objectsPerPages;
+			this.maxPageNumber = (int) Math.ceil(nbe / opp);
+		}
 	}
 
 	@Override
