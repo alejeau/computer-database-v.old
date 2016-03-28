@@ -85,13 +85,14 @@ public enum ComputerDAOImpl implements ComputerDAO {
 		int limitNbr  = 2;
 		
 		list = new ArrayList<>();
-		String query = "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
+		String query = "SELECT * FROM computer WHERE name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
 		if (field != Fields.NONE) {
 			String order = (ascending) ? "ASC" : "DESC";
 			if (field == Fields.COMPANY) {
-				query += " LEFT JOIN company on computer.company_id=company.id";
+				query = "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id WHERE computer.name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
 			}
 			query += " ORDER BY " + field.toString() + " " + order;
+			
 			offsetNbr = 3;
 			limitNbr  = 4;
 		}
