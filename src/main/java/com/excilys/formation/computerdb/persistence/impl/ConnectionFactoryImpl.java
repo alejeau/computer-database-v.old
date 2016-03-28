@@ -105,8 +105,43 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 		try {
 			return connectionPool.getConnection();
 		} catch (SQLException e) {
-			LOGGER.fatal("Conuldn't get connection!");
+			LOGGER.fatal("Couldn't get connection!");
 		}
 		return null;
+	}
+	
+	public Connection getTransaction() {
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			LOGGER.fatal("Couldn't get connection!");
+		}
+		return connection;
+	}
+	
+	public void commitTransaction(Connection connection) throws SQLException {
+		 connection.commit();
+	}
+	
+	public void rollbackTransaction(Connection connection) {
+		try {
+			connection.rollback();
+		} catch (SQLException e) {
+			LOGGER.fatal("Couldn't rollback the modifications!");
+		}
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Connection endTransaction(Connection connection) {
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			LOGGER.fatal(e.getMessage());
+		}
+		return connection;
 	}
 }

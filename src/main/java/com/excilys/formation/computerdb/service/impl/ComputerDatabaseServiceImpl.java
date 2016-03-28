@@ -30,11 +30,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
-		companyDAOImpl 	= CompanyDAOImpl.INSTANCE;
+		companyDAOImpl = CompanyDAOImpl.INSTANCE;
 		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 	}
+
 	@Override
-	public boolean alreadyExists(String name){
+	public boolean alreadyExists(String name) {
 		return this.computerDAOImpl.exists(name);
 	}
 
@@ -101,22 +102,24 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp) {
 		int nbEntries = computerDAOImpl.getNbEntries();
-		List<Computer> list = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		List<Computer> list = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(),
+				sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setNbEntries(nbEntries);
 		sp.setPage(list);
-		
+
 		return sp;
 	}
 
 	@Override
 	public SearchPage<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp) {
 		int nbEntries = computerDAOImpl.getNbEntriesNamed(sp.getSearch());
-		List<Computer> list = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
+		List<Computer> list = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(),
+				pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setNbEntries(nbEntries);
 		sp.setPage(list);
-		
+
 		return sp;
 	}
 
@@ -133,14 +136,9 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		List<Problem> listErrors = null;
 		listErrors = ComputerValidator.validateComputer(name, intro, outro);
 		System.out.println("listErrors = " + listErrors);
-		if (listErrors == null){
+		if (listErrors == null) {
 			Computer c = null;
-			c = new Computer.Builder()
-					.name(name)
-					.intro(intro)
-					.outro(outro)
-					.company(comp)
-					.build();
+			c = new Computer.Builder().name(name).intro(intro).outro(outro).company(comp).build();
 			System.out.println("c = " + c);
 			computerDAOImpl.createComputer(c);
 		}
@@ -152,15 +150,9 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public List<Problem> createComputer(long id, String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
 
-		if (listErrors == null){
+		if (listErrors == null) {
 			Computer c = null;
-			c = new Computer.Builder()
-					.id(id)
-					.name(name)
-					.intro(intro)
-					.outro(outro)
-					.company(comp)
-					.build();
+			c = new Computer.Builder().id(id).name(name).intro(intro).outro(outro).company(comp).build();
 			computerDAOImpl.createComputer(c);
 		}
 
@@ -191,21 +183,18 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public void deleteComputers(long[] listId) {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 		logger.info("Starting mass computer deletion...");
 		try {
-			connection.setAutoCommit(false);
-			
+			connection = connectionFactory.getTransaction();
+
 			computerDAOImpl.deleteComputers(listId, connection);
-			
-			connection.commit();
+
+			connectionFactory.commitTransaction(connection);
 		} catch (SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				logger.error(e1.getMessage());
-			}
+			logger.error("Couldn't commit the changes!");
 			logger.error(e.getMessage());
+			logger.error("Rolling back now...");
+			connectionFactory.rollbackTransaction(connection);
 		} finally {
 			try {
 				connection.close();
@@ -215,28 +204,25 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		}
 		logger.info("Mass deletion done.");
 	}
-	
+
 	@Override
 	public void deleteCompany(Company c) {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
 		if (c != null) {
 			long id = c.getId();
 			try {
-				connection.setAutoCommit(false);
-				
+				connection = connectionFactory.getTransaction();
+
 				computerDAOImpl.deleteComputersWhereCompanyIdEquals(id, connection);
 				companyDAOImpl.deleteCompany(id, connection);
-				
+
 				connection.commit();
 			} catch (SQLException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					logger.error(e1.getMessage());
-				}
-				e.printStackTrace();
+				logger.error("Couldn't commit the changes!");
+				logger.error(e.getMessage());
+				logger.error("Rolling back now...");
+				connectionFactory.rollbackTransaction(connection);
 			} finally {
 				try {
 					connection.close();
@@ -247,5 +233,5 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		}
 		logger.info("Deletion of company \"" + c.getName() + "\" its related computers done.");
 	}
-	
+
 }

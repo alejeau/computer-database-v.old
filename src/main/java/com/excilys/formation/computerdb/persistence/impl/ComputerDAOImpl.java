@@ -75,15 +75,14 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public 
-	List<Computer> getNamedFromToSortedBy(String name, int offset, int limit, Fields field, boolean ascending) {
+	public List<Computer> getNamedFromToSortedBy(String name, int offset, int limit, Fields field, boolean ascending) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		connection = this.connectionFactory.getConnection();
 		int offsetNbr = 1;
-		int limitNbr  = 2;
-		
+		int limitNbr = 2;
+
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer WHERE name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
 		if (field != Fields.NONE) {
@@ -92,9 +91,9 @@ public enum ComputerDAOImpl implements ComputerDAO {
 				query = "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id WHERE computer.name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
 			}
 			query += " ORDER BY " + field.toString() + " " + order;
-			
+
 			offsetNbr = 3;
-			limitNbr  = 4;
+			limitNbr = 4;
 		}
 		query += " LIMIT ?, ?;";
 		logger.debug(query);
@@ -379,11 +378,14 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
 			String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
 			String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
-			logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES (" + computer.getName() + ", " + intro + ", " + outro + ")\"");
+			logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES ("
+					+ computer.getName() + ", " + intro + ", " + outro + ")\"");
 			boolean hasACompany = computer.hasACompany();
 			if (hasACompany) {
 				query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-				logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES (" + computer.getName() + ", " + intro + ", " + outro + ", " + computer.getCompany().getId() + ")\"");
+				logger.info("Computer creation: \"INSERT INTO computer (name, introduced, discontinued) VALUES ("
+						+ computer.getName() + ", " + intro + ", " + outro + ", " + computer.getCompany().getId()
+						+ ")\"");
 			}
 			logger.debug(query);
 
