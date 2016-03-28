@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.dto.ComputerDto;
+import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.dto.page.SearchPageDto;
 import com.excilys.formation.computerdb.dto.page.SortedPageDto;
 import com.excilys.formation.computerdb.model.Computer;

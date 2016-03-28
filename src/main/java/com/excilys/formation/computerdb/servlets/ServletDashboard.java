@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.mapper.request.DashboardRequestMapper;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
-import com.excilys.formation.computerdb.servlets.request.SortedPageRequest;
+import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageRequest;
 
 public class ServletDashboard extends HttpServlet {
 	private static final long serialVersionUID = -2466894131493728982L;
@@ -19,7 +19,7 @@ public class ServletDashboard extends HttpServlet {
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SortedPageRequest page = DashboardRequestMapper.mapDoGet(request);
+		ComputerSortedPageRequest page = DashboardRequestMapper.mapDoGet(request);
 		request = setRequest(request, page);
 		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
@@ -29,7 +29,7 @@ public class ServletDashboard extends HttpServlet {
 		ComputerDatabaseServiceImpl.INSTANCE.deleteComputers(listId);
 	}
 	
-	protected static HttpServletRequest setRequest(HttpServletRequest request, SortedPageRequest page){
+	protected static HttpServletRequest setRequest(HttpServletRequest request, ComputerSortedPageRequest page){
 		// Setting the paths 
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);

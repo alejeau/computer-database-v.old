@@ -5,11 +5,11 @@ import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.servlets.Paths;
 
-public class SortedPageRequest {
+public class ComputerSortedPageRequest {
 	String url = Paths.PATH_DASHBOARD;
 	SortedPage<Computer> page = new SortedPage<>();
 	
-	public SortedPageRequest(SortedPage<Computer> p, String url){
+	public ComputerSortedPageRequest(SortedPage<Computer> p, String url){
 		this.page = p;
 		this.page = ComputerDatabaseServiceImpl.INSTANCE.getComputerSortedPage(page.getCurrentPageNumber(), page);
 		this.url = url;

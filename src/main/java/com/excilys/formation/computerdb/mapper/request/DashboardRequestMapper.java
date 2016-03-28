@@ -6,11 +6,11 @@ import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.request.SortedPageRequest;
+import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageRequest;
 
 public class DashboardRequestMapper {
 	
-	public static SortedPageRequest mapDoGet(HttpServletRequest request) {
+	public static ComputerSortedPageRequest mapDoGet(HttpServletRequest request) {
 		String url = Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 		
@@ -63,7 +63,7 @@ public class DashboardRequestMapper {
 				page.setAscending(ascend);
 				url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
 
-		return new SortedPageRequest(page, url);
+		return new ComputerSortedPageRequest(page, url);
 	}
 	
 	/**

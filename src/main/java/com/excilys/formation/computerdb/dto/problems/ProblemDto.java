@@ -1,11 +1,11 @@
-package com.excilys.formation.computerdb.dto;
+package com.excilys.formation.computerdb.dto.problems;
 
 import java.util.HashMap;
 import java.util.List;
 
 import com.excilys.formation.computerdb.errors.Problem;
 
-public class ProblemDTO {
+public class ProblemDto {
 
 	/**
 	 * Converts a Problem to a HashMap<String, String> with a single entry.

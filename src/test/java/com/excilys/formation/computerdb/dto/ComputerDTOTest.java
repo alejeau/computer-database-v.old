@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.model.Computer;
 
 public class ComputerDTOTest {

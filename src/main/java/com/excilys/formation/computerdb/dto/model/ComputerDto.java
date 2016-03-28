@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.dto;
+package com.excilys.formation.computerdb.dto.model;
 
 import java.time.LocalDate;
 
