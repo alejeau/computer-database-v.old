@@ -19,20 +19,27 @@ public class Page<T> {
 	}
 	
 	/**
-	 * Creates a page of T.
+	 * Creates a page of T.<br>
+	 * The number of objects per page is based on the size of the list given in argument,
+	 * so if your list is empty, do not forget to set it manually! 
 	 * 
 	 * @param list a list to put in the page
 	 * @param currentPageNumber the current page number
 	 * @param maxPageNumber the maximum page number
 	 * @param nbEntries the number of entries
 	 */
-	public Page(List<T> list, int currentPageNumber, int maxPageNumber, int nbEntries) {
+	public Page(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries) {
 		this.page = list;
-		this.objectsPerPages = this.page.size();
+		this.objectsPerPages = objectsPerPages;
 		
 		this.nbEntries = nbEntries;
 		this.maxPageNumber = maxPageNumber;
 		this.currentPageNumber = currentPageNumber;
+		if (this.objectsPerPages > 0) {
+			double nbe = (double) this.nbEntries;
+			double opp = (double) this.objectsPerPages;
+			this.maxPageNumber = (int) Math.ceil(nbe / opp);
+		}
 	}
 
 	public List<T> getPage() {
@@ -41,7 +48,6 @@ public class Page<T> {
 
 	public void setPage(List<T> page) {
 		this.page = page;
-		
 	}
 
 	public int getCurrentPageNumber() {
@@ -122,6 +128,7 @@ public class Page<T> {
 		private List<T> nestedPage = null;
 		private int nestedNbEntries = -1;
 		private int nestedMaxPageNumber = -1;
+		private int nestedObjectsPerPages = -1;
 		private int nestedCurrentPageNumber = -1;
 		
 		public Builder() {}
@@ -142,13 +149,18 @@ public class Page<T> {
 			return this;
 		}
 		
+		public Builder<T> objectsPerPages(int objectsPerPages) {
+			this.nestedObjectsPerPages = objectsPerPages;
+			return this;
+		}
+		
 		public Builder<T> currentPageNumber(int currentPageNumber) {
 			this.nestedCurrentPageNumber = currentPageNumber;
 			return this;
 		}
 		
 		public Page<T> build() {
-			return new Page<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedNbEntries);
+			return new Page<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries);
 		}
 	}
 }

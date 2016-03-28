@@ -3,7 +3,7 @@ package com.excilys.formation.computerdb.pagination;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.persistence.Fields;
+import com.excilys.formation.computerdb.constants.Fields;
 
 public class SortedPage<T> extends Page<T> {
 	protected Fields field;
@@ -25,8 +25,8 @@ public class SortedPage<T> extends Page<T> {
 	 * @param field the sort field (from enum Fields)
 	 * @param ascending true if the sort is ascending, false else
 	 */
-	public SortedPage(List<T> list, int currentPageNumber, int maxPageNumber, int nbEntries, Fields field, boolean ascending) {
-		super(list, currentPageNumber, maxPageNumber, nbEntries);
+	public SortedPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries, Fields field, boolean ascending) {
+		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries);
 		this.field = field;
 		this.ascending = ascending;
 	}
@@ -83,6 +83,7 @@ public class SortedPage<T> extends Page<T> {
 		private List<T> nestedPage = null;
 		private int nestedNbEntries = -1;
 		private int nestedMaxPageNumber = -1;
+		private int nestedObjectsPerPages = -1;
 		private int nestedCurrentPageNumber = -1;
 		private Fields nestedField = Fields.NAME;
 		private boolean nestedAscending = true;
@@ -105,6 +106,11 @@ public class SortedPage<T> extends Page<T> {
 			return this;
 		}
 		
+		public Builder<T> objectsPerPages(int objectsPerPages) {
+			this.nestedObjectsPerPages = objectsPerPages;
+			return this;
+		}
+		
 		public Builder<T> currentPageNumber(int currentPageNumber) {
 			this.nestedCurrentPageNumber = currentPageNumber;
 			return this;
@@ -121,7 +127,7 @@ public class SortedPage<T> extends Page<T> {
 		}
 		
 		public SortedPage<T> build() {
-			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedNbEntries, nestedField, nestedAscending);
+			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries, nestedField, nestedAscending);
 		}
 	}
 	

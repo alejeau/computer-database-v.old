@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Computer;
 
 public interface ComputerDAO {

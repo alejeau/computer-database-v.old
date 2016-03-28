@@ -3,7 +3,7 @@ package com.excilys.formation.computerdb.pagination;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.persistence.Fields;
+import com.excilys.formation.computerdb.constants.Fields;
 
 public class SearchPage<T> extends SortedPage<T> {
 	String search;
@@ -26,8 +26,8 @@ public class SearchPage<T> extends SortedPage<T> {
 	 * @param ascending true if the sort is ascending, false else
 	 * @param search the String to look for in the database
 	 */
-	public SearchPage(List<T> list, int currentPageNumber, int maxPageNumber, int nbEntries, Fields field, boolean ascending, String search) {
-		super(list, currentPageNumber, maxPageNumber, nbEntries, field, ascending);
+	public SearchPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries, Fields field, boolean ascending, String search) {
+		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries, field, ascending);
 		this.search = search;
 	}
 
@@ -68,6 +68,7 @@ public class SearchPage<T> extends SortedPage<T> {
 		private List<T> nestedPage = null;
 		private int nestedNbEntries = -1;
 		private int nestedMaxPageNumber = -1;
+		private int nestedObjectsPerPages = -1;
 		private int nestedCurrentPageNumber = -1;
 		private Fields nestedField = null;
 		private boolean nestedAscending = true;
@@ -88,6 +89,11 @@ public class SearchPage<T> extends SortedPage<T> {
 		
 		public Builder<T> maxPageNumber(int maxPageNumber) {
 			this.nestedMaxPageNumber = maxPageNumber;
+			return this;
+		}
+		
+		public Builder<T> objectsPerPages(int objectsPerPages) {
+			this.nestedObjectsPerPages = objectsPerPages;
 			return this;
 		}
 		
@@ -112,7 +118,7 @@ public class SearchPage<T> extends SortedPage<T> {
 		}
 		
 		public Page<T> build() {
-			return new SearchPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedNbEntries, nestedField, nestedAscending, nestedSearch);
+			return new SearchPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries, nestedField, nestedAscending, nestedSearch);
 		}
 	}
 

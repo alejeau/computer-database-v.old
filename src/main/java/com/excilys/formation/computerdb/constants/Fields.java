@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.persistence;
+package com.excilys.formation.computerdb.constants;
 
 public enum Fields {
 	NONE (null),
@@ -9,7 +9,6 @@ public enum Fields {
 	
 	private String field = "";
 	   
-	  //Constructeur
 	  Fields(String field){
 	    this.field = field;
 	  }

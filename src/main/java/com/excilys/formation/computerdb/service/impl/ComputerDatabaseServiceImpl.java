@@ -78,14 +78,14 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public Page<Company> getAllCompanies() {
 		List<Company> list = companyDAOImpl.getAll();
 		int len = list.size();
-		return new Page<Company>(list, 1, 1, len);
+		return new Page<Company>(list, 1, 1, len, len);
 	}
 
 	@Override
 	public Page<Computer> getAllComputers() {
 		List<Computer> list = computerDAOImpl.getAll();
 		int len = list.size();
-		return new Page<Computer>(list, 1, 1, len);
+		return new Page<Computer>(list, 1, 1, len, len);
 	}
 
 	@Override
@@ -110,8 +110,8 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
-	public SearchPage<Computer> getComputersNamedFromToSortedBy(int pageNumber, SearchPage<Computer> sp) {
-		int nbEntries = computerDAOImpl.getNbEntries();
+	public SearchPage<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp) {
+		int nbEntries = computerDAOImpl.getNbEntriesNamed(sp.getSearch());
 		List<Computer> list = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(), pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setNbEntries(nbEntries);

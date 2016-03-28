@@ -11,6 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
@@ -18,7 +19,6 @@ import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDAO;
-import com.excilys.formation.computerdb.persistence.Fields;
 
 public enum ComputerDAOImpl implements ComputerDAO {
 	INSTANCE;

@@ -26,7 +26,7 @@ public interface ComputerDatabaseService {
 	
 	Page<Computer> getAllComputers();
 	Page<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp);
-	Page<Computer> getComputersNamedFromToSortedBy(int pageNumber, SearchPage<Computer> sp);
+	Page<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp);
 	
 	/**
 	 * Creates a computer

@@ -59,10 +59,10 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="${ currentUrl }&field=name">Computer name</a></th>
-						<th><a href="${ currentUrl }&field=introduced">Introduced date</a></th>
-						<th><a href="${ currentUrl }&field=discontinued">Discontinued date</a></th>
-						<th><a href="${ currentUrl }&field=company.name">Company</a></th>
+						<th><a href='<cst:links linkTo="self" field="name" />'>Computer name</a></th>
+						<th><a href='<cst:links linkTo="self" field="introduced" />'>Introduction date</a></th>
+						<th><a href='<cst:links linkTo="self" field="discontinued" />'>Discontinuation date</a></th>
+						<th><a href='<cst:links linkTo="self" field="company.name" />'>Manufacturer</a></th>
 
 					</tr>
 				</thead>
@@ -75,7 +75,6 @@
 						<td><c:out value="${ computer.intro }" /></td>
 						<td><c:out value="${ computer.outro }" /></td>
 						<td><c:out value="${ computer.company }" /></td>
-
 					</tr>
 				</c:forEach>
 				</tbody>
@@ -91,12 +90,12 @@
 				<cst:pager/>
 			</ul>
 
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="<cst:links linkTo="display" displayBy="10" />" class="btn btn-default">10</a>
-				<a href="<cst:links linkTo="display" displayBy="15" />" class="btn btn-default">15</a>
-				<a href="<cst:links linkTo="display" displayBy="50" />" class="btn btn-default">50</a>
-				<a href="<cst:links linkTo="display" displayBy="100" />" class="btn btn-default">100</a>
-			</div>
+ 			<div class="btn-group btn-group-sm pull-right" role="group">
+				<a href='<cst:links linkTo="self" displayBy="10" />' class="btn btn-default">10</a>
+ 				<a href='<cst:links linkTo="self" displayBy="15" />' class="btn btn-default">15</a>
+ 				<a href='<cst:links linkTo="self" displayBy="50" />' class="btn btn-default">50</a>
+ 				<a href='<cst:links linkTo="self" displayBy="100" />' class="btn btn-default">100</a>
+ 			</div> 
 		</div>
 	</footer>
 	<script src="<c:out value="${ pathSource }" />js/jquery.min.js"></script>
