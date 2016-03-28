@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.dto.ComputerDto;
+import com.excilys.formation.computerdb.dto.page.SearchPageDto;
+import com.excilys.formation.computerdb.dto.page.SortedPageDto;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.pagination.SearchPage;
@@ -38,31 +40,31 @@ public class PageDtoMapper {
 		return sp;
 	}
 	
-	public static SortedPage<ComputerDto> toSortedPageDto(SortedPage<Computer> p) {
+	public static SortedPageDto<ComputerDto> toSortedPageDto(SortedPage<Computer> p) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
-		SortedPage<ComputerDto> sp = new SortedPage<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField(), p.isAscending());
+		SortedPageDto<ComputerDto> spdto = new SortedPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending());
 		
 		for (Computer c : cList) {
 			dtoList.add(new ComputerDto(c));
 		}
 		
-		sp.setPage(dtoList);
+		spdto.setPage(dtoList);
 		
-		return sp;
+		return spdto;
 	}
 	
-	public static SearchPage<ComputerDto> toSearchPageDto(SearchPage<Computer> p) {
+	public static SearchPageDto<ComputerDto> toSearchPageDto(SearchPage<Computer> p) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
-		SearchPage<ComputerDto> sp = new SearchPage<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField(), p.isAscending(), p.getSearch());
+		SearchPageDto<ComputerDto> spdto = new SearchPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending(), p.getSearch());
 		
 		for (Computer c : cList) {
 			dtoList.add(new ComputerDto(c));
 		}
 		
-		sp.setPage(dtoList);
+		spdto.setPage(dtoList);
 		
-		return sp;
+		return spdto;
 	}
 }

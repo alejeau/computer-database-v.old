@@ -1,7 +1,6 @@
 package com.excilys.formation.computerdb.servlets;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletException;

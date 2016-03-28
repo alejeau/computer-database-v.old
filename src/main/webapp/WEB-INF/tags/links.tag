@@ -9,8 +9,6 @@
 <%@attribute name="field" required="false"%>
 <%@attribute name="ascending" required="false"%>
 
-<%-- <c:out value="${ searchModeActivated ? '&search='.concat(PAGE.search) : '' }" /> --%>
-
 <c:set var="pathDash" value="/computer-database/access" />
 <c:set var="pathAdd" value="/computer-database/access/add" />
 <c:set var="pathEdit" value="/computer-database/access/edit" />
@@ -26,12 +24,14 @@
 	value="${ emptyText.concat('&displayBy=').concat(PAGE.objectsPerPages) }" />
 <c:set var="tmpField"
 	value="${ emptyText.concat('&field=').concat(PAGE.field) }" />
+<c:set var="oldField"
+	value="${ emptyText.concat(PAGE.field) }" />
 <c:set var="tmpAscending"
 	value="${ emptyText.concat('&ascending=').concat(PAGE.ascending) }" />
 <c:set var="tmpSearch"
 	value="${ searchModeActivated ? emptyText.concat('&search=').concat(PAGE.search) : '' }" />
 
-
+<%-- <c:out value="field=${ field } and PAGE.field=${ PAGE.field } and field.equals(PAGE.field)=${ field.equals(PAGE.field) }" /> --%>
 
 <%-- --%>
 <c:choose>
@@ -68,7 +68,7 @@
 			</c:when>
 			<c:when test="${ linkTo.equals('self') }">
 				<c:set var="tmpPath" value="${ tmpPath.concat(currentPath) }" />
-				<c:if test="searchModeActivated == true">
+				<c:if test="${ searchModeActivated }">
 					<c:set var="tmpSearchMode" value="${ true }" />
 				</c:if>
 			</c:when>
@@ -92,19 +92,22 @@
 </c:if>
 
 <c:if
+	test="${ not empty ascending and ascending.matches('[true|false]') }">
+	<c:set var="tmpAscending" value="${ emptyText.concat('&ascending=').concat(ascending) }" />
+</c:if>
+
+<c:if
 	test="${ not empty field }">
 	<c:if test="${ field.equals('name')
 		or field.equals('introduced')
 		or field.equals('discontinued')
 		or field.equals('company.name') }">
-	<c:set var="tmpField"
-		value="${ emptyText.concat('&field=').concat(field) }" />
+		<c:set var="tmpField"
+			value="${ emptyText.concat('&field=').concat(field) }" />
 	</c:if>
-</c:if>
-
-<c:if
-	test="${ not empty ascending and ascending.matches('[true|false]') }">
-	<c:set var="tmpAscending" value="${ emptyText.concat('&displayBy=').concat(displayBy) }" />
+	<c:if test="${ field.equals(PAGE.field) }">
+		<c:set var="tmpAscending" value="${ emptyText.concat('&ascending=').concat(!PAGE.ascending) }" />
+	</c:if>
 </c:if>
 
 <c:set var="tmpPath" value="${ tmpPath.concat(tmpPageNb) }" />
