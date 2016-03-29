@@ -22,4 +22,8 @@ public enum ThreadLocalConnection {
 	public Connection get() {
 		return this.threadLocal.get();
 	}
+	
+	public void remove() {
+		this.threadLocal.remove();
+	}
 }

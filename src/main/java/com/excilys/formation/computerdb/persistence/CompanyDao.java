@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.excilys.formation.computerdb.model.Company;
 
-public interface CompanyDAO {
+public interface CompanyDao {
 	public List<Company> getAll();
 	public List<Company> getFromTo(int offset, int limit);
 	public int getNbEntries();

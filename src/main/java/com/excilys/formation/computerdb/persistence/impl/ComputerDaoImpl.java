@@ -18,19 +18,20 @@ import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
 import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.persistence.ComputerDAO;
+import com.excilys.formation.computerdb.persistence.ComputerDao;
+import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 
-public enum ComputerDAOImpl implements ComputerDAO {
+public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
 	private ConnectionFactoryImpl connectionFactory;
-	protected final Logger logger = LoggerFactory.getLogger(ComputerDAOImpl.class);
-	protected CompanyDAOImpl companyDAOImpl;
+	protected final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+	protected CompanyDaoImpl companyDAOImpl;
 	protected List<Computer> list = null;
 
-	private ComputerDAOImpl() {
+	private ComputerDaoImpl() {
 		this.connectionFactory = ConnectionFactoryImpl.INSTANCE;
-		this.companyDAOImpl = CompanyDAOImpl.INSTANCE;
+		this.companyDAOImpl = CompanyDaoImpl.INSTANCE;
 	}
 
 	@Override
@@ -500,7 +501,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void deleteComputers(long[] listId, Connection connection) throws SQLException {
+	public void deleteComputers(long[] listId) throws SQLException {
+		Connection connection = ThreadLocalConnection.INSTANCE.get();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
@@ -518,7 +520,8 @@ public enum ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public void deleteComputersWhereCompanyIdEquals(long id, Connection connection) throws SQLException {
+	public void deleteComputersWhereCompanyIdEquals(long id) throws SQLException {
+		Connection connection = ThreadLocalConnection.INSTANCE.get();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 

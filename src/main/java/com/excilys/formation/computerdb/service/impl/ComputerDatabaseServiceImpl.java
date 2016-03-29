@@ -14,32 +14,32 @@ import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.pagination.SearchPage;
 import com.excilys.formation.computerdb.pagination.SortedPage;
-import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
-import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
+import com.excilys.formation.computerdb.persistence.impl.CompanyDaoImpl;
+import com.excilys.formation.computerdb.persistence.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
-//import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
+import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	INSTANCE;
 
-	private ComputerDAOImpl computerDAOImpl;
-	private CompanyDAOImpl companyDAOImpl;
+	private ComputerDaoImpl computerDaoImpl;
+	private CompanyDaoImpl companyDAOImpl;
 	private ConnectionFactoryImpl connectionFactory;
-//	private ThreadLocalConnection threadLocalConnection;
+	private ThreadLocalConnection threadLocalConnection;
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
-		computerDAOImpl = ComputerDAOImpl.INSTANCE;
-		companyDAOImpl = CompanyDAOImpl.INSTANCE;
+		computerDaoImpl = ComputerDaoImpl.INSTANCE;
+		companyDAOImpl = CompanyDaoImpl.INSTANCE;
 		connectionFactory = ConnectionFactoryImpl.INSTANCE;
-//		threadLocalConnection = ThreadLocalConnection.INSTANCE;
+		threadLocalConnection = ThreadLocalConnection.INSTANCE;
 	}
 
 	@Override
 	public boolean alreadyExists(String name) {
-		return this.computerDAOImpl.exists(name);
+		return this.computerDaoImpl.exists(name);
 	}
 
 	@Override
@@ -49,12 +49,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public int getNbComputers() {
-		return computerDAOImpl.getNbEntries();
+		return computerDaoImpl.getNbEntries();
 	}
 
 	@Override
 	public int getNbComputersNamed(String search) {
-		int nb = computerDAOImpl.getNbEntriesNamed(search);
+		int nb = computerDaoImpl.getNbEntriesNamed(search);
 		return nb;
 	}
 
@@ -70,12 +70,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public Computer getComputerById(Long id) {
-		return computerDAOImpl.getComputerById(id);
+		return computerDaoImpl.getComputerById(id);
 	}
 
 	@Override
 	public Computer getComputerByName(String name) {
-		return computerDAOImpl.getComputerByName(name);
+		return computerDaoImpl.getComputerByName(name);
 	}
 
 	@Override
@@ -87,14 +87,14 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public Page<Computer> getAllComputers() {
-		List<Computer> list = computerDAOImpl.getAll();
+		List<Computer> list = computerDaoImpl.getAll();
 		int len = list.size();
 		return new Page<Computer>(list, 1, 1, len, len);
 	}
 
 	@Override
 	public Page<Company> getCompanyPage(int pageNumber, Page<Company> p) {
-		int nbEntries = computerDAOImpl.getNbEntries();
+		int nbEntries = computerDaoImpl.getNbEntries();
 		List<Company> list = companyDAOImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
 		p.setPage(list);
 		p.setCurrentPageNumber(pageNumber);
@@ -104,8 +104,8 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp) {
-		int nbEntries = computerDAOImpl.getNbEntries();
-		List<Computer> list = computerDAOImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(),
+		int nbEntries = computerDaoImpl.getNbEntries();
+		List<Computer> list = computerDaoImpl.getFromToSortedBy(pageNumber * sp.getObjectsPerPages(),
 				sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setNbEntries(nbEntries);
@@ -116,8 +116,8 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public SearchPage<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp) {
-		int nbEntries = computerDAOImpl.getNbEntriesNamed(sp.getSearch());
-		List<Computer> list = computerDAOImpl.getNamedFromToSortedBy(sp.getSearch(),
+		int nbEntries = computerDaoImpl.getNbEntriesNamed(sp.getSearch());
+		List<Computer> list = computerDaoImpl.getNamedFromToSortedBy(sp.getSearch(),
 				pageNumber * sp.getObjectsPerPages(), sp.getObjectsPerPages(), sp.getField(), sp.isAscending());
 		sp.setCurrentPageNumber(pageNumber);
 		sp.setNbEntries(nbEntries);
@@ -130,7 +130,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public List<Problem> createComputer(Computer c) {
 		List<Problem> listErrors = new ArrayList<>();
 
-		computerDAOImpl.createComputer(c);
+		computerDaoImpl.createComputer(c);
 		return listErrors;
 	}
 
@@ -143,7 +143,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			Computer c = null;
 			c = new Computer.Builder().name(name).intro(intro).outro(outro).company(comp).build();
 			System.out.println("c = " + c);
-			computerDAOImpl.createComputer(c);
+			computerDaoImpl.createComputer(c);
 		}
 
 		return listErrors;
@@ -156,7 +156,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		if (listErrors == null) {
 			Computer c = null;
 			c = new Computer.Builder().id(id).name(name).intro(intro).outro(outro).company(comp).build();
-			computerDAOImpl.createComputer(c);
+			computerDaoImpl.createComputer(c);
 		}
 
 		return listErrors;
@@ -167,7 +167,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
 
 		if (listErrors == null) {
-			this.computerDAOImpl.updateComputer(computer);
+			this.computerDaoImpl.updateComputer(computer);
 		}
 
 		return listErrors;
@@ -175,12 +175,12 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public void deleteComputer(Long id) {
-		computerDAOImpl.deleteComputer(id);
+		computerDaoImpl.deleteComputer(id);
 	}
 
 	@Override
 	public void deleteComputer(String name) {
-		computerDAOImpl.deleteComputer(name);
+		computerDaoImpl.deleteComputer(name);
 	}
 
 	@Override
@@ -189,8 +189,8 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		logger.info("Starting mass computer deletion...");
 		try {
 			connection = connectionFactory.getTransaction();
-
-			computerDAOImpl.deleteComputers(listId, connection);
+			threadLocalConnection.set(connection);
+			computerDaoImpl.deleteComputers(listId);
 
 			connectionFactory.commitTransaction(connection);
 		} catch (SQLException e) {
@@ -200,6 +200,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			connectionFactory.rollbackTransaction(connection);
 		} finally {
 			try {
+				threadLocalConnection.remove();
 				connection.close();
 			} catch (SQLException e) {
 				logger.error(e.getMessage());
@@ -216,8 +217,9 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			long id = c.getId();
 			try {
 				connection = connectionFactory.getTransaction();
+				threadLocalConnection.set(connection);
 
-				computerDAOImpl.deleteComputersWhereCompanyIdEquals(id, connection);
+				computerDaoImpl.deleteComputersWhereCompanyIdEquals(id);
 				companyDAOImpl.deleteCompany(id, connection);
 
 				connection.commit();
@@ -228,6 +230,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 				connectionFactory.rollbackTransaction(connection);
 			} finally {
 				try {
+					threadLocalConnection.remove();
 					connection.close();
 				} catch (SQLException e) {
 					logger.error(e.getMessage());

@@ -1,13 +1,12 @@
 package com.excilys.formation.computerdb.persistence;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Computer;
 
-public interface ComputerDAO {
+public interface ComputerDao {
 	boolean exists(String name);
 	boolean exists(Computer computer);
 	
@@ -28,6 +27,22 @@ public interface ComputerDAO {
 	void updateComputer(Computer computer);
 	void deleteComputer(long id);
 	void deleteComputer(String name);
-	void deleteComputers(long[] list, Connection connection) throws SQLException;
-	void deleteComputersWhereCompanyIdEquals(long id, Connection connection) throws SQLException;
+	
+	/**
+	 * Deletes a list of Computer.<br>
+	 * This function needs a connection from a ThreadLocalConnection,
+	 *  so be sure to store one before calling this function.
+	 * @param list a list of Computer to delete from the database
+	 * @throws SQLException if the deletion goes wrong
+	 */
+	void deleteComputers(long[] list) throws SQLException;
+	
+	/**
+	 * Deletes a Company and the list of Computer associated.<br>
+	 * This function needs a connection from a ThreadLocalConnection,
+	 *  so be sure to store one before calling this function.
+	 * @param id the id of the Company to delete
+	 * @throws SQLException if the deletion goes wrong
+	 */
+	void deleteComputersWhereCompanyIdEquals(long id) throws SQLException;
 }
