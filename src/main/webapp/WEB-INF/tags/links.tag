@@ -27,11 +27,12 @@
 <c:set var="oldField"
 	value="${ emptyText.concat(PAGE.field) }" />
 <c:set var="tmpAscending"
-	value="${ emptyText.concat('&ascending=').concat(PAGE.ascending) }" />
+	value="${ emptyText.concat('&ascending=true') }" />
 <c:set var="tmpSearch"
 	value="${ searchModeActivated ? emptyText.concat('&search=').concat(PAGE.search) : '' }" />
 
 <%-- <c:out value="field=${ field } and PAGE.field=${ PAGE.field } and field.equals(PAGE.field)=${ field.equals(PAGE.field) }" /> --%>
+<%-- <c:out value="ascending=${ param['ascending'] }" /> --%>
 
 <%-- --%>
 <c:choose>
@@ -92,8 +93,8 @@
 </c:if>
 
 <c:if
-	test="${ not empty ascending and ascending.matches('[true|false]') }">
-	<c:set var="tmpAscending" value="${ emptyText.concat('&ascending=').concat(ascending) }" />
+	test="${ not empty param['ascending'] and param['ascending'].matches('[true|false]') }">
+	<c:set var="tmpAscending" value="${ emptyText.concat('&ascending=true') }" />
 </c:if>
 
 <c:if

@@ -18,6 +18,7 @@ import com.excilys.formation.computerdb.persistence.impl.CompanyDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDAOImpl;
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
+//import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
@@ -26,12 +27,14 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	private ComputerDAOImpl computerDAOImpl;
 	private CompanyDAOImpl companyDAOImpl;
 	private ConnectionFactoryImpl connectionFactory;
+//	private ThreadLocalConnection threadLocalConnection;
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
 		computerDAOImpl = ComputerDAOImpl.INSTANCE;
 		companyDAOImpl = CompanyDAOImpl.INSTANCE;
 		connectionFactory = ConnectionFactoryImpl.INSTANCE;
+//		threadLocalConnection = ThreadLocalConnection.INSTANCE;
 	}
 
 	@Override

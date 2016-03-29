@@ -3,8 +3,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.pagination.SearchPage;
+import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 
@@ -18,8 +21,10 @@ public class CLI {
 //	ComputerDatabaseServiceImpl service;
 //
 //	private int choice = -1;
-//	private ComputerPager computerPager = null;
-//	private CompanyPager  companyPager  = null;
+//	private SearchPage<Computer> computerSearchPage = null;
+//	private SearchPage<Company>  companySearchPage  = null;
+//	private SortedPage<Computer> computerSortedPage = null;
+//	private SortedPage<Company>  companySortedPage  = null;
 //	private List<Computer> computerList = null;
 //	private List<Company>  companyList  = null;
 //
@@ -30,9 +35,27 @@ public class CLI {
 //	public CLI(Scanner sc) {
 //		this.sc = sc;
 //		this.service = ComputerDatabaseServiceImpl.INSTANCE;
-//		this.companyPager = new CompanyPager(10);
-//		this.computerPager = new ComputerPager(10);
+////		this.computerSortedPage = new SortedPage<>(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries, field, ascending);
+//		int objectsPerPage = 10;
+//		int nbEntries = this.service.getNbComputers();
+//		int mpn = maxPageNumber(objectsPerPage, nbEntries);
+//		this.computerSortedPage = new SortedPage<>(null, 0, mpn, objectsPerPage, nbEntries, Fields.NAME, true);
+//
+//		nbEntries = this.service.getNbCompanies();
+//		mpn = maxPageNumber(objectsPerPage, nbEntries);
+//		this.companySortedPage  = new SortedPage<>(null, 0, mpn, objectsPerPage, nbEntries, Fields.NAME, true);
 //		
+//		this.computerSearchPage = new SearchPage<>();
+//		
+//		this.companySearchPage  = new SearchPage<>();
+//	}
+//	
+//	private int maxPageNumber(int objectsPerPage, int nbEntries) {
+//		int maxPageNumber = -1;
+//		double opp = (double) objectsPerPage;
+//		double nbe = (double) nbEntries;
+//		maxPageNumber = (int) Math.ceil(nbe / opp);
+//		return maxPageNumber;
 //	}
 //
 //	/**
@@ -129,7 +152,7 @@ public class CLI {
 //	 */
 //	protected void displayAllComputers() {
 //		List<Computer> comps = null;
-//		comps = service.getAllComputers();
+//		comps = service.getAllComputers().getPage();
 //		System.out.println("comps.size() : " + comps.size());
 //		for (Computer comp : comps) {
 //			System.out.println(comp.toString());
@@ -150,13 +173,14 @@ public class CLI {
 //				switch (c) {
 //				case 1: // First page
 //					try {
-//						this.computerPager.goToPageNumber(0);
+//						this.computerSortedPage.get
 //					} catch (Exception e) {
 //						System.out.println(e.getMessage());
 //					}
 //					this.computerList = this.computerPager.getCurrentPage();
 //					break;
 //				case 2: // Previous page
+//					
 //					this.computerList = this.computerPager.getPreviousPage();
 //					break;
 //				case 3: // Next page
@@ -374,8 +398,8 @@ public class CLI {
 //		}
 //		return date;
 //	}
-
-	public static void main(String[] args) {
+//
+//	public static void main(String[] args) {
 //		Scanner sc = new Scanner(System.in);
 //		CLI cli = new CLI(sc);
 //		boolean keepOnRocking = true;
@@ -386,5 +410,5 @@ public class CLI {
 //			keepOnRocking = cli.launch();
 //		}
 //		sc.close();
-	}
+//	}
 }
