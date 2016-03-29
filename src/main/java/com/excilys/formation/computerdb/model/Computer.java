@@ -52,12 +52,20 @@ public class Computer implements Comparable<Computer> {
 	 */
 	public Computer(String name, String intro, String outro, Company comp) {
 		this.name = name;
+		
+		if (intro != null) {
+			intro = intro.split(" ")[0];
+			this.intro = LocalDate.parse(intro);
+		} else {
+			intro = null;
+		}
 
-		intro = intro.split(" ")[0];
-		this.intro = LocalDate.parse(intro);
-
-		outro = outro.split(" ")[0];
-		this.outro = LocalDate.parse(outro);
+		if (outro != null) {
+			outro = outro.split(" ")[0];
+			this.outro = LocalDate.parse(outro);
+		} else {
+			outro = null;
+		}
 
 		this.company = comp;
 	}
@@ -73,12 +81,20 @@ public class Computer implements Comparable<Computer> {
 	public Computer(long id, String name, String intro, String outro, Company comp) {
 		this.id = id;
 		this.name = name;
+		
+		if (intro != null) {
+			intro = intro.split(" ")[0];
+			this.intro = LocalDate.parse(intro);
+		} else {
+			intro = null;
+		}
 
-		intro = intro.split(" ")[0];
-		this.intro = LocalDate.parse(intro);
-
-		outro = outro.split(" ")[0];
-		this.outro = LocalDate.parse(outro);
+		if (outro != null) {
+			outro = outro.split(" ")[0];
+			this.outro = LocalDate.parse(outro);
+		} else {
+			outro = null;
+		}
 
 		this.company = comp;
 	}
@@ -104,8 +120,12 @@ public class Computer implements Comparable<Computer> {
 	 * @param intro the date of start of production
 	 */
 	public void setIntro(String intro) {
-		intro = intro.split(" ")[0];
-		this.intro = LocalDate.parse(intro);
+		if (intro != null) {
+			intro = intro.split(" ")[0];
+			this.intro = LocalDate.parse(intro);
+		} else {
+			intro = null;
+		}
 	}
 
 	public LocalDate getOutro() {
@@ -120,8 +140,12 @@ public class Computer implements Comparable<Computer> {
 	 * @param outro the date of start of production
 	 */
 	public void setOutro(String outro) {
-		outro = outro.split(" ")[0];
-		this.intro = LocalDate.parse(outro);
+		if (outro != null) {
+			outro = outro.split(" ")[0];
+			this.outro = LocalDate.parse(outro);
+		} else {
+			outro = null;
+		}
 	}
 
 	public Company getCompany() {

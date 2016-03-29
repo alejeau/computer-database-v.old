@@ -1,6 +1,7 @@
 package com.excilys.formation.computerdb.servlets;
 
 import java.io.IOException;
+//import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +15,10 @@ import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageReque
 
 public class ServletDashboard extends HttpServlet {
 	private static final long serialVersionUID = -2466894131493728982L;
+//	private static ThreadLocal<Connection> threadLocal;
 	
 	public ServletDashboard() {
+//		threadLocal = new ThreadLocal<>();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
