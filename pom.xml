@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.3.0-RELEASE</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -21,6 +21,18 @@
 			<plugin>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.7</version>
+			</plugin>
+			
+			<!-- exclude integration test from the the unit test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/selenium/**</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -40,9 +52,8 @@
 	</reporting>
 
 	<dependencies>
-	
-<!-- 		Tests -->
-<!-- 		selenium -->
+		<!-- Tests -->
+		<!-- selenium -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -61,22 +72,22 @@
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
-<!-- 		junit -->
+		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-<!-- 		mockito -->
+		<!-- mockito -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-<!-- 		compile -->
+
+		<!-- compile -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -102,17 +113,17 @@
 			<artifactId>bonecp</artifactId>
 			<version>${bonecp.version}</version>
 		</dependency>
-		
-<!-- 		runtime -->
+
+		<!-- runtime -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-		
-<!-- 		Provided -->
+
+
+		<!-- Provided -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
@@ -123,21 +134,25 @@
 
 	</dependencies>
 	<properties>
-<!-- 		test -->
+		<!-- plugin -->
+		<surefire.version>2.19.1</surefire.version>
+		
+		<!-- test -->
 		<selenium.version>2.53.0</selenium.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
-		
-<!-- 		compile -->
+
+		<!-- compile -->
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.19</slf4j.version>
 		<jstl.version>1.2</jstl.version>
 		<logback.version>1.1.6</logback.version>
-<!-- 		runtime -->
+		<!-- runtime -->
 		<mysql.version>5.1.38</mysql.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
-		
-<!-- 		provided -->
+
+		<!-- provided -->
 		<javax.version>7.0</javax.version>
 	</properties>
+	<url>https://github.com/alejeau/computer-database</url>
 </project>
