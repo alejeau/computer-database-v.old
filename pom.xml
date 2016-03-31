@@ -134,6 +134,9 @@
 
 	</dependencies>
 	<properties>
+		<!-- sets the projects encoding to UTF-8 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
 		
