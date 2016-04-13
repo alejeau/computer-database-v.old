@@ -10,25 +10,27 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.mapper.model.CompanyMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDao;
 
-public enum CompanyDaoImpl implements CompanyDao {
-	INSTANCE;
-
-	private ConnectionFactoryImpl connectionFactory;
-	protected final Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+@Repository
+public class CompanyDaoImpl implements CompanyDao {
+	
+	private ConnectionFactoryImpl connectionFactory = ConnectionFactoryImpl.INSTANCE;
+	
+	protected final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
+	
 	protected Statement stmt = null;
 	protected PreparedStatement pstmt = null;
 	protected ResultSet rs = null;
 	protected List<Company> list = null;
 
-	private CompanyDaoImpl() {
-		connectionFactory = ConnectionFactoryImpl.INSTANCE;
-		this.list = new ArrayList<Company>();
+	protected CompanyDaoImpl() {
+		list = new ArrayList<Company>();
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				list.add(company);
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 			CompanyDaoImpl.close(rs, pstmt, connection);
 			throw new CompanyDaoException(e.getMessage());
 		} finally {
@@ -75,7 +77,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				nbEntries = rs.getInt("nb_companys");
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 			CompanyDaoImpl.close(rs, pstmt, connection);
 			throw new CompanyDaoException(e.getMessage());
 		} finally {
@@ -101,7 +103,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				list.add(company);
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 			CompanyDaoImpl.close(rs, pstmt, connection);
 			throw new CompanyDaoException(e.getMessage());
 		} finally {
@@ -133,7 +135,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 			CompanyDaoImpl.close(rs, pstmt, connection);
 			throw new CompanyDaoException(e.getMessage());
 		} finally {
@@ -160,7 +162,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				company = CompanyMapper.map(rs);
 			}
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			LOG.error(e.getMessage());
 			CompanyDaoImpl.close(rs, pstmt, connection);
 			throw new CompanyDaoException(e.getMessage());
 		} finally {
@@ -173,7 +175,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	public void deleteCompany(long id, Connection connection) throws SQLException {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		logger.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
+		LOG.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
 		String query = "DELETE FROM company WHERE id = ?";
 		pstmt = connection.prepareStatement(query);
 		pstmt.setLong(1, id);

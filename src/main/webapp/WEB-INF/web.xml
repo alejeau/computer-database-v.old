@@ -2,39 +2,50 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:./applicationContext.xml</param-value>
+	</context-param>
 
-	<servlet>
-		<servlet-name>ServletDashboard</servlet-name>
-		<servlet-class>com.excilys.formation.computerdb.servlets.ServletDashboard</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>ServletAdd</servlet-name>
-		<servlet-class>com.excilys.formation.computerdb.servlets.ServletAddComputer</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>ServletEdit</servlet-name>
-		<servlet-class>com.excilys.formation.computerdb.servlets.ServletEditComputer</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>ServletSearch</servlet-name>
-		<servlet-class>com.excilys.formation.computerdb.servlets.ServletSearch</servlet-class>
-	</servlet>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
 
-	<servlet-mapping>
-		<servlet-name>ServletDashboard</servlet-name>
-		<url-pattern>/access</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ServletAdd</servlet-name>
-		<url-pattern>/access/add</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ServletEdit</servlet-name>
-		<url-pattern>/access/edit</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ServletSearch</servlet-name>
-		<url-pattern>/access/search</url-pattern>
-	</servlet-mapping>
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ServletDashboard</servlet-name> -->
+<!-- 		<servlet-class>com.excilys.formation.computerdb.servlets.ServletDashboard</servlet-class> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ServletAdd</servlet-name> -->
+<!-- 		<servlet-class>com.excilys.formation.computerdb.servlets.ServletAddComputer</servlet-class> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ServletEdit</servlet-name> -->
+<!-- 		<servlet-class>com.excilys.formation.computerdb.servlets.ServletEditComputer</servlet-class> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>ServletSearch</servlet-name> -->
+<!-- 		<servlet-class>com.excilys.formation.computerdb.servlets.ServletSearch</servlet-class> -->
+<!-- 	</servlet> -->
+
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ServletDashboard</servlet-name> -->
+<!-- 		<url-pattern>/access</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ServletAdd</servlet-name> -->
+<!-- 		<url-pattern>/access/add</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ServletEdit</servlet-name> -->
+<!-- 		<url-pattern>/access/edit</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>ServletSearch</servlet-name> -->
+<!-- 		<url-pattern>/access/search</url-pattern> -->
+<!-- 	</servlet-mapping> -->
 	
 </web-app>

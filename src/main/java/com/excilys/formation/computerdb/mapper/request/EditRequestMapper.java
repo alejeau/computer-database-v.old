@@ -6,6 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
@@ -15,11 +18,19 @@ import com.excilys.formation.computerdb.servlets.Paths;
 import com.excilys.formation.computerdb.servlets.request.ComputerEditObject;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
+@Component
 public class EditRequestMapper {
-
-	public static HttpServletRequest mapDoGet(HttpServletRequest request) {
-		ComputerDatabaseServiceImpl services = ComputerDatabaseServiceImpl.INSTANCE;
-		
+	
+	@Autowired
+	ComputerDatabaseServiceImpl services;
+	
+	@Autowired
+	ComputerValidator cval;
+	
+	public EditRequestMapper() {
+	}
+	
+	public HttpServletRequest mapDoGet(HttpServletRequest request) {
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
@@ -32,8 +43,7 @@ public class EditRequestMapper {
 		return request;
 	}
 	
-	public static ComputerEditObject mapDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		ComputerDatabaseServiceImpl services = ComputerDatabaseServiceImpl.INSTANCE;
+	public ComputerEditObject mapDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Problem> listPbs = null;
 		long   id		= Long.valueOf(request.getParameter("computerId"));
 		String oldName 	= services.getComputerById(id).getName();
@@ -50,7 +60,7 @@ public class EditRequestMapper {
 		intro = checkDateEntry(intro);
 		outro = checkDateEntry(outro);
 
-		listPbs = ComputerValidator.validateNewComputer(newName, oldName, intro, outro);
+		listPbs = cval.validateNewComputer(newName, oldName, intro, outro);
 
 		long   cid = Long.valueOf(request.getParameter("companyId"));
 		Company cy = services.getCompanyById(cid);
@@ -61,6 +71,7 @@ public class EditRequestMapper {
 				.outro(outro)
 				.company(cy)
 				.build();
+		
 		if (listPbs == null) {
 			listPbs = null;
 			listPbs = services.updateComputer(c, oldName);
@@ -77,8 +88,7 @@ public class EditRequestMapper {
 	}
 
 	
-	private static HttpServletRequest setComputerDisplay(HttpServletRequest request, Computer c) {
-		ComputerDatabaseServiceImpl services = ComputerDatabaseServiceImpl.INSTANCE;
+	private HttpServletRequest setComputerDisplay(HttpServletRequest request, Computer c) {
 		ComputerDto cdto = new ComputerDto(c);
 		request.setAttribute("cdto",  cdto);
 
@@ -94,7 +104,7 @@ public class EditRequestMapper {
 		return request;
 	}
 
-	private static String checkDateEntry(String date){
+	private String checkDateEntry(String date){
 		if (date.equals("")) {
 			return null;
 		}

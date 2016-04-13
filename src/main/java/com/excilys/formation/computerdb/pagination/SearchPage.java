@@ -13,8 +13,6 @@ public class SearchPage<T> extends SortedPage<T> {
 		this.search = null;
 	}
 	
-
-	
 	/**
 	 * Creates a page of T.
 	 * 

@@ -10,28 +10,35 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.constants.Time;
+import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
-import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDao;
 import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 
-public enum ComputerDaoImpl implements ComputerDao {
-	INSTANCE;
-
-	private ConnectionFactoryImpl connectionFactory;
+@Repository
+public class ComputerDaoImpl implements ComputerDao {
+	
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
-	protected CompanyDaoImpl companyDAOImpl;
 	protected List<Computer> list = null;
-
-	private ComputerDaoImpl() {
-		this.connectionFactory = ConnectionFactoryImpl.INSTANCE;
-		this.companyDAOImpl = CompanyDaoImpl.INSTANCE;
+	
+	@Autowired
+	protected ComputerMapper compMap;
+	
+	@Autowired
+	protected CompanyDaoImpl companyDAOImpl;
+	
+	protected ConnectionFactoryImpl connectionFactory;
+	
+	protected ComputerDaoImpl() {
+		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 	}
 
 	@Override
@@ -115,7 +122,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				id = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(id);
-				computer = ComputerMapper.map(rs, c);
+				computer = compMap.map(rs, c);
 
 				list.add(computer);
 			}
@@ -167,7 +174,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				id = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(id);
-				computer = ComputerMapper.map(rs, c);
+				computer = compMap.map(rs, c);
 
 				list.add(computer);
 			}
@@ -274,7 +281,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				id = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(id);
-				computer = ComputerMapper.map(rs, c);
+				computer = compMap.map(rs, c);
 				list.add(computer);
 			}
 		} catch (SQLException e) {
@@ -309,7 +316,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				idc = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(idc);
-				computer = ComputerMapper.map(rs, c);
+				computer = compMap.map(rs, c);
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
@@ -343,7 +350,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				idc = rs.getLong("company_id");
 
 				c = this.companyDAOImpl.getCompanyById(idc);
-				computer = ComputerMapper.map(rs, c);
+				computer = compMap.map(rs, c);
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());

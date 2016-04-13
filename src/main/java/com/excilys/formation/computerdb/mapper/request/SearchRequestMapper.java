@@ -10,7 +10,7 @@ import com.excilys.formation.computerdb.servlets.request.ComputerSearchPageReque
 
 public class SearchRequestMapper {
 	
-	public static ComputerSearchPageRequest<Computer> mapDoGet(HttpServletRequest request) {
+	public static ComputerSearchPageRequest mapDoGet(HttpServletRequest request) {
 		String url = Paths.PATH_COMPUTER_SEARCH;
 		SearchPage<Computer> page = new SearchPage<>();
 
@@ -72,7 +72,7 @@ public class SearchRequestMapper {
 		page.setSearch(search);
 		url = setUrl(url, UrlFields.URL_SEARCH, search);
 
-		return new ComputerSearchPageRequest<>(page, url);
+		return new ComputerSearchPageRequest(page, url);
 	}
 	
 	/**

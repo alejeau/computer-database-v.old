@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
@@ -21,18 +23,25 @@ import com.excilys.formation.computerdb.service.ComputerDatabaseService;
 import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
-public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
-	INSTANCE;
-
+@Service
+public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
+	
+	@Autowired
 	private ComputerDaoImpl computerDaoImpl;
+	
+	@Autowired
 	private CompanyDaoImpl companyDAOImpl;
+	
+	@Autowired
+	private ComputerValidator cval;
+	
 	private ConnectionFactoryImpl connectionFactory;
 	private ThreadLocalConnection threadLocalConnection;
+	
+	
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
-		computerDaoImpl = ComputerDaoImpl.INSTANCE;
-		companyDAOImpl = CompanyDaoImpl.INSTANCE;
 		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		threadLocalConnection = ThreadLocalConnection.INSTANCE;
 	}
@@ -137,7 +146,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = null;
-		listErrors = ComputerValidator.validateComputer(name, intro, outro);
+		listErrors = cval.validateComputer(name, intro, outro);
 		System.out.println("listErrors = " + listErrors);
 		if (listErrors == null) {
 			Computer c = null;
@@ -151,7 +160,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public List<Problem> createComputer(long id, String name, String intro, String outro, Company comp) {
-		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
+		List<Problem> listErrors = cval.validateComputer(name, intro, outro);
 
 		if (listErrors == null) {
 			Computer c = null;
@@ -164,7 +173,7 @@ public enum ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public List<Problem> updateComputer(Computer computer, String oldName) {
-		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
+		List<Problem> listErrors = cval.validateNewComputer(computer, oldName);
 
 		if (listErrors == null) {
 			this.computerDaoImpl.updateComputer(computer);

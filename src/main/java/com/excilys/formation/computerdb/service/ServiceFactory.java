@@ -1,18 +1,19 @@
 package com.excilys.formation.computerdb.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 public enum ServiceFactory {
 	INSTANCE;
 
-	ComputerDatabaseServiceImpl computerDatabaseServiceImpl;
+	@Autowired
+	ComputerDatabaseServiceImpl services;
 
-	private ServiceFactory() {
-		computerDatabaseServiceImpl = ComputerDatabaseServiceImpl.INSTANCE;
-	}
+	private ServiceFactory() {}
 
 	public ComputerDatabaseService getService() {
-		return computerDatabaseServiceImpl;
+		return services;
 	}
 
 }

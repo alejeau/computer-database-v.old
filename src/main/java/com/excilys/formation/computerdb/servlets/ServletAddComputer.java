@@ -3,10 +3,15 @@ package com.excilys.formation.computerdb.servlets;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.errors.Problem;
@@ -15,11 +20,24 @@ import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
+@WebServlet(name = "ServletAdd", urlPatterns = "/access/add")
 public class ServletAddComputer extends HttpServlet {
 	private static final long serialVersionUID = 8660445621574175568L;
 
-	public ServletAddComputer() {
+
+	@Autowired
+	ComputerDatabaseServiceImpl services;
+	
+	@Autowired
+	ComputerValidator cval; 
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
+
+	public ServletAddComputer() {}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setRequest(request, null);
@@ -28,13 +46,12 @@ public class ServletAddComputer extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Problem> listPbs = null;
-		ComputerDatabaseServiceImpl services = ComputerDatabaseServiceImpl.INSTANCE;
-
+		
 		String name = request.getParameter("computerName");
 		String intro = request.getParameter("introduced");
 		String outro = request.getParameter("discontinued");
 
-		listPbs = ComputerValidator.validateComputer(name, intro, outro);
+		listPbs = cval.validateComputer(name, intro, outro);
 
 		if (listPbs == null) {
 			long cid = Long.valueOf(request.getParameter("companyId"));
@@ -47,7 +64,7 @@ public class ServletAddComputer extends HttpServlet {
 	}
 
 	private void setRequest(HttpServletRequest request, List<Problem> listPbs) throws ServletException, IOException {
-		Page<Company> companies = ComputerDatabaseServiceImpl.INSTANCE.getAllCompanies();
+		Page<Company> companies = this.services.getAllCompanies();
 
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>4.3.10-RELEASE</version>
+	<version>4.5.1-SNAPSHOT</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -50,7 +50,17 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<!-- Tests -->
 		<!-- selenium -->
@@ -88,20 +98,35 @@
 		</dependency>
 
 		<!-- compile -->
+		<!-- logging APIs -->
+		<!-- logback -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
+		<!-- slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- log4j -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		<!-- BoneCP -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${bonecp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
@@ -109,19 +134,28 @@
 			<version>${jstl.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${bonecp.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>${javax.version}</version>
 		</dependency>
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
 
 
@@ -162,7 +196,7 @@
 		<jstl.version>1.2</jstl.version>
 		<logback.version>1.1.6</logback.version>
 		<spring.version>4.2.5.RELEASE</spring.version>
-		
+
 		<!-- runtime -->
 		<mysql.version>5.1.38</mysql.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>

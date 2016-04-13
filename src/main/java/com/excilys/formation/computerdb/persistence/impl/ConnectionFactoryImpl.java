@@ -13,9 +13,8 @@ import com.jolbox.bonecp.BoneCPConfig;
 import java.sql.Connection;
 
 public enum ConnectionFactoryImpl implements ConnectionFactory {
-//	public static final ConnectionFactoryImpl INSTANCE = new ConnectionFactoryImpl();
 	INSTANCE;
-	
+
 	// Config parameters
 	private final String FILE_PROPERTIES = "dao.properties";
 	private final String PROPERTY_URL = "url";
@@ -28,9 +27,8 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 	private String URL;
 	private String DRIVER;
 
-	
 	private Properties properties;
-	
+
 	// Logger
 	private final Logger LOGGER = Logger.getLogger(ConnectionFactoryImpl.class);
 
@@ -81,7 +79,7 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 			config.setJdbcUrl(URL);
 			config.setUsername(USERNAME);
 			config.setPassword(PASSWORD);
-			
+
 			// Configuring pool size
 			config.setMinConnectionsPerPartition(5);
 			config.setMaxConnectionsPerPartition(10);
@@ -109,7 +107,7 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 		}
 		return null;
 	}
-	
+
 	public Connection getTransaction() {
 		Connection connection = null;
 		try {
@@ -120,11 +118,11 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 		}
 		return connection;
 	}
-	
+
 	public void commitTransaction(Connection connection) throws SQLException {
-		 connection.commit();
+		connection.commit();
 	}
-	
+
 	public void rollbackTransaction(Connection connection) {
 		try {
 			connection.rollback();
@@ -132,6 +130,7 @@ public enum ConnectionFactoryImpl implements ConnectionFactory {
 			LOGGER.fatal("Couldn't rollback the modifications!");
 		}
 	}
+
 	/**
 	 * 
 	 * @return

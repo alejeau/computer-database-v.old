@@ -8,10 +8,13 @@ import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 
 public class ConnectionFactoryTest {
+	protected static final Logger LOG = LoggerFactory.getLogger(ConnectionFactoryTest.class);
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,8 +50,7 @@ public class ConnectionFactoryTest {
 		try {
 			isValid = connec.isValid(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage());
 		}
 		assertTrue(isValid);
 	}

@@ -1,17 +1,21 @@
 package com.excilys.formation.computerdb.ui;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.pagination.SortedPage;
-import com.excilys.formation.computerdb.pagination.pager.SortedPageComputer;
 import com.excilys.formation.computerdb.pagination.pager.CompanyPager;
+import com.excilys.formation.computerdb.pagination.pager.SortedPageComputer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
-
 
 public class CLI {
 	public static final String COMPUTER = "computer";
@@ -20,22 +24,34 @@ public class CLI {
 
 	Scanner sc = null;
 
+	@Autowired
 	ComputerDatabaseServiceImpl service;
+
+	@Autowired
+	SortedPageComputer spc;
+
+	@Autowired
+	CompanyPager cpager;
 
 	private int choice = -1;
 	private SortedPage<Computer> computerSortedPage = null;
 	private Page<Company> companyPage = null;
 	private List<Computer> computerList = null;
-	private List<Company>  companyList  = null;
+	private List<Company> companyList = null;
 
 	/**
 	 * Creates a CLI using a Scanner
-	 * @param sc a Scanner
+	 * 
+	 * @param sc
+	 *            a Scanner
 	 */
 	public CLI(Scanner sc) {
 		this.sc = sc;
-		this.service = ComputerDatabaseServiceImpl.INSTANCE;
 		int objectsPerPage = 10;
+		if (this.service == null) {
+			System.out.println("this.service is null");
+			throw new RuntimeException("this.service is null");
+		}
 		int nbEntries = this.service.getNbComputers();
 		int mpn = maxPageNumber(objectsPerPage, nbEntries);
 		this.computerSortedPage = new SortedPage<>(null, 0, mpn, objectsPerPage, nbEntries, Fields.NAME, true);
@@ -44,7 +60,7 @@ public class CLI {
 		mpn = maxPageNumber(objectsPerPage, nbEntries);
 		companyPage = new Page<>(companyList, 0, mpn, objectsPerPage, nbEntries);
 	}
-	
+
 	private int maxPageNumber(int objectsPerPage, int nbEntries) {
 		int maxPageNumber = -1;
 		double opp = (double) objectsPerPage;
@@ -100,6 +116,7 @@ public class CLI {
 
 	/**
 	 * Launches the right activity given the user's choice
+	 * 
 	 * @return whether to quit or not
 	 */
 	public boolean launch() {
@@ -167,22 +184,22 @@ public class CLI {
 			} else {
 				switch (c) {
 				case 1: // First page
-					computerSortedPage = SortedPageComputer.firstPage(computerSortedPage);
+					computerSortedPage = spc.firstPage(computerSortedPage);
 					break;
 				case 2: // Previous page
-					computerSortedPage = SortedPageComputer.prevPage(computerSortedPage);
+					computerSortedPage = spc.prevPage(computerSortedPage);
 					break;
 				case 3: // Next page
-					computerSortedPage = SortedPageComputer.nextPage(computerSortedPage);
+					computerSortedPage = spc.nextPage(computerSortedPage);
 					break;
 				case 4:
 					int pageNumber = getPageNumber();
-					computerSortedPage = SortedPageComputer.goToPage(pageNumber, computerSortedPage);
+					computerSortedPage = spc.goToPage(pageNumber, computerSortedPage);
 					break;
 				default:
 					break;
 				}
-				
+
 				this.computerList = computerSortedPage.getPage();
 
 				for (Computer comp : this.computerList) {
@@ -213,22 +230,22 @@ public class CLI {
 			} else {
 				switch (c) {
 				case 1: // First page
-					companyPage = CompanyPager.firstPage(companyPage);
+					companyPage = cpager.firstPage(companyPage);
 					break;
 				case 2: // Previous page
-					companyPage = CompanyPager.prevPage(companyPage);
+					companyPage = cpager.prevPage(companyPage);
 					break;
 				case 3: // Next page
-					companyPage = CompanyPager.nextPage(companyPage);
+					companyPage = cpager.nextPage(companyPage);
 					break;
 				case 4:
 					int pageNumber = getPageNumber();
-					companyPage = CompanyPager.goToPage(pageNumber, companyPage);
+					companyPage = cpager.goToPage(pageNumber, companyPage);
 					break;
 				default:
 					break;
 				}
-				
+
 				this.companyList = companyPage.getPage();
 
 				for (Company comp : this.companyList) {
@@ -240,6 +257,7 @@ public class CLI {
 
 	/**
 	 * Gets the user's choice of page
+	 * 
 	 * @return the user's choice
 	 */
 	protected int getPageChoice() {
@@ -259,6 +277,7 @@ public class CLI {
 
 	/**
 	 * Gets the user's choice for page number
+	 * 
 	 * @return the number of pages
 	 */
 	protected int getPageNumber() {
@@ -331,10 +350,11 @@ public class CLI {
 		this.service.deleteComputer(name);
 
 	}
-	
-	protected void deleteCompany(){
+
+	protected void deleteCompany() {
 		System.out.println("Company deletion menu");
-		System.out.println("Please specify the name of the company you want to delete (and all its affiliated computers)");
+		System.out.println(
+				"Please specify the name of the company you want to delete (and all its affiliated computers)");
 		String name = sc.nextLine();
 		Company c = this.service.getCompanyByName(name);
 		this.service.deleteCompany(c);
@@ -346,6 +366,7 @@ public class CLI {
 	 * Date of introduction<br>
 	 * Date of production stop<br>
 	 * Company name
+	 * 
 	 * @return an array of String containing the previously stated infos
 	 */
 	protected String[] getInfo() {
@@ -369,7 +390,9 @@ public class CLI {
 
 	/**
 	 * Checks whether a date is in a valid format or not
-	 * @param date a String representing the date
+	 * 
+	 * @param date
+	 *            a String representing the date
 	 * @return the date or CLI2.TIMESTAMP_ZERO if the date's wrong
 	 */
 	protected static String validateDate(String date) {
@@ -380,9 +403,9 @@ public class CLI {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
 				date = CLI.TIMESTAMP_ZERO;
 			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
-				int year 	= Integer.valueOf(s[0]);
-				int month 	= Integer.valueOf(s[1]);
-				int day 	= Integer.valueOf(s[2]);
+				int year = Integer.valueOf(s[0]);
+				int month = Integer.valueOf(s[1]);
+				int day = Integer.valueOf(s[2]);
 				ld = LocalDate.of(year, month, day);
 				date = ld.toString();
 			}
@@ -391,6 +414,8 @@ public class CLI {
 	}
 
 	public static void main(String[] args) {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
+
 		Scanner sc = new Scanner(System.in);
 		CLI cli = new CLI(sc);
 		boolean keepOnRocking = true;
