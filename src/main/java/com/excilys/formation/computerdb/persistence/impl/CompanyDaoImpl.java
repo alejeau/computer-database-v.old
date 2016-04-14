@@ -20,7 +20,7 @@ import com.excilys.formation.computerdb.persistence.CompanyDao;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 	
-	private ConnectionFactoryImpl connectionFactory = ConnectionFactoryImpl.INSTANCE;
+	private ConnectionFactoryImpl connectionFactory = null;
 	
 	protected final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	
@@ -30,6 +30,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	protected List<Company> list = null;
 
 	protected CompanyDaoImpl() {
+		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		list = new ArrayList<Company>();
 	}
 

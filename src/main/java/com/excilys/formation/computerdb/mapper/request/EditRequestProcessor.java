@@ -19,7 +19,7 @@ import com.excilys.formation.computerdb.servlets.request.ComputerEditObject;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 @Component
-public class EditRequestMapper {
+public class EditRequestProcessor {
 	
 	@Autowired
 	ComputerDatabaseServiceImpl services;
@@ -27,10 +27,10 @@ public class EditRequestMapper {
 	@Autowired
 	ComputerValidator cval;
 	
-	public EditRequestMapper() {
+	public EditRequestProcessor() {
 	}
 	
-	public HttpServletRequest mapDoGet(HttpServletRequest request) {
+	public HttpServletRequest processDoGet(HttpServletRequest request) {
 		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
 		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
 		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
@@ -43,7 +43,7 @@ public class EditRequestMapper {
 		return request;
 	}
 	
-	public ComputerEditObject mapDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ComputerEditObject processDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Problem> listPbs = null;
 		long   id		= Long.valueOf(request.getParameter("computerId"));
 		String oldName 	= services.getComputerById(id).getName();

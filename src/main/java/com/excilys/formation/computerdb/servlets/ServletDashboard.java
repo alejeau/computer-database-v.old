@@ -27,12 +27,6 @@ public class ServletDashboard extends HttpServlet {
 	@Autowired
 	ComputerDatabaseServiceImpl services;
 
-	@Autowired
-	DashboardRequestMapper drm;
-	
-//	@Autowired
-//	ComputerSortedPageRequest page;
-
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init();
@@ -43,13 +37,16 @@ public class ServletDashboard extends HttpServlet {
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ComputerSortedPageRequest page = drm.mapDoGet(request);
+		ComputerSortedPageRequest page = DashboardRequestMapper.mapDoGet(request);
+		
+		//* Maybe I need that, maybe I don't, so...
 		SortedPage<Computer> sp = page.getComputerSortedPage();
 		int currentPageNumber = sp.getCurrentPageNumber();
 		sp = this.services.getComputerSortedPage(currentPageNumber, sp);
-		page.set(sp);
+		page.setPage(sp);
+		//*/
 		request = setRequest(request, page);
-		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
+		request.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

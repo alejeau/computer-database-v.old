@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Company;
@@ -414,7 +412,7 @@ public class CLI {
 	}
 
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
+//		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
 
 		Scanner sc = new Scanner(System.in);
 		CLI cli = new CLI(sc);

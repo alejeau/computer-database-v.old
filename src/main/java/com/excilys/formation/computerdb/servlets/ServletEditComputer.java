@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
-import com.excilys.formation.computerdb.mapper.request.EditRequestMapper;
+import com.excilys.formation.computerdb.mapper.request.EditRequestProcessor;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -27,7 +27,7 @@ public class ServletEditComputer extends HttpServlet {
 	ComputerDatabaseServiceImpl services;
 	
 	@Autowired
-	EditRequestMapper erm;
+	EditRequestProcessor erm;
 	
 	
 	@Override
@@ -39,7 +39,7 @@ public class ServletEditComputer extends HttpServlet {
 	public ServletEditComputer() {}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request = erm.mapDoGet(request);
+		request = erm.processDoGet(request);
 		Page<Company> companyList = this.services.getAllCompanies();
 		request.setAttribute("companies",  companyList.getPage());
 		
@@ -48,7 +48,7 @@ public class ServletEditComputer extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Page<Company> companies = this.services.getAllCompanies();
-		ComputerEditObject ceo = erm.mapDoPost(request, response);
+		ComputerEditObject ceo = erm.processDoPost(request, response);
 		
 		if ((ceo.getResponse() == null) && (ceo.getListPbs() == null)) {
 			response.sendRedirect(Paths.PATH_DASHBOARD_RESET);

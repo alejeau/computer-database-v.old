@@ -35,6 +35,14 @@ public class ServletSearch extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComputerSearchPageRequest page = SearchRequestMapper.mapDoGet(request);
+		
+		/* Maybe I need that, maybe I don't, so...
+		SortedPage<Computer> sp = page.getComputerSortedPage();
+		int currentPageNumber = sp.getCurrentPageNumber();
+		sp = this.services.getComputerSortedPage(currentPageNumber, sp);
+		page.set(sp);
+		//*/
+		
 		request = setRequest(request, page);
 		this.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}

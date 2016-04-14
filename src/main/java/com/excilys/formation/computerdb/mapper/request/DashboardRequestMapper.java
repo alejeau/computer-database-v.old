@@ -2,22 +2,25 @@ package com.excilys.formation.computerdb.mapper.request;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.servlets.Paths;
 import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageRequest;
 
-@Component
 public class DashboardRequestMapper {
 
-	@Autowired
-	protected ComputerSortedPageRequest csp;
+	public DashboardRequestMapper() {
+	}
 
-	public ComputerSortedPageRequest mapDoGet(HttpServletRequest request) {
+	/**
+	 * Maps the request and creates a ComputerSortedPageRequest containing all
+	 * pertaining to the page display.<br>
+	 * Please note that the SearchPage actual page will have to be filled.
+	 * @param request
+	 * @return
+	 */
+	public static ComputerSortedPageRequest mapDoGet(HttpServletRequest request) {
 		String url = Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 
@@ -72,9 +75,7 @@ public class DashboardRequestMapper {
 		page.setAscending(ascend);
 		url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
 
-		this.csp.set(page, url);
-
-		return csp;
+		return new ComputerSortedPageRequest(page, url);
 	}
 
 	/**
