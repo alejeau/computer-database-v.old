@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.service.impl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,7 @@ import com.excilys.formation.computerdb.pagination.SearchPage;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 import com.excilys.formation.computerdb.persistence.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdb.persistence.impl.ComputerDaoImpl;
-import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 import com.excilys.formation.computerdb.service.ComputerDatabaseService;
-import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 @Service
@@ -35,15 +32,10 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Autowired
 	private ComputerValidator cval;
 	
-	@Autowired
-	private ConnectionFactoryImpl connectionFactory;
-	private ThreadLocalConnection threadLocalConnection;
-	
 	
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
-		threadLocalConnection = ThreadLocalConnection.INSTANCE;
 	}
 
 	@Override
@@ -194,58 +186,35 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public void deleteComputers(long[] listId) {
-		Connection connection = null;
 		logger.info("Starting mass computer deletion...");
+		
 		try {
-			connection = connectionFactory.getTransaction();
-			threadLocalConnection.set(connection);
 			computerDaoImpl.deleteComputers(listId);
-
-			connectionFactory.commitTransaction(connection);
 		} catch (SQLException e) {
 			logger.error("Couldn't commit the changes!");
 			logger.error(e.getMessage());
 			logger.error("Rolling back now...");
-			connectionFactory.rollbackTransaction(connection);
-		} finally {
-			try {
-				threadLocalConnection.remove();
-				connection.close();
-			} catch (SQLException e) {
-				logger.error(e.getMessage());
-			}
 		}
-		logger.info("Mass deletion done.");
+		
+		logger.info("Mass deletion completed.");
 	}
 
 	@Override
 	public void deleteCompany(Company c) {
-		Connection connection = null;
 		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
+		
 		if (c != null) {
 			long id = c.getId();
 			try {
-				connection = connectionFactory.getTransaction();
-				threadLocalConnection.set(connection);
-
 				computerDaoImpl.deleteComputersWhereCompanyIdEquals(id);
-				companyDAOImpl.deleteCompany(id, connection);
-
-				connection.commit();
+				companyDAOImpl.deleteCompany(id);
 			} catch (SQLException e) {
 				logger.error("Couldn't commit the changes!");
 				logger.error(e.getMessage());
 				logger.error("Rolling back now...");
-				connectionFactory.rollbackTransaction(connection);
-			} finally {
-				try {
-					threadLocalConnection.remove();
-					connection.close();
-				} catch (SQLException e) {
-					logger.error(e.getMessage());
-				}
 			}
 		}
+		
 		logger.info("Deletion of company \"" + c.getName() + "\" its related computers done.");
 	}
 

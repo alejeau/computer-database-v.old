@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.persistence;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,5 +9,5 @@ public interface CompanyDao {
 	public List<Company> getAll();
 	public List<Company> getFromTo(int offset, int limit);
 	public int getNbEntries();
-	public void deleteCompany(long id, Connection connection) throws SQLException;
+	public void deleteCompany(long id) throws SQLException;
 }

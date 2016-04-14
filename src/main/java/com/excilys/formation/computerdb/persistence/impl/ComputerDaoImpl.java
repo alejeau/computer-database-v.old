@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDao;
-import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
@@ -509,14 +509,16 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
+	@Transactional
 	public void deleteComputers(long[] listId) throws SQLException {
-		Connection connection = ThreadLocalConnection.INSTANCE.get();
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		String query = "DELETE FROM computer WHERE id = ?";
 		logger.debug(query);
 
+		connection = this.dataSource.getConnection();
 		pstmt = connection.prepareStatement(query);
 		for (long id : listId) {
 			logger.info("Computer deletion: \"DELETE FROM computer WHERE id = " + id + "\"");
@@ -528,8 +530,9 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
+	@Transactional
 	public void deleteComputersWhereCompanyIdEquals(long id) throws SQLException {
-		Connection connection = ThreadLocalConnection.INSTANCE.get();
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
@@ -537,6 +540,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		String query = "DELETE FROM computer WHERE company_id = ?";
 		logger.debug(query);
 
+		connection = this.dataSource.getConnection();
 		pstmt = connection.prepareStatement(query);
 		pstmt.setLong(1, id);
 		pstmt.executeUpdate();

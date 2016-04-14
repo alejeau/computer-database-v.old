@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Company;
@@ -15,12 +16,11 @@ import com.excilys.formation.computerdb.pagination.pager.CompanyPager;
 import com.excilys.formation.computerdb.pagination.pager.SortedPageComputer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
+@Controller
 public class CLI {
 	public static final String COMPUTER = "computer";
 	public static final String COMPANY = "company";
 	public static final String TIMESTAMP_ZERO = "0000-00-00";
-
-	Scanner sc = null;
 
 	@Autowired
 	ComputerDatabaseServiceImpl service;
@@ -31,11 +31,12 @@ public class CLI {
 	@Autowired
 	CompanyPager cpager;
 
-	private int choice = -1;
-	private SortedPage<Computer> computerSortedPage = null;
-	private Page<Company> companyPage = null;
-	private List<Computer> computerList = null;
-	private List<Company> companyList = null;
+	protected Scanner sc = null;
+	protected int choice = -1;
+	protected SortedPage<Computer> computerSortedPage = null;
+	protected Page<Company> companyPage = null;
+	protected List<Computer> computerList = null;
+	protected List<Company> companyList = null;
 
 	/**
 	 * Creates a CLI using a Scanner
@@ -43,8 +44,11 @@ public class CLI {
 	 * @param sc
 	 *            a Scanner
 	 */
-	public CLI(Scanner sc) {
-		this.sc = sc;
+	public CLI() {
+	}
+
+	public void init() {
+
 		int objectsPerPage = 10;
 		if (this.service == null) {
 			System.out.println("this.service is null");
@@ -58,8 +62,8 @@ public class CLI {
 		mpn = maxPageNumber(objectsPerPage, nbEntries);
 		companyPage = new Page<>(companyList, 0, mpn, objectsPerPage, nbEntries);
 	}
-
-	private int maxPageNumber(int objectsPerPage, int nbEntries) {
+	
+	protected int maxPageNumber(int objectsPerPage, int nbEntries) {
 		int maxPageNumber = -1;
 		double opp = (double) objectsPerPage;
 		double nbe = (double) nbEntries;
@@ -312,8 +316,11 @@ public class CLI {
 		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
 		} else {
+			LocalDate d1 = mapDate(infos[1]);
+			LocalDate d2 = mapDate(infos[2]);
+			
 			Company cy = service.getCompanyByName(infos[3]);
-			service.createComputer(new Computer(infos[0], infos[1], infos[2], cy));
+			service.createComputer(new Computer(infos[0], d1, d2, cy));
 		}
 	}
 
@@ -330,8 +337,13 @@ public class CLI {
 		} else {
 			computer = this.service.getComputerByName(infos[0]);
 			String oldName = computer.getName();
-			computer.setIntro(infos[1]);
-			computer.setOutro(infos[2]);
+
+			LocalDate d1 = mapDate(infos[1]);
+			LocalDate d2 = mapDate(infos[2]);
+			
+			computer.setIntro(d1);
+			computer.setOutro(d2);
+			
 			Company cy = this.service.getCompanyByName(infos[3]);
 			computer.setCompany(cy);
 			this.service.updateComputer(computer, oldName);
@@ -359,6 +371,8 @@ public class CLI {
 	}
 
 	/**
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 	 * Gets infos about a computer from user's input :<br>
 	 * Name<br>
 	 * Date of introduction<br>
@@ -386,43 +400,53 @@ public class CLI {
 		return infos;
 	}
 
+	public void setScanner(Scanner sc) {
+		this.sc = sc;
+	}
+
 	/**
 	 * Checks whether a date is in a valid format or not
 	 * 
 	 * @param date
 	 *            a String representing the date
-	 * @return the date or CLI2.TIMESTAMP_ZERO if the date's wrong
+	 * @return the date or null if the date's wrong
 	 */
-	protected static String validateDate(String date) {
+	protected static LocalDate mapDate(String date) {
 		LocalDate ld = null;
-		if (date.length() == 10) {
+		
+		if ((date != null) && (date.length() == 10)) {
 			String[] s = date.split("-");
 			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
-				date = CLI.TIMESTAMP_ZERO;
 			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
-				int year = Integer.valueOf(s[0]);
+				int year  = Integer.valueOf(s[0]);
 				int month = Integer.valueOf(s[1]);
-				int day = Integer.valueOf(s[2]);
+				int day   = Integer.valueOf(s[2]);
+				ld = LocalDate.of(year, month, day);
+			}
+		}
+		
+		return ld;
+	}
+	
+
+	protected static String validateDate(String date) {
+		LocalDate ld = null;
+		
+		if ((date != null) && (date.length() == 10)) {
+			String[] s = date.split("-");
+			if (s.length != 3) {
+				System.out.println("Wrong date format!\nThe date will be set to null.");
+				date = "";
+			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
+				int year  = Integer.valueOf(s[0]);
+				int month = Integer.valueOf(s[1]);
+				int day   = Integer.valueOf(s[2]);
 				ld = LocalDate.of(year, month, day);
 				date = ld.toString();
 			}
 		}
+		
 		return date;
-	}
-
-	public static void main(String[] args) {
-//		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
-
-		Scanner sc = new Scanner(System.in);
-		CLI cli = new CLI(sc);
-		boolean keepOnRocking = true;
-
-		while (keepOnRocking) {
-			cli.showMenu();
-			cli.makeAChoiceAndChecksIt();
-			keepOnRocking = cli.launch();
-		}
-		sc.close();
 	}
 }

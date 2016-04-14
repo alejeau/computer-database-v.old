@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>4.5.1-SNAPSHOT</version>
+	<version>4.5.1-RELEASE</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -173,17 +173,6 @@
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
-
-		<!-- Provided -->
-		<!-- <dependency> -->
-		<!-- <groupId>javax</groupId> -->
-		<!-- <artifactId>javaee-api</artifactId> -->
-		<!-- <version>${javax.version}</version> -->
-		<!-- <scope>provided</scope> -->
-		<!-- </dependency> -->
-
-
 	</dependencies>
 	<properties>
 		<!-- sets the projects encoding to UTF-8 -->

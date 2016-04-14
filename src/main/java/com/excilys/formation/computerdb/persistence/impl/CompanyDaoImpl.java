@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,11 +178,15 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 	
 	@Override
-	public void deleteCompany(long id, Connection connection) throws SQLException {
+	@Transactional
+	public void deleteCompany(long id) throws SQLException {
+		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		LOG.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
 		String query = "DELETE FROM company WHERE id = ?";
+		
+		connection = dataSource.getConnection();
 		pstmt = connection.prepareStatement(query);
 		pstmt.setLong(1, id);
 		pstmt.executeUpdate();
