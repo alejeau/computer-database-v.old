@@ -8,8 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.exceptions.CompanyDaoException;
@@ -19,8 +22,9 @@ import com.excilys.formation.computerdb.persistence.CompanyDao;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
-	
-	private ConnectionFactoryImpl connectionFactory = null;
+
+	@Autowired
+	private DataSource dataSource;
 	
 	protected final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	
@@ -28,21 +32,21 @@ public class CompanyDaoImpl implements CompanyDao {
 	protected PreparedStatement pstmt = null;
 	protected ResultSet rs = null;
 	protected List<Company> list = null;
-
+	
+	
 	protected CompanyDaoImpl() {
-		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		list = new ArrayList<Company>();
 	}
 
 	@Override
 	public List<Company> getFromTo(int offset, int limit) {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name LIMIT ?, ? ";
 
 		try {
+			connection = dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, limit);
@@ -66,12 +70,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	@Override
 	public int getNbEntries() {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_companys FROM company";
 
 		try {
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
@@ -91,12 +95,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	@Override
 	public List<Company> getAll() {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 
 		list = new ArrayList<>();
 		String query = "SELECT * FROM company ORDER BY name";
 
 		try {
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -120,7 +124,6 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 
 		pstmt = null;
 		rs = null;
@@ -128,6 +131,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		String query = "SELECT * FROM company WHERE id = ?";
 
 		try {
+			connection = dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
@@ -147,7 +151,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	public Company getCompanyByName(String name) {
 		Connection connection = null;
-		connection = connectionFactory.getConnection();
 
 		pstmt = null;
 		rs = null;
@@ -155,6 +158,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		String query = "SELECT * FROM company WHERE name = ?";
 
 		try {
+			connection = dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();

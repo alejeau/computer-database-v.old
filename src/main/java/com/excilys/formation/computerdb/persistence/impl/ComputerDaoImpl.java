@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import com.excilys.formation.computerdb.thread.ThreadLocalConnection;
 
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
+	@Autowired
+	private DataSource dataSource;
 	
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 	protected List<Computer> list = null;
@@ -35,10 +39,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Autowired
 	protected CompanyDaoImpl companyDAOImpl;
 	
-	protected ConnectionFactoryImpl connectionFactory;
-	
 	protected ComputerDaoImpl() {
-		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 	}
 
 	@Override
@@ -47,13 +48,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer WHERE name=? ORDER BY name;";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();
@@ -87,7 +88,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 		int offsetNbr = 1;
 		int limitNbr = 2;
 
@@ -107,6 +107,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			if (field != Fields.NONE) {
 				pstmt.setString(1, "%" + name + "%");
@@ -147,7 +148,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		list = new ArrayList<>();
 
@@ -163,6 +163,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, limit);
@@ -195,13 +196,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_computers FROM computer";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
 			if (rs.next()) {
@@ -223,13 +224,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		int nbEntries = 0;
 		String query = "SELECT count(*) as nb_computers FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, "%" + name + "%");
 			pstmt.setString(2, "%" + name + "%");
@@ -258,7 +259,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		list = new ArrayList<>();
 		String query = "SELECT * FROM computer";
@@ -272,6 +272,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -300,13 +301,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE id = ?";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
@@ -333,13 +334,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		Computer computer = null;
 		String query = "SELECT * FROM computer WHERE name = ?";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();
@@ -375,7 +376,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		int nbRow = 0;
 		Computer tmp = null;
@@ -398,6 +398,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			logger.debug(query);
 
 			try {
+				connection = this.dataSource.getConnection();
 				pstmt = connection.prepareStatement(query);
 				pstmt.setString(1, computer.getName());
 				pstmt.setString(2, intro);
@@ -423,7 +424,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 
 		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?";
 		int champs = 4;
@@ -437,6 +437,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, computer.getName());
 			pstmt.setString(2, intro);
@@ -462,13 +463,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 		logger.info("Computer deletion: \"DELETE FROM computer WHERE id = " + id + "\"");
 
 		String query = "DELETE FROM computer WHERE id = ?";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
@@ -487,13 +488,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		connection = this.connectionFactory.getConnection();
 		logger.info("Computer deletion: \"DELETE FROM computer WHERE name = " + name + "\"");
 
 		String query = "DELETE FROM computer WHERE name = ?";
 		logger.debug(query);
 
 		try {
+			connection = this.dataSource.getConnection();
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, name);
 			pstmt.executeUpdate();
