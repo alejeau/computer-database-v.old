@@ -38,13 +38,13 @@ public class ServletDashboard extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComputerSortedPageRequest page = DashboardRequestMapper.mapDoGet(request);
-		
-		//* Maybe I need that, maybe I don't, so...
+
+		// We feed content to the page
 		SortedPage<Computer> sp = page.getComputerSortedPage();
 		int currentPageNumber = sp.getCurrentPageNumber();
 		sp = this.services.getComputerSortedPage(currentPageNumber, sp);
 		page.setPage(sp);
-		//*/
+
 		request = setRequest(request, page);
 		request.getServletContext().getRequestDispatcher(Views.DASHBOARD).forward(request, response);
 	}

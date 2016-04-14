@@ -43,7 +43,7 @@ public class ServletEditComputer extends HttpServlet {
 		Page<Company> companyList = this.services.getAllCompanies();
 		request.setAttribute("companies",  companyList.getPage());
 		
-		this.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
+		request.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,6 +58,6 @@ public class ServletEditComputer extends HttpServlet {
 		request.setAttribute("mapErrors", ProblemDto.toHashMap(ceo.getListPbs()));
 		request.setAttribute("companies",  companies.getPage());
 		
-		this.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
+		request.getServletContext().getRequestDispatcher(Views.EDIT_COMPUTER).forward(request, response);
 	}
 }

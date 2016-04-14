@@ -41,7 +41,7 @@ public class ServletAddComputer extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setRequest(request, null);
-		this.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
+		request.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,7 +60,7 @@ public class ServletAddComputer extends HttpServlet {
 		}
 
 		setRequest(request, listPbs);
-		this.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
+		request.getServletContext().getRequestDispatcher(Views.ADD_COMPUTER).forward(request, response);
 	}
 
 	private void setRequest(HttpServletRequest request, List<Problem> listPbs) throws ServletException, IOException {
