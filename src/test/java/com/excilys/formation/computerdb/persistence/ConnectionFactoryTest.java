@@ -1,6 +1,7 @@
 package com.excilys.formation.computerdb.persistence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,14 +9,21 @@ import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdb.persistence.impl.ConnectionFactoryImpl;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
 public class ConnectionFactoryTest {
-	protected static final Logger LOG = LoggerFactory.getLogger(ConnectionFactoryTest.class);
+//	protected final Logger LOG = LoggerFactory.getLogger(ConnectionFactoryTest.class);
 
+	@Autowired
+	ConnectionFactoryImpl cf;
+	
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -25,32 +33,21 @@ public class ConnectionFactoryTest {
 	}
 	
 	@Test
-	public void factory(){
-		ConnectionFactoryImpl cf = null;
-		cf = ConnectionFactoryImpl.getInstance();
-		assertNotEquals(null, cf);
-	}
-	
-	@Test
 	public void getConnection(){
 		Connection connec = null;
-		ConnectionFactoryImpl cf = null;
-		cf = ConnectionFactoryImpl.getInstance();
 		connec = cf.getConnection();
-		assertNotEquals(null, connec);
+		assertNotNull(connec);
 	}
 
 	@Test
 	public void getValidConnection(){
 		Connection connec = null;
-		ConnectionFactoryImpl cf = null;
-		cf = ConnectionFactoryImpl.getInstance();
 		connec = cf.getConnection();
 		boolean isValid = false;
 		try {
 			isValid = connec.isValid(1);
 		} catch (SQLException e) {
-			LOG.error(e.getMessage());
+//			LOG.error(e.getMessage());
 		}
 		assertTrue(isValid);
 	}

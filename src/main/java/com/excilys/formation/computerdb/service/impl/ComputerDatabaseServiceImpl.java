@@ -35,6 +35,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Autowired
 	private ComputerValidator cval;
 	
+	@Autowired
 	private ConnectionFactoryImpl connectionFactory;
 	private ThreadLocalConnection threadLocalConnection;
 	
@@ -42,7 +43,6 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
-		connectionFactory = ConnectionFactoryImpl.INSTANCE;
 		threadLocalConnection = ThreadLocalConnection.INSTANCE;
 	}
 
