@@ -7,10 +7,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.formation.computerdb.model.Company;
 
-public class CompanyMapper {
+public class CompanyMapper implements RowMapper<Company> {
 	protected static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 
 	public static Company map(ResultSet rs) {
@@ -40,5 +41,19 @@ public class CompanyMapper {
 			companyMap.put(c.getId(), c.getName());
 		}
 		return companyMap;
+	}
+
+	@Override
+	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+		long id = -1;
+		String name = null;
+		
+		id = rs.getLong("id");
+		name = rs.getString("name");
+
+		return new Company.Builder()
+				.id(id)
+				.name(name)
+				.build();
 	}
 }
