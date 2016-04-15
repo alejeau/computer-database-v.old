@@ -1,8 +1,6 @@
 package com.excilys.formation.computerdb.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
-import com.excilys.formation.computerdb.mapper.model.CompanyMapper;
 import com.excilys.formation.computerdb.mapper.request.EditRequestProcessor;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.pagination.Page;
