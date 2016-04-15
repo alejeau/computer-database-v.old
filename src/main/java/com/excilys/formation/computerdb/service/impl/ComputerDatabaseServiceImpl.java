@@ -29,10 +29,6 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Autowired
 	private CompanyDaoImpl companyDAOImpl;
 	
-	@Autowired
-	private ComputerValidator cval;
-	
-	
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
@@ -138,7 +134,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = null;
-		listErrors = cval.validateComputer(name, intro, outro);
+		listErrors = ComputerValidator.validateComputer(name, intro, outro);
 		System.out.println("listErrors = " + listErrors);
 		if (listErrors == null) {
 			Computer c = null;
@@ -152,7 +148,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public List<Problem> createComputer(long id, String name, String intro, String outro, Company comp) {
-		List<Problem> listErrors = cval.validateComputer(name, intro, outro);
+		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
 
 		if (listErrors == null) {
 			Computer c = null;
@@ -165,7 +161,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public List<Problem> updateComputer(Computer computer, String oldName) {
-		List<Problem> listErrors = cval.validateNewComputer(computer, oldName);
+		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
 
 		if (listErrors == null) {
 			this.computerDaoImpl.updateComputer(computer);

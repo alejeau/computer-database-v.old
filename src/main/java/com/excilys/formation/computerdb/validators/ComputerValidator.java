@@ -5,23 +5,16 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Computer;
 
-@Component
 public class ComputerValidator {
-	private final String FIELD_NAME = "name";
-	private final String FIELD_DATES = "dates";
-	private final String FIELD_DATE_INTRO = "intro";
-	private final String FIELD_DATE_OUTRO = "outro";
+	private static final String FIELD_NAME = "name";
+	private static final String FIELD_DATES = "dates";
+	private static final String FIELD_DATE_INTRO = "intro";
+	private static final String FIELD_DATE_OUTRO = "outro";
 
-
-	public ComputerValidator() {
-	}
-
-	public Problem validateName(String name) {
+	public static Problem validateName(String name) {
 		String field = FIELD_NAME;
 		Problem pb = null;
 		if (name == null) {
@@ -34,7 +27,7 @@ public class ComputerValidator {
 		return pb;
 	}
 
-	public Problem validateNewName(String newName, String oldName) {
+	public static Problem validateNewName(String newName, String oldName) {
 		String field = FIELD_NAME;
 		Problem pb = null;
 		if (newName == null) {
@@ -47,14 +40,14 @@ public class ComputerValidator {
 		return pb;
 	}
 
-	private boolean canBeCompared(String date) {
+	private static boolean canBeCompared(String date) {
 		if ((date != null) && (!date.equals(""))) {
 			return true;
 		}
 		return false;
 	}
 
-	public Problem validateDate(String date) {
+	public static Problem validateDate(String date) {
 		String field = FIELD_DATES;
 		Problem pb = null;
 		if (date != null) {
@@ -71,7 +64,7 @@ public class ComputerValidator {
 		return pb;
 	}
 
-	public List<Problem> validateDates(String intro, String outro) {
+	public static List<Problem> validateDates(String intro, String outro) {
 		List<Problem> list = null;
 		Problem pb1 = null, pb2 = null;
 		String field = FIELD_DATES;
@@ -109,7 +102,7 @@ public class ComputerValidator {
 	 *            date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
-	public List<Problem> validateComputer(Computer c) {
+	public static List<Problem> validateComputer(Computer c) {
 		List<Problem> listErrors = null;
 		String i = null, o = null;
 
@@ -138,7 +131,7 @@ public class ComputerValidator {
 	 *            date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
-	public List<Problem> validateComputer(String name, String intro, String outro) {
+	public static List<Problem> validateComputer(String name, String intro, String outro) {
 		List<Problem> listErrors = null;
 
 		listErrors = addToList(listErrors, validateName(name));
@@ -161,7 +154,7 @@ public class ComputerValidator {
 	 *            date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
-	public List<Problem> validateNewComputer(Computer c, String oldName) {
+	public static List<Problem> validateNewComputer(Computer c, String oldName) {
 		List<Problem> listErrors = null;
 		String i = null, o = null;
 
@@ -193,7 +186,7 @@ public class ComputerValidator {
 	 *            date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
-	public List<Problem> validateNewComputer(String newName, String oldName, String intro, String outro) {
+	public static List<Problem> validateNewComputer(String newName, String oldName, String intro, String outro) {
 		List<Problem> listErrors = null;
 
 		listErrors = addToList(listErrors, validateNewName(newName, oldName));
@@ -203,7 +196,7 @@ public class ComputerValidator {
 		return listErrors;
 	}
 
-	protected List<Problem> addToList(List<Problem> list, Problem p) {
+	protected static List<Problem> addToList(List<Problem> list, Problem p) {
 		if (p != null) {
 			if (list == null) {
 				list = new ArrayList<Problem>();
@@ -215,7 +208,7 @@ public class ComputerValidator {
 		return list;
 	}
 
-	protected List<Problem> addToList(List<Problem> list, List<Problem> listToAdd) {
+	protected static List<Problem> addToList(List<Problem> list, List<Problem> listToAdd) {
 		if (listToAdd != null) {
 			if (list == null) {
 				list = new ArrayList<Problem>();

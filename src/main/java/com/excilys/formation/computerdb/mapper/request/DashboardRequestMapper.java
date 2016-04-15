@@ -10,9 +10,6 @@ import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageReque
 
 public class DashboardRequestMapper {
 
-	public DashboardRequestMapper() {
-	}
-
 	/**
 	 * Maps the request and creates a ComputerSortedPageRequest containing all
 	 * pertaining to the page display.<br>
@@ -135,5 +132,4 @@ public class DashboardRequestMapper {
 		}
 		return false;
 	}
-
 }

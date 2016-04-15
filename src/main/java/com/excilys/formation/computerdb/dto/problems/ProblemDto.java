@@ -13,7 +13,6 @@ public class ProblemDto {
 	 * @return a HashMap with Problem.field as key and Problem.message as entry
 	 */
 	public static HashMap<String, String> toHashMap(Problem p) {
-
 		if (p == null) {
 			return null;
 		}
@@ -29,7 +28,6 @@ public class ProblemDto {
 	 * @return a HashMap with Problem.field as key and Problem.message as entry
 	 */
 	public static HashMap<String, String> toHashMap(List<Problem> l) {
-
 		if (l == null) {
 			return null;
 		}

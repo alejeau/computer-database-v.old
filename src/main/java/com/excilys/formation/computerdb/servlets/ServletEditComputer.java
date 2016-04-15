@@ -1,6 +1,8 @@
 package com.excilys.formation.computerdb.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
+import com.excilys.formation.computerdb.mapper.model.CompanyMapper;
 import com.excilys.formation.computerdb.mapper.request.EditRequestProcessor;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.pagination.Page;
@@ -29,6 +32,7 @@ public class ServletEditComputer extends HttpServlet {
 	@Autowired
 	EditRequestProcessor erm;
 	
+	public static HashMap<Long, String> companyMap = null;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -36,7 +40,12 @@ public class ServletEditComputer extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
-	public ServletEditComputer() {}
+	public ServletEditComputer() {
+		if (companyMap != null) {
+			List<Company> list = this.services.getAllCompanies().getPage();
+			companyMap = CompanyMapper.toHashMap(list);
+		}
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request = erm.processDoGet(request);

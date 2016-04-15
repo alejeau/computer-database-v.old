@@ -24,12 +24,8 @@ import com.excilys.formation.computerdb.validators.ComputerValidator;
 public class ServletAddComputer extends HttpServlet {
 	private static final long serialVersionUID = 8660445621574175568L;
 
-
 	@Autowired
 	ComputerDatabaseServiceImpl services;
-	
-	@Autowired
-	ComputerValidator cval; 
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -51,7 +47,7 @@ public class ServletAddComputer extends HttpServlet {
 		String intro = request.getParameter("introduced");
 		String outro = request.getParameter("discontinued");
 
-		listPbs = cval.validateComputer(name, intro, outro);
+		listPbs = ComputerValidator.validateComputer(name, intro, outro);
 
 		if (listPbs == null) {
 			long cid = Long.valueOf(request.getParameter("companyId"));

@@ -69,8 +69,8 @@ public class SearchPageDto<T> extends SortedPageDto<T> {
 		private int nestedObjectsPerPages = -1;
 		private int nestedCurrentPageNumber = -1;
 		private String nestedField = null;
-		private boolean nestedAscending = true;
 		private String nestedSearch = null;
+		private boolean nestedAscending = true;
 		
 		public Builder() {}
 		
