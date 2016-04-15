@@ -13,27 +13,6 @@ import com.excilys.formation.computerdb.model.Company;
 
 public class CompanyMapper implements RowMapper<Company> {
 	protected static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
-
-	public static Company map(ResultSet rs) {
-		long id = -1;
-		String name = null;
-
-		try {
-			id = rs.getLong("id");
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-
-		try {
-			name = rs.getString("name");
-		} catch (SQLException e) {
-			LOG.error(e.getMessage());
-		}
-		return new Company.Builder()
-				.id(id)
-				.name(name)
-				.build();
-	}
 	
 	public static HashMap<Long, String> toHashMap(List<Company> list) {
 		HashMap<Long, String> companyMap = new HashMap<>();

@@ -32,8 +32,6 @@ public class ServletEditComputer extends HttpServlet {
 	@Autowired
 	EditRequestProcessor erm;
 	
-	public static HashMap<Long, String> companyMap = null;
-	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init();
@@ -41,10 +39,6 @@ public class ServletEditComputer extends HttpServlet {
 	}
 
 	public ServletEditComputer() {
-		if (companyMap != null) {
-			List<Company> list = this.services.getAllCompanies().getPage();
-			companyMap = CompanyMapper.toHashMap(list);
-		}
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -15,7 +15,6 @@ import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.ServletEditComputer;
 import com.excilys.formation.computerdb.servlets.request.ComputerEditObject;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
@@ -61,8 +60,7 @@ public class EditRequestProcessor {
 		listPbs = ComputerValidator.validateNewComputer(newName, oldName, intro, outro);
 
 		long   cid = Long.valueOf(request.getParameter("companyId"));
-		String companyName = ServletEditComputer.companyMap.get(cid); 
-		Company cy = new Company(cid, companyName);
+		Company cy = this.services.getCompanyById(cid);
 		Computer c = new Computer.Builder()
 				.id(id)
 				.name(newName)

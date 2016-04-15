@@ -19,12 +19,11 @@ import com.excilys.formation.computerdb.persistence.CompanyDao;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 	@Autowired
-    private JdbcTemplate jdbcTemplate;
-	
+	private JdbcTemplate jdbcTemplate;
+
 	protected final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	protected List<Company> list = null;
-	
-	
+
 	protected CompanyDaoImpl() {
 		list = new ArrayList<Company>();
 	}
@@ -38,7 +37,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		args[0] = offset;
 		args[1] = limit;
 		list = jdbcTemplate.query(query, args, new CompanyMapper());
-		
+
 		return list;
 	}
 
@@ -63,37 +62,36 @@ public class CompanyDaoImpl implements CompanyDao {
 		if ((id == -1l) || (id == 0L)) {
 			return null;
 		}
-		
+
 		Company company = null;
 		String query = "SELECT * FROM company WHERE id = ?";
 
 		Object args[] = new Object[1];
 		args[0] = id;
 		company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
-		
+
 		return company;
 	}
 
 	public Company getCompanyByName(String name) {
 		Company company = null;
 		String query = "SELECT * FROM company WHERE name = ?";
-		
+
 		Object args[] = new Object[1];
 		args[0] = name;
 		company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
 
 		return company;
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteCompany(long id) throws SQLException {
 		LOG.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
 		String query = "DELETE FROM company WHERE id = ?";
-		
+
 		Object args[] = new Object[1];
 		args[0] = id;
 		jdbcTemplate.update(query, args);
-	
 	}
 }
