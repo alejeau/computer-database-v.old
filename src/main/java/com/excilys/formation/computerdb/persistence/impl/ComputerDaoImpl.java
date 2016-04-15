@@ -132,7 +132,6 @@ public class ComputerDaoImpl implements ComputerDao {
 			query += " ORDER BY " + field.toString() + " " + order;
 		}
 		query += " LIMIT ?, ?;";
-		System.out.println(query);
 		logger.debug(query);
 
 		// Executing the query
