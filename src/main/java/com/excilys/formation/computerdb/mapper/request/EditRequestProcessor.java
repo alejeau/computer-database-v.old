@@ -1,21 +1,19 @@
 package com.excilys.formation.computerdb.mapper.request;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.formation.computerdb.controllers.Paths;
+import com.excilys.formation.computerdb.controllers.request.ComputerEditObject;
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
-import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.request.ComputerEditObject;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 @Component
@@ -27,31 +25,31 @@ public class EditRequestProcessor {
 	public EditRequestProcessor() {
 	}
 	
-	public HttpServletRequest processDoGet(HttpServletRequest request) {
-		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
-		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
-		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
-		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
+	public ModelAndView processGet(Map<String, String> params, ModelAndView maw) {
+		maw.addObject("pathDashboard", Paths.PATH_DASHBOARD);
+		maw.addObject("pathAddComputer", Paths.PATH_COMPUTER_ADD);
+		maw.addObject("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
+		maw.addObject("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 
-		String name	= request.getParameter("computer");
+		String name	= params.get("computer");
 		Computer c = services.getComputerByName(name);
-		request = setComputerDisplay(request, c);
+		maw = setComputerDisplay(maw, c);
 		
-		return request;
+		return maw;
 	}
 	
-	public ComputerEditObject processDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ComputerEditObject processPost(Map<String, String> params, ModelAndView maw) {
 		List<Problem> listPbs = null;
-		long   id		= Long.valueOf(request.getParameter("computerId"));
+		long   id		= Long.valueOf(params.get("computerId"));
 		String oldName 	= services.getComputerById(id).getName();
-		String newName	= request.getParameter("computerName");
-		String intro 	= request.getParameter("introduced");
-		String outro 	= request.getParameter("discontinued");
+		String newName	= params.get("computerName");
+		String intro 	= params.get("introduced");
+		String outro 	= params.get("discontinued");
 
-		request.setAttribute("pathDashboard", Paths.PATH_DASHBOARD);
-		request.setAttribute("pathAddComputer", Paths.PATH_COMPUTER_ADD);
-		request.setAttribute("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
-		request.setAttribute("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
+		maw.addObject("pathDashboard", Paths.PATH_DASHBOARD);
+		maw.addObject("pathAddComputer", Paths.PATH_COMPUTER_ADD);
+		maw.addObject("pathEditComputer", Paths.PATH_COMPUTER_EDIT);
+		maw.addObject("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 		
 
 		intro = checkDateEntry(intro);
@@ -59,7 +57,7 @@ public class EditRequestProcessor {
 
 		listPbs = ComputerValidator.validateNewComputer(newName, oldName, intro, outro);
 
-		long   cid = Long.valueOf(request.getParameter("companyId"));
+		long   cid = Long.valueOf(params.get("companyId"));
 		Company cy = this.services.getCompanyById(cid);
 		Computer c = new Computer.Builder()
 				.id(id)
@@ -72,33 +70,33 @@ public class EditRequestProcessor {
 		if (listPbs == null) {
 			listPbs = null;
 			listPbs = services.updateComputer(c, oldName);
-			request = setComputerDisplay(request, c);
+			maw = setComputerDisplay(maw, c);
 			
 			if (listPbs == null){
-				return new ComputerEditObject(null, response, null);
+				return new ComputerEditObject(maw, null);
 			}
 		} else {
-			request = setComputerDisplay(request, c);
+			maw = setComputerDisplay(maw, c);
 		}
 		
-		return new ComputerEditObject(request, response, listPbs);
+		return new ComputerEditObject(maw, listPbs);
 	}
 
 	
-	private HttpServletRequest setComputerDisplay(HttpServletRequest request, Computer c) {
+	private ModelAndView setComputerDisplay(ModelAndView maw, Computer c) {
 		ComputerDto cdto = new ComputerDto(c);
-		request.setAttribute("cdto",  cdto);
+		maw.addObject("cdto",  cdto);
 
 		// If the company wasn't set, we set its name to "-1"
 		String company = cdto.getCompany();
 		if (company.equals("")) {
-			request.setAttribute("selectedId",  "-1");	
+			maw.addObject("selectedId",  "-1");	
 		} else {
 			long cid = c.getCompany().getId();
-			request.setAttribute("selectedId",  String.valueOf(cid));
+			maw.addObject("selectedId",  String.valueOf(cid));
 		}
 		
-		return request;
+		return maw;
 	}
 
 	private String checkDateEntry(String date){

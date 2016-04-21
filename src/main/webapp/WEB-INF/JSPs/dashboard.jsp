@@ -8,9 +8,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="<c:out value="${ pathSource }" />css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="<c:out value="${ pathSource }" />css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="<c:out value="${ pathSource }" />css/main.css" rel="stylesheet" media="screen">
+<c:set var="resourcesUrl" value="${pageContext.request.contextPath}/resources" />
+<link href="${resourcesUrl}/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${resourcesUrl}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${resourcesUrl}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -98,8 +99,8 @@
  			</div> 
 		</div>
 	</footer>
-	<script src="<c:out value="${ pathSource }" />js/jquery.min.js"></script>
-	<script src="<c:out value="${ pathSource }" />js/bootstrap.min.js"></script>
-	<script src="<c:out value="${ pathSource }" />js/dashboard.js"></script>
+	<script src="${resourcesUrl}/js/jquery.min.js"></script>
+	<script src="${resourcesUrl}/js/bootstrap.min.js"></script>
+	<script src="${resourcesUrl}/js/dashboard.js"></script>
 </body>
 </html>

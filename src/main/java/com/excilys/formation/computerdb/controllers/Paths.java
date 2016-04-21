@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.servlets;
+package com.excilys.formation.computerdb.controllers;
 
 public class Paths {
 	public static final String PATH_DASHBOARD 		= "/computer-database/access";

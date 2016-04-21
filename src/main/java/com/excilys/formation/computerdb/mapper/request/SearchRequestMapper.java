@@ -1,24 +1,24 @@
 package com.excilys.formation.computerdb.mapper.request;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
+import com.excilys.formation.computerdb.controllers.Paths;
+import com.excilys.formation.computerdb.controllers.request.ComputerSearchPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SearchPage;
-import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.request.ComputerSearchPageRequest;
 
 public class SearchRequestMapper {
 	
-	public static ComputerSearchPageRequest mapDoGet(HttpServletRequest request) {
+	public static ComputerSearchPageRequest mapGet(Map<String, String> params) {
 		String url = Paths.PATH_COMPUTER_SEARCH;
 		SearchPage<Computer> page = new SearchPage<>();
 
-		String pageNb = request.getParameter(UrlFields.URL_PAGE_NB);
-		String displayBy = request.getParameter(UrlFields.URL_DISPLAY_BY);
-		String stringField = request.getParameter(UrlFields.URL_FIELD);
-		String ascending = request.getParameter(UrlFields.URL_ASCENDING);
-		String searchField = request.getParameter(UrlFields.URL_SEARCH);
+		String pageNb = params.get(UrlFields.URL_PAGE_NB);
+		String displayBy = params.get(UrlFields.URL_DISPLAY_BY);
+		String stringField = params.get(UrlFields.URL_FIELD);
+		String ascending = params.get(UrlFields.URL_ASCENDING);
+		String searchField = params.get(UrlFields.URL_SEARCH);
 
 		// Retrieving and setting the page number
 		int nb = 0;
@@ -95,11 +95,11 @@ public class SearchRequestMapper {
 	
 	/**
 	 * Returns the list of computer IDs to delete
-	 * @param request the request to process
+	 * @param params the request to process
 	 * @return the list of computer IDs to delete
 	 */
-	public static long[] mapDoPost(HttpServletRequest request) {
-		String del = request.getParameter("selection");
+	public static long[] mapPost(Map<String, String> params) {
+		String del = params.get("selection");
 		long[] listId = null;
 		if (!del.equals("")) {
 			String[] list = del.split(",");

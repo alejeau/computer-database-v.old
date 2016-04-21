@@ -1,8 +1,8 @@
-package com.excilys.formation.computerdb.servlets.request;
+package com.excilys.formation.computerdb.controllers.request;
 
+import com.excilys.formation.computerdb.controllers.Paths;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
-import com.excilys.formation.computerdb.servlets.Paths;
 
 public class ComputerSortedPageRequest {
 

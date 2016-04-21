@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.servlets;
+package com.excilys.formation.computerdb.controllers;
 
 public class Views {
 	public static final String DASHBOARD 	 = "/WEB-INF/JSPs/dashboard.jsp";

@@ -1,10 +1,10 @@
-package com.excilys.formation.computerdb.servlets.request;
+package com.excilys.formation.computerdb.controllers.request;
 
 import org.springframework.stereotype.Component;
 
+import com.excilys.formation.computerdb.controllers.Paths;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SearchPage;
-import com.excilys.formation.computerdb.servlets.Paths;
 
 @Component
 public class ComputerSearchPageRequest {

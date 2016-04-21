@@ -1,12 +1,11 @@
 package com.excilys.formation.computerdb.mapper.request;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
+import com.excilys.formation.computerdb.controllers.request.ComputerSortedPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
-import com.excilys.formation.computerdb.servlets.Paths;
-import com.excilys.formation.computerdb.servlets.request.ComputerSortedPageRequest;
 
 public class DashboardRequestMapper {
 
@@ -14,17 +13,18 @@ public class DashboardRequestMapper {
 	 * Maps the request and creates a ComputerSortedPageRequest containing all
 	 * pertaining to the page display.<br>
 	 * Please note that the SearchPage actual page will have to be filled.
-	 * @param request
+	 * @param params
 	 * @return
 	 */
-	public static ComputerSortedPageRequest mapDoGet(HttpServletRequest request) {
-		String url = Paths.PATH_DASHBOARD;
+	public static ComputerSortedPageRequest mapGet(Map<String, String> params) {
+		String url = com.excilys.formation.computerdb.controllers.Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 
-		String pageNb = request.getParameter(UrlFields.URL_PAGE_NB);
-		String displayBy = request.getParameter(UrlFields.URL_DISPLAY_BY);
-		String stringField = request.getParameter(UrlFields.URL_FIELD);
-		String ascending = request.getParameter(UrlFields.URL_ASCENDING);
+		
+		String pageNb = params.get(UrlFields.URL_PAGE_NB);
+		String displayBy = params.get(UrlFields.URL_DISPLAY_BY);
+		String stringField = params.get(UrlFields.URL_FIELD);
+		String ascending = params.get(UrlFields.URL_ASCENDING);
 
 		// Retrieving and setting the page number
 		int nb = 0;
@@ -76,35 +76,14 @@ public class DashboardRequestMapper {
 	}
 
 	/**
-	 * Adds var=value to the url, with the correct ? or &
-	 * 
-	 * @param url
-	 *            the current url
-	 * @param var
-	 *            the name of the var
-	 * @param value
-	 *            the value of the var
-	 * @return url + ?|& + var=value
-	 */
-	private static String setUrl(String url, String var, String value) {
-		if (url.contains("?")) {
-			url += "&";
-		} else {
-			url += "?";
-		}
-		url += var + "=" + value;
-		return url;
-	}
-
-	/**
 	 * Returns the list of computer IDs to delete
 	 * 
-	 * @param request
+	 * @param params
 	 *            the request to process
 	 * @return the list of computer IDs to delete
 	 */
-	public static long[] mapDoPost(HttpServletRequest request) {
-		String del = request.getParameter("selection");
+	public static long[] mapPost(Map<String, String> params) {
+		String del = params.get("selection");
 		long[] listId = null;
 		if (!del.equals("")) {
 			String[] list = del.split(",");
@@ -115,6 +94,27 @@ public class DashboardRequestMapper {
 			}
 		}
 		return listId;
+	}
+
+	/**
+	 * Adds var=value to the url, with the correct ? or &
+	 * 
+	 * @param url
+	 *            the current url
+	 * @param var
+	 *            the name of the var
+	 * @param value
+	 *            the value of the var
+	 * @return url + ?|& + var=value
+	 */
+	protected static String setUrl(String url, String var, String value) {
+		if (url.contains("?")) {
+			url += "&";
+		} else {
+			url += "?";
+		}
+		url += var + "=" + value;
+		return url;
 	}
 
 	/**
