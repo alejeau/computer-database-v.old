@@ -2,13 +2,20 @@ package com.excilys.formation.computerdb.dto.model;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Size;
+
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.validators.annotations.ValidDate;
 
 public class ComputerDto {
 	protected long   id = -1;
+
+    @Size(min=1, message = "Name must have at least 1 character")
 	protected String name;
+    @ValidDate
 	protected String intro;
+    @ValidDate
 	protected String outro;
 	protected String company;
 

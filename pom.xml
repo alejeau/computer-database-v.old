@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>4.5.4-RELEASE</version>
+	<version>4.5.4-SNAPSHOT</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -145,6 +145,10 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
