@@ -7,6 +7,37 @@
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
+	<properties>
+		<!-- sets the projects encoding to UTF-8 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- plugin -->
+		<surefire.version>2.19.1</surefire.version>
+
+		<!-- test -->
+		<selenium.version>2.53.0</selenium.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.10.19</mockito.version>
+
+		<!-- compile -->
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j.version>1.7.19</slf4j.version>
+		<jstl.version>1.2</jstl.version>
+		<logback.version>1.1.6</logback.version>
+		<spring.version>4.2.5.RELEASE</spring.version>
+
+		<!-- Validators -->
+		<hibernate.version>5.2.4.Final</hibernate.version>
+		<commonsValidator.version>1.4.0</commonsValidator.version>
+
+		<!-- runtime -->
+		<mysql.version>5.1.38</mysql.version>
+		<bonecp.version>0.8.0.RELEASE</bonecp.version>
+
+		<!-- provided -->
+		<javax.version>7.0</javax.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -97,11 +128,19 @@
 			<scope>test</scope>
 		</dependency>
 
-
-
-
 		<!-- compile -->
 		<!-- logging APIs -->
+		<!-- Validators -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${commonsValidator.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
 		<!-- logback -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -179,31 +218,5 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
-	<properties>
-		<!-- sets the projects encoding to UTF-8 -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- plugin -->
-		<surefire.version>2.19.1</surefire.version>
-
-		<!-- test -->
-		<selenium.version>2.53.0</selenium.version>
-		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-
-		<!-- compile -->
-		<log4j.version>1.2.17</log4j.version>
-		<slf4j.version>1.7.19</slf4j.version>
-		<jstl.version>1.2</jstl.version>
-		<logback.version>1.1.6</logback.version>
-		<spring.version>4.2.5.RELEASE</spring.version>
-
-		<!-- runtime -->
-		<mysql.version>5.1.38</mysql.version>
-		<bonecp.version>0.8.0.RELEASE</bonecp.version>
-
-		<!-- provided -->
-		<javax.version>7.0</javax.version>
-	</properties>
 	<url>https://github.com/alejeau/computer-database</url>
 </project>

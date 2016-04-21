@@ -11,7 +11,6 @@ import javax.validation.Payload;
 
 import com.excilys.formation.computerdb.validators.DateValidator;
 
-
 @Documented
 @Constraint(validatedBy = DateValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
