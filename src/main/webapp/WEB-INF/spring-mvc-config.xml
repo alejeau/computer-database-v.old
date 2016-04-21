@@ -14,7 +14,7 @@
 	<context:component-scan base-package="com.excilys.formation.computerdb.controllers" />
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
-			<value>/WEB-INF/JSPs/</value>
+			<value>/WEB-INF/views/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>
