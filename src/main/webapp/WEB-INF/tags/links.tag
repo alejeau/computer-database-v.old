@@ -8,6 +8,7 @@
 <%@attribute name="displayBy" required="false"%>
 <%@attribute name="field" required="false"%>
 <%@attribute name="ascending" required="false"%>
+<%@attribute name="lang" required="false"%>
 
 <c:set var="pathDash" value="/computer-database/access" />
 <c:set var="pathAdd" value="/computer-database/access/add" />
@@ -30,11 +31,9 @@
 	value="${ emptyText.concat('&ascending=true') }" />
 <c:set var="tmpSearch"
 	value="${ searchModeActivated ? emptyText.concat('&search=').concat(PAGE.search) : '' }" />
+<c:set var="tmpLang"
+	value="${ emptyText.concat('&lang=en') }" />
 
-<%-- <c:out value="field=${ field } and PAGE.field=${ PAGE.field } and field.equals(PAGE.field)=${ field.equals(PAGE.field) }" /> --%>
-<%-- <c:out value="ascending=${ param['ascending'] }" /> --%>
-
-<%-- --%>
 <c:choose>
 	<c:when test="${not empty linkTo}">
 		<c:choose>
@@ -109,6 +108,11 @@
 	<c:if test="${ field.equals(PAGE.field) }">
 		<c:set var="tmpAscending" value="${ emptyText.concat('&ascending=').concat(!PAGE.ascending) }" />
 	</c:if>
+</c:if>
+
+<c:if
+	test="${ not empty lang and lang.matches('en|fr') }">
+	<c:set var="tmpAscending" value="${ emptyText.concat('&lang=').concat(lang) }" />
 </c:if>
 
 <c:set var="tmpPath" value="${ tmpPath.concat(tmpPageNb) }" />

@@ -18,6 +18,7 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application - Computer Database </a>
+			<span style="float: right; color: white;"><spring:message code="lang.current" text="Current language" /> ${pageContext.response.locale} <a href='<cst:links linkTo="self" lang="en" />'><img src="${resourcesUrl}/img/thumbs/en.png"></a> | <a href='<cst:links linkTo="self" lang="fr" />'><img src="${resourcesUrl}/img/thumbs/fr.png"></a></span>
         </div>
     </header>
 	
@@ -34,12 +35,12 @@
                                 	data-validation="custom" data-validation-regexp="^[\wÀ-ÿ]+[\wÀ-ÿ_\-' \+]*$" >
                             </div>
                             <div class="form-group">
-                                <label for="introduced"><spring:message code="computer.intro" text="Intro date" /></label> <span class="errmsg"><cst:errors error="intro" /> <cst:errors error="dates" /></span>
+                                <label for="introduced"><spring:message code="computer.intro" text="Intro date" /> <spring:message code="date.format" text="" /></label><span class="errmsg"><cst:errors error="intro" /> <cst:errors error="dates" /></span>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="<spring:message code="computer.intro" text="" />"
                                 	data-validation="custom" data-validation-regexp="^<spring:message code="date.regex" text="" />" >
                             </div>
                             <div class="form-group">
-                                <label for="discontinued"><spring:message code="computer.outro" text="Outro date" /></label> <span class="errmsg"><cst:errors error="outro" /> <cst:errors error="dates" /></span>
+                                <label for="discontinued"><spring:message code="computer.outro" text="Outro date" /> <spring:message code="date.format" text="" /></label> <span class="errmsg"><cst:errors error="outro" /> <cst:errors error="dates" /></span>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="<spring:message code="computer.outro" text="" />"
                                 	data-validation="custom" data-validation-regexp="<spring:message code="date.regex" text="" />" >
                             </div>
