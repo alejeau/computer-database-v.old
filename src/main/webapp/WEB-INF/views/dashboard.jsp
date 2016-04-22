@@ -1,5 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -16,29 +18,27 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application - Computer Database </a>
 		</div>
 	</header>
 	
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle"><c:out value="${ PAGE.nbEntries }" /> Computers found</h1>
+			<h1 id="homeTitle"><c:out value="${ PAGE.nbEntries }" /> <spring:message code="header.compFound" text="Computers found" /></h1>
 			
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="<c:out value="${ pathSearchComputer }" />" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" value='<c:out value="${ param.search != null ? param.search : '' }" />' /> <input
-							type="submit" id="searchsubmit" name="searchSubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="header.search" text="Search name" />" value='<c:out value="${ param.search != null ? param.search : '' }" />' /> <input
+							type="submit" id="searchsubmit" name="searchSubmit" value="<spring:message code="header.filter" text="Filter by name" />"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="<c:out value="${ pathAddComputer }" />" >Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="<c:out value="${ pathAddComputer }" />" ><spring:message code="header.add" text="Add computer" /></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="misc.edit" text="Edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -60,10 +60,10 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href='<cst:links linkTo="self" field="name" />'>Computer name</a></th>
-						<th><a href='<cst:links linkTo="self" field="introduced" />'>Introduction date</a></th>
-						<th><a href='<cst:links linkTo="self" field="discontinued" />'>Discontinuation date</a></th>
-						<th><a href='<cst:links linkTo="self" field="company.name" />'>Manufacturer</a></th>
+						<th><a href='<cst:links linkTo="self" field="name" />'><spring:message code="computer.name" text="Computer name" /></a></th>
+						<th><a href='<cst:links linkTo="self" field="introduced" />'><spring:message code="computer.intro" text="Introduction date" /></a></th>
+						<th><a href='<cst:links linkTo="self" field="discontinued" />'><spring:message code="computer.outro" text="Discontinuation date" /></a></th>
+						<th><a href='<cst:links linkTo="self" field="company.name" />'><spring:message code="computer.company" text="Manufacturer" /></a></th>
 
 					</tr>
 				</thead>
@@ -84,8 +84,8 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-<c:set var="PAGE_NB " value="?pageNb=" />
-<c:set var="DISPLAY_BY " value="?displayBy=" />
+<c:set var="PAGE_NB" value="?pageNb=" />
+<c:set var="DISPLAY_BY" value="?displayBy=" />
 		<div class="container text-center">
 			<ul class="pagination">
 				<cst:pager/>

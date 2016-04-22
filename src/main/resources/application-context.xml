@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
- <beans xmlns="http://www.springframework.org/schema/beans"
- 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- 	xmlns:context="http://www.springframework.org/schema/context"
- 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-   <context:component-scan base-package="com.excilys.formation.computerdb.mapper.*"/>
-   <context:component-scan base-package="com.excilys.formation.computerdb.pagination.pager"/>
-   <context:component-scan base-package="com.excilys.formation.computerdb.persistence.impl"/>
-   <context:component-scan base-package="com.excilys.formation.computerdb.service.impl"/>
-   <context:component-scan base-package="com.excilys.formation.computerdb.ui"/>
-   <context:component-scan base-package="com.excilys.formation.computerdb.validators"/>
-   
-   <!-- jdbcTemplate uses dataSource -->
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-   
-   <!-- dataSource configuration -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	   <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url"
-			value="jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.mapper.*" />
+	<context:component-scan
+		base-package="com.excilys.formation.computerdb.pagination.pager" />
+	<context:component-scan
+		base-package="com.excilys.formation.computerdb.persistence.impl" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.service.impl" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.ui" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.validators" />
+
+	<!-- jdbcTemplate uses dataSource -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Transactions -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- dataSource configuration -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull" />
 		<property name="username" value="admincdb" />
 		<property name="password" value="qwerty1234" />
 	</bean>
- </beans>
+</beans>

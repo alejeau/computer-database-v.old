@@ -1,4 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
@@ -23,35 +25,35 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="header.add" text="Add computer" /></h1>
                     <form action="<c:out value="${ pathAddComputer }" />" method="POST">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label> <span class="errmsg"><cst:errors error="name" /></span>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name"
-                                	data-validation="custom" data-validation-regexp="^[\wÀ-ÿ]+[\wÀ-ÿ_\-' \+]*$" >
+                                <label for="computerName"><spring:message code="computer.name" text="Computer name" /></label> <span class="errmsg"><cst:errors error="name" /></span>
+                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="<spring:message code="computer.name" text="" />"
+                                	data-validation="custom" data-validation-regexp="^[\wÃ€-Ã¿]+[\wÃ€-Ã¿_\-' \+]*$" >
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label> <span class="errmsg"><cst:errors error="intro" /> <cst:errors error="dates" /></span>
-                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date"
-                                	data-validation="custom" data-validation-regexp="^^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})-(1[0-2]{1}|0[1-9]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$|^$" >
+                                <label for="introduced"><spring:message code="computer.intro" text="Intro date" /></label> <span class="errmsg"><cst:errors error="intro" /> <cst:errors error="dates" /></span>
+                                <input type="date" class="form-control" id="introduced" name="introduced" placeholder="<spring:message code="computer.intro" text="" />"
+                                	data-validation="custom" data-validation-regexp="^<spring:message code="date.regex" text="" />" >
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label> <span class="errmsg"><cst:errors error="outro" /> <cst:errors error="dates" /></span>
-                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date"
-                                	data-validation="custom" data-validation-regexp="^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})-(1[0-2]{1}|0[1-9]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$|^$" >
+                                <label for="discontinued"><spring:message code="computer.outro" text="Outro date" /></label> <span class="errmsg"><cst:errors error="outro" /> <cst:errors error="dates" /></span>
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="<spring:message code="computer.outro" text="" />"
+                                	data-validation="custom" data-validation-regexp="<spring:message code="date.regex" text="" />" >
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="computer.company" text="Manuf" /></label>
                                 <select class="form-control" id="companyId" name="companyId" >
                                 	<cst:companies/>
                                 </select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
-                            or
-                            <a href="<c:out value="${ pathDashboard }" />" class="btn btn-default">Cancel</a>
+                            <input type="submit" value="<spring:message code="misc.add" text="Add" />" class="btn btn-primary">
+                            <spring:message code="misc.or" text="or" />
+                            <a href="<c:out value="${ pathDashboard }" />" class="btn btn-default"><spring:message code="misc.cancel" text="Cancel" /></a>
                         </div>
                     </form>
                 </div>

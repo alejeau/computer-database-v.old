@@ -34,18 +34,17 @@
 
 
 	<!-- Forbidden directory listing -->
-
 	<error-page>
 		<error-code>403</error-code>
 		<location>/resources/403.html</location>
 	</error-page>
+	<!-- Missing resource -->
 	<error-page>
-		<!-- Missing resource -->
 		<error-code>404</error-code>
 		<location>/resources/404.html</location>
 	</error-page>
+	<!-- Uncaught exception -->
 	<error-page>
-		<!-- Uncaught exception -->
 		<error-code>500</error-code>
 		<location>/resources/500.html</location>
 	</error-page>

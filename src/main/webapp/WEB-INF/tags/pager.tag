@@ -1,5 +1,6 @@
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="cst" tagdir="/WEB-INF/tags"%>
 
 
@@ -22,7 +23,7 @@
 <c:set var="stop" scope="page" value="${ stop < 0 ? 0 : stop }" />
 
 <li><a href='<cst:links linkTo="self" pageNb="0" />'
-	aria-label="Previous"> <span aria-hidden="true">First</span>
+	aria-label="Previous"> <span aria-hidden="true"><spring:message code="footer.first" text="First" /></span>
 </a></li>
 <li><a href='<cst:links linkTo="self" pageNb="${ PAGE.currentPageNumber-1 < 0 ? 0 : PAGE.currentPageNumber-1 }" />'
 	aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
@@ -37,5 +38,5 @@
 </a></li>
 <li><a
 	href='<cst:links linkTo="self" pageNb="${ PAGE.maxPageNumber < 0 ? stop : PAGE.maxPageNumber-1 }" />'
-	aria-label="Previous"> <span aria-hidden="true">Last</span>
+	aria-label="Previous"> <span aria-hidden="true"><spring:message code="footer.last" text="Last" /></span>
 </a></li>
