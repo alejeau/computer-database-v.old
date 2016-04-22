@@ -14,25 +14,25 @@ import com.excilys.formation.computerdb.pagination.SortedPage;
 
 public class PageDtoMapper {
 
-	public static ComputerDto toDTO(Computer c) {
-		return new ComputerDto(c);
+	public static ComputerDto toDTO(Computer c, String locale) {
+		return new ComputerDto(c, locale);
 	}
 
-	public static List<ComputerDto> toDTO(List<Computer> computers) {
+	public static List<ComputerDto> toDTO(List<Computer> computers, String locale) {
 		List<ComputerDto> list = new ArrayList<>();
 		for (Computer c : computers) {
-			list.add(new ComputerDto(c));
+			list.add(new ComputerDto(c, locale));
 		}
 		return list;
 	}
 	
-	public static Page<ComputerDto> toPageDto(Page<Computer> p) {
+	public static Page<ComputerDto> toPageDto(Page<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
 		Page<ComputerDto> sp = new Page<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries());
 		
 		for (Computer c : cList) {
-			dtoList.add(new ComputerDto(c));
+			dtoList.add(new ComputerDto(c, locale));
 		}
 		
 		sp.setPage(dtoList);
@@ -40,13 +40,13 @@ public class PageDtoMapper {
 		return sp;
 	}
 	
-	public static SortedPageDto<ComputerDto> toSortedPageDto(SortedPage<Computer> p) {
+	public static SortedPageDto<ComputerDto> toSortedPageDto(SortedPage<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
 		SortedPageDto<ComputerDto> spdto = new SortedPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending());
 		
 		for (Computer c : cList) {
-			dtoList.add(new ComputerDto(c));
+			dtoList.add(new ComputerDto(c, locale));
 		}
 		
 		spdto.setPage(dtoList);
@@ -54,13 +54,13 @@ public class PageDtoMapper {
 		return spdto;
 	}
 	
-	public static SearchPageDto<ComputerDto> toSearchPageDto(SearchPage<Computer> p) {
+	public static SearchPageDto<ComputerDto> toSearchPageDto(SearchPage<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
 		SearchPageDto<ComputerDto> spdto = new SearchPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending(), p.getSearch());
 		
 		for (Computer c : cList) {
-			dtoList.add(new ComputerDto(c));
+			dtoList.add(new ComputerDto(c, locale));
 		}
 		
 		spdto.setPage(dtoList);

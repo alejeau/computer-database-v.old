@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.errors.Problem;
+import com.excilys.formation.computerdb.mapper.date.DateMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
@@ -39,6 +41,8 @@ public class ControllerAddComputer {
 		String name  = params.get("computerName");
 		String intro = params.get("introduced");
 		String outro = params.get("discontinued");
+		intro = parseDate(intro);
+		outro = parseDate(outro);
 
 		listPbs = ComputerValidator.validateComputer(name, intro, outro);
 
@@ -64,6 +68,11 @@ public class ControllerAddComputer {
 		maw.addObject("companies", companies.getPage());
 
 		return maw;
+	}
+
+	private static String parseDate(String date) {
+		String locale = LocaleContextHolder.getLocale().toString();
+		return DateMapper.mapDate(date, locale);
 	}
 
 }

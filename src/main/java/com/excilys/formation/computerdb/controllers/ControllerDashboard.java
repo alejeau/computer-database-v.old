@@ -3,6 +3,7 @@ package com.excilys.formation.computerdb.controllers;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +56,8 @@ public class ControllerDashboard {
 		maw.addObject("pathDashboardReset", Paths.PATH_DASHBOARD_RESET);
 
 		// Setting the vars
-		maw.addObject("PAGE", PageDtoMapper.toSortedPageDto(page.getComputerSortedPage()));
+		String locale = LocaleContextHolder.getLocale().toString();
+		maw.addObject("PAGE", PageDtoMapper.toSortedPageDto(page.getComputerSortedPage(), locale));
 		maw.addObject("pathSource", "/resources");
 		maw.addObject("currentUrl", page.getUrl());
 		maw.addObject("searchModeActivated", false);

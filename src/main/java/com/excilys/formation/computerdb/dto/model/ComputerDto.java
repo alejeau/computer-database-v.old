@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.Size;
 
+import com.excilys.formation.computerdb.mapper.date.DateMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.validators.annotations.ValidDate;
@@ -19,7 +20,7 @@ public class ComputerDto {
 	protected String outro;
 	protected String company;
 
-	public ComputerDto(Computer c) {
+	public ComputerDto(Computer c, String locale) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
 		Company  cy = c.getCompany();
 		final String EMPTY = "";
@@ -27,16 +28,16 @@ public class ComputerDto {
 
 		this.id 	 = 	(cid > -1L) ? (cid) : (-1L);
 		this.name 	 = 	c.getName();
-		this.intro   = 	(i  != null) ? (i.toString()) : (EMPTY);
-		this.outro   = 	(o  != null) ? (o.toString()) : (EMPTY);
+		this.intro   = 	(i  != null) ? (DateMapper.unmapDate(i.toString(), locale)) : (EMPTY);
+		this.outro   = 	(o  != null) ? (DateMapper.unmapDate(o.toString(), locale)) : (EMPTY);
 		this.company =  (cy != null) ? (cy.getName()) : (EMPTY);
 	}
 
-	public ComputerDto(long cid, String name, String intro, String outro, String company) {
+	public ComputerDto(long cid, String name, String intro, String outro, String company, String locale) {
 		this.id = (cid > -1L) ? (cid) : (-1L);
 		this.name = name;
-		this.intro = intro;
-		this.outro = outro;
+		this.intro = DateMapper.unmapDate(intro, locale);
+		this.outro = DateMapper.unmapDate(outro, locale);
 		this.company = company;
 	}
 
@@ -81,11 +82,12 @@ public class ComputerDto {
 	}
 	
 	public static class ComputerDTOBuilder {
-		private long nestedId = -1;
+		private long   nestedId = -1;
 		private String nestedName = null;
 		private String nestedIntro = null;
 		private String nestedOutro = null;
 		private String nestedCompany = null;
+		private String nestedLocale = null;
 
 
 		public ComputerDTOBuilder() {}
@@ -120,8 +122,13 @@ public class ComputerDto {
 			return this;
 		}
 
+		public ComputerDTOBuilder locale(final String locale) {
+			this.nestedLocale = locale;
+			return this;
+		}
+
 		public ComputerDto build() {
-			return new ComputerDto(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany);
+			return new ComputerDto(nestedId, nestedName, nestedIntro, nestedOutro, nestedCompany, nestedLocale);
 		}
 	}
 }
