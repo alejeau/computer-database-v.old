@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.persistence.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +57,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		return list;
 	}
 
+	@Override
 	public Company getCompanyById(long id) {
 		if ((id == -1l) || (id == 0L)) {
 			return null;
@@ -73,25 +73,37 @@ public class CompanyDaoImpl implements CompanyDao {
 		return company;
 	}
 
+	@Override
 	public Company getCompanyByName(String name) {
 		Company company = null;
 		String query = "SELECT * FROM company WHERE name = ?";
 
-		Object args[] = new Object[1];
-		args[0] = name;
-		company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
+		Object args[] = new Object[] { name };
+		try {
+			company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
+		} catch (Exception e) {
+			String error = "An error occured while deleting the company. Try to check the company name.";
+			LOG.error(error);
+			// throw new RuntimeException(error + "\n" + e.getMessage());
+		}
 
 		return company;
 	}
 
 	@Override
 	@Transactional
-	public void deleteCompany(long id) throws SQLException {
+	public void deleteCompany(long id) {
 		LOG.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
 		String query = "DELETE FROM company WHERE id = ?";
 
 		Object args[] = new Object[1];
 		args[0] = id;
-		jdbcTemplate.update(query, args);
+		try {
+			jdbcTemplate.update(query, args);
+		} catch (Exception e) {
+			String error = "An error occured while deleting the company. Try to check the company name.";
+			LOG.error(error);
+			throw new RuntimeException(error + "\n" + e.getMessage());
+		}
 	}
 }

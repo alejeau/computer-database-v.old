@@ -24,6 +24,7 @@
 		<slf4j.version>1.7.19</slf4j.version>
 		<jstl.version>1.2</jstl.version>
 		<logback.version>1.1.6</logback.version>
+		<hikaricp.version>2.4.5</hikaricp.version>
 		<spring.version>4.2.5.RELEASE</spring.version>
 
 		<!-- Validators -->
@@ -174,6 +175,13 @@
 			<artifactId>javaee-api</artifactId>
 			<version>${javax.version}</version>
 		</dependency>
+		<dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+           <version>${hikaricp.version}</version>
+        </dependency>
+		
+		
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>

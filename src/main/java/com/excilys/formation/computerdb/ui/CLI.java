@@ -371,8 +371,6 @@ public class CLI {
 	}
 
 	/**
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 	 * Gets infos about a computer from user's input :<br>
 	 * Name<br>
 	 * Date of introduction<br>

@@ -24,6 +24,11 @@ public class ControllerDashboard {
 	@Autowired
 	ComputerDatabaseServiceImpl services;
 
+	/**
+	 * Displays a list of computer in the main page.
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
 	@RequestMapping(method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("dashboard");
@@ -40,6 +45,10 @@ public class ControllerDashboard {
 		return maw;
 	}
 
+	/**
+	 * Deletes a list of computer.
+	 * @param params the list of parameter given by the URL
+	 */
 	@RequestMapping(method = RequestMethod.POST)
     public void post(@RequestParam Map<String, String> params) {
 		long[] listId = DashboardRequestMapper.mapPost(params);

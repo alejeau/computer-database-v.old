@@ -15,6 +15,13 @@ public class ComputerMapper implements RowMapper<Computer> {
 	public ComputerMapper() {
 	}
 	
+	/**
+	 * Maps a ResultSet into a Computer.
+	 * @param rs the ResultSet to map
+	 * @param company the Company to add to the Computer
+	 * @return a Computer
+	 * @throws SQLException
+	 */
 	public Computer map(ResultSet rs, Company company) throws SQLException {
 		long id 	 = rs.getLong("id");
 		String name  = rs.getString("name");
@@ -30,6 +37,11 @@ public class ComputerMapper implements RowMapper<Computer> {
 			.build();
 	}
 	
+	/**
+	 * Maps a ResultSet into a Company ID.
+	 * @param rs the ResultSet to map
+	 * @return the Company ID
+	 */
 	public static long getCompanyId(ResultSet rs) {
 		long id = -1;
 		try {
@@ -41,7 +53,8 @@ public class ComputerMapper implements RowMapper<Computer> {
 	}
 
 	/**
-	 * The company will not be set and so has to be set manually after.
+	 * Maps a ResultSet into a Computer.
+	 * WARNING: the company will not be set and so has to be set manually after.
 	 */
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {

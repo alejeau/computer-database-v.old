@@ -19,6 +19,11 @@ import com.excilys.formation.computerdb.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 
+/**
+ * Allows for the addition
+ * @author excilys
+ *
+ */
 @Controller
 @RequestMapping("/access")
 public class ControllerAddComputer {
@@ -26,6 +31,11 @@ public class ControllerAddComputer {
 	@Autowired
 	ComputerDatabaseServiceImpl services;
 
+	/**
+	 * Displays problems encountered while adding a Computer if appropriate.
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("addComputer");
@@ -33,6 +43,11 @@ public class ControllerAddComputer {
 		return maw;
 	}
 
+	/**
+	 * Adds a computer into the database
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ModelAndView post(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("addComputer");
@@ -44,8 +59,10 @@ public class ControllerAddComputer {
 		intro = parseDate(intro);
 		outro = parseDate(outro);
 
+		// We check the validity of the data
 		listPbs = ComputerValidator.validateComputer(name, intro, outro);
-
+		
+		// If valid, we try to add the computer
 		if (listPbs == null) {
 			long cid = Long.valueOf(params.get("companyId"));
 			Company cy = services.getCompanyById(cid);

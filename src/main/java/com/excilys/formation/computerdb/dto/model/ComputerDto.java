@@ -20,19 +20,32 @@ public class ComputerDto {
 	protected String outro;
 	protected String company;
 
+	/**
+	 * Creates a lighter Computer version with only Company name instead of a Company.
+	 * @param c the Computer to convert
+	 * @param locale the language chosen
+	 */
 	public ComputerDto(Computer c, String locale) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
 		Company  cy = c.getCompany();
 		final String EMPTY = "";
-		long cid = c.getId();
 
-		this.id 	 = 	(cid > -1L) ? (cid) : (-1L);
+		this.id 	 = 	c.getId();
 		this.name 	 = 	c.getName();
 		this.intro   = 	(i  != null) ? (DateMapper.unmapDate(i.toString(), locale)) : (EMPTY);
 		this.outro   = 	(o  != null) ? (DateMapper.unmapDate(o.toString(), locale)) : (EMPTY);
 		this.company =  (cy != null) ? (cy.getName()) : (EMPTY);
 	}
 
+	/**
+	 * Creates a lighter Computer version with only Company name instead of a Company.
+	 * @param cid the Computer cid
+	 * @param name the Computer name
+	 * @param intro the Computer intro
+	 * @param outro the Computer outro
+	 * @param company the Computer company
+	 * @param locale the Computer locale
+	 */
 	public ComputerDto(long cid, String name, String intro, String outro, String company, String locale) {
 		this.id = (cid > -1L) ? (cid) : (-1L);
 		this.name = name;

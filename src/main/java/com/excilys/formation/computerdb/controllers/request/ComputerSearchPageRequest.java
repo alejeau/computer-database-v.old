@@ -1,12 +1,12 @@
 package com.excilys.formation.computerdb.controllers.request;
 
-import org.springframework.stereotype.Component;
-
 import com.excilys.formation.computerdb.controllers.Paths;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SearchPage;
 
-@Component
+/**
+ * Page encapsulating a SearchPage and its associated URL
+ */
 public class ComputerSearchPageRequest {
 
 	String url = Paths.PATH_DASHBOARD;

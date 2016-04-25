@@ -4,6 +4,9 @@ import com.excilys.formation.computerdb.controllers.Paths;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SortedPage;
 
+/**
+ * Page encapsulating a SortedPage and its associated URL
+ */
 public class ComputerSortedPageRequest {
 
 	String url = Paths.PATH_DASHBOARD;

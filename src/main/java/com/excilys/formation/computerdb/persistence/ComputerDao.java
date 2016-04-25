@@ -7,9 +7,25 @@ import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Computer;
 
 public interface ComputerDao {
-	boolean exists(String name);
-	boolean exists(Computer computer);
 	
+	/**
+	 * Checks whether a computer with the name name exists.
+	 * @param name the computer name.
+	 * @return true if the computer exists, false else.
+	 */
+	boolean exists(String name);
+	
+	/**
+	 * Checks whether a Computer exists.
+	 * @param computer the Computer to check
+	 * @return true if the computer exists, false else.
+	 */
+	boolean exists(Computer computer);
+
+	/**
+	 * Returns a List of all the Computer in the database.
+	 * @return a List of all the Computer in the database.
+	 */
 	List<Computer> getAll();
 	List<Computer> getAllSortedBy(Fields field, boolean ascending);
 	List<Computer> getFromTo(int offset, int limit);

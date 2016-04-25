@@ -24,25 +24,10 @@
 	</bean>
 
 	<!-- dataSource configuration -->
-	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"  destroy-method="close">
-		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
-		<!-- Tomcat is in BIO mode, so it accepts 200 threads/connections -->
-		<property name="maximumPoolSize" value="200" />
-		<!-- Maximum lifetime of a connection in the pool. -->
-		<property name="maxLifetime" value="30000" />
-		<!-- Maximum amount of time that a connection is allowed to sit idle in the pool. -->
-		<property name="idleTimeout" value="30000" />
-		<property name="dataSourceProperties">
-			<props>
-				<prop key="url">jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull</prop>
-				<prop key="user">admincdb</prop>
-				<prop key="password">qwerty1234</prop>
-				<prop key="prepStmtCacheSize">250</prop>
-				<prop key="prepStmtCacheSqlLimit">2048</prop>
-				<prop key="cachePrepStmts">true</prop>
-				<prop key="useServerPrepStmts">true</prop>
-			</props>
-		</property>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/computer-database-db-test?zeroDateTimeBehavior=convertToNull" />
+		<property name="username" value="admincdb" />
+		<property name="password" value="qwerty1234" />
 	</bean>
-	
 </beans>

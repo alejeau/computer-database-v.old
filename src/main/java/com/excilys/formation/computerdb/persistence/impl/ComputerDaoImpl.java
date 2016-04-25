@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.persistence.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -344,7 +343,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	@Transactional
-	public void deleteComputers(long[] listId) throws SQLException {
+	public void deleteComputers(long[] listId) {
 		Object[] args = new Object[1];
 
 		String query = "DELETE FROM computer WHERE id = ?";
@@ -358,7 +357,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	@Transactional
-	public void deleteComputersWhereCompanyIdEquals(long id) throws SQLException {
+	public void deleteComputersWhereCompanyIdEquals(long id) {
 		Object[] args = new Object[] { id };
 
 		String query = "DELETE FROM computer WHERE company_id = ?";

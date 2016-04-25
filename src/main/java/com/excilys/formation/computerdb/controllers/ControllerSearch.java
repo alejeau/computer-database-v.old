@@ -24,6 +24,11 @@ public class ControllerSearch {
 	@Autowired
 	ComputerDatabaseServiceImpl services;
 
+	/**
+	 * Displays a list of computers matching the search keyword.
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("dashboard");
@@ -39,6 +44,10 @@ public class ControllerSearch {
 		return maw;
 	}
 
+    /**
+	 * Deletes a list of computer.
+	 * @param params the list of parameter given by the URL
+     */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
 	public void post(@RequestParam Map<String, String> params) {
 		long[] listId = SearchRequestMapper.mapPost(params);

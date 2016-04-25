@@ -26,22 +26,36 @@ public class ControllerEditComputer {
 	@Autowired
 	EditRequestProcessor erm;
 
+	/**
+	 * Displays a list of Computer.
+	 * 
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("editComputer");
 		maw = erm.processGet(params, maw);
+		
 		Page<Company> companyList = this.services.getAllCompanies();
 		maw.addObject("companies",  companyList.getPage());
 		return maw;
 	}
 
+
+	/**
+	 * Deletes a list of Computer.
+	 * 
+	 * @param params the list of parameter given by the URL
+	 * @return the ModelAndView modified accordingly
+	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public ModelAndView post(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("editComputer");
 		Page<Company> companies = this.services.getAllCompanies();
 		ComputerEditObject ceo = erm.processPost(params, maw);
 		
-		if ((ceo.getResponse() == null) && (ceo.getListPbs() == null)) {
+		if ((ceo.getMaw() == null) && (ceo.getListPbs() == null)) {
 			return maw;
 		}
 		

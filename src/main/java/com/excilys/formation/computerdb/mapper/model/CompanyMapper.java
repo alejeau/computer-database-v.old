@@ -14,6 +14,11 @@ import com.excilys.formation.computerdb.model.Company;
 public class CompanyMapper implements RowMapper<Company> {
 	protected static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
 	
+	/**
+	 * Converts a List of Company to a HashMap<ID, Name>
+	 * @param list
+	 * @return
+	 */
 	public static HashMap<Long, String> toHashMap(List<Company> list) {
 		HashMap<Long, String> companyMap = new HashMap<>();
 		for (Company c : list) {
@@ -22,6 +27,9 @@ public class CompanyMapper implements RowMapper<Company> {
 		return companyMap;
 	}
 
+	/**
+	 * Maps ResultSet into a Company
+	 */
 	@Override
 	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 		long id = -1;

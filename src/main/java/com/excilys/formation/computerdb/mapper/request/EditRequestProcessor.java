@@ -27,6 +27,12 @@ public class EditRequestProcessor {
 	public EditRequestProcessor() {
 	}
 
+	/**
+	 * Sets the corrects information to display about the computer edition
+	 * @param params the params
+	 * @param maw the ModelAndView to modify
+	 * @return the modified MAW
+	 */
 	public ModelAndView processGet(Map<String, String> params, ModelAndView maw) {
 		maw.addObject("pathDashboard", Paths.PATH_DASHBOARD);
 		maw.addObject("pathAddComputer", Paths.PATH_COMPUTER_ADD);
@@ -35,11 +41,17 @@ public class EditRequestProcessor {
 
 		String name = params.get("computer");
 		Computer c = services.getComputerByName(name);
-		maw = setComputerDisplay(maw, c);
+		maw = setSelectedComputer(maw, c);
 
 		return maw;
 	}
 
+	/**
+	 * Creates a ComputerEditObject containing the computer to edit and the URL.
+	 * @param params the params
+	 * @param maw the ModelAndView to modify
+	 * @return the modified MAW
+	 */
 	public ComputerEditObject processPost(Map<String, String> params, ModelAndView maw) {
 		List<Problem> listPbs = null;
 		long id = Long.valueOf(params.get("computerId"));
@@ -68,19 +80,25 @@ public class EditRequestProcessor {
 		if (listPbs == null) {
 			listPbs = null;
 			listPbs = services.updateComputer(c, oldName);
-			maw = setComputerDisplay(maw, c);
+			maw = setSelectedComputer(maw, c);
 
 			if (listPbs == null) {
 				return new ComputerEditObject(maw, null);
 			}
 		} else {
-			maw = setComputerDisplay(maw, c);
+			maw = setSelectedComputer(maw, c);
 		}
 
 		return new ComputerEditObject(maw, listPbs);
 	}
 
-	private ModelAndView setComputerDisplay(ModelAndView maw, Computer c) {
+	/**
+	 * Sets the selectedId of the company's computer.
+	 * @param params the params
+	 * @param maw the ModelAndView to modify
+	 * @return the modified MAW
+	 */
+	private static ModelAndView setSelectedComputer(ModelAndView maw, Computer c) {
 		String locale = LocaleContextHolder.getLocale().toString();
 		ComputerDto cdto = new ComputerDto(c, locale);
 		maw.addObject("cdto", cdto);
@@ -97,7 +115,7 @@ public class EditRequestProcessor {
 		return maw;
 	}
 
-	private String checkDateEntry(String date) {
+	private static String checkDateEntry(String date) {
 		if (date.equals("")) {
 			return null;
 		}

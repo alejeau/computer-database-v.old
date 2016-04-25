@@ -1,6 +1,5 @@
 package com.excilys.formation.computerdb.service.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +21,13 @@ import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 @Service
 public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
-	
+
 	@Autowired
 	private ComputerDaoImpl computerDaoImpl;
-	
+
 	@Autowired
 	private CompanyDaoImpl companyDAOImpl;
-	
+
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
 	private ComputerDatabaseServiceImpl() {
@@ -183,34 +182,34 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	public void deleteComputers(long[] listId) {
 		logger.info("Starting mass computer deletion...");
-		
+
 		try {
 			computerDaoImpl.deleteComputers(listId);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.error("Couldn't commit the changes!");
 			logger.error(e.getMessage());
-			logger.error("Rolling back now...");
+			throw new RuntimeException("Couldn't commit the changes!");
 		}
-		
+
 		logger.info("Mass deletion completed.");
 	}
 
 	@Override
 	public void deleteCompany(Company c) {
 		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
-		
+
 		if (c != null) {
 			long id = c.getId();
 			try {
 				computerDaoImpl.deleteComputersWhereCompanyIdEquals(id);
 				companyDAOImpl.deleteCompany(id);
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				logger.error("Couldn't commit the changes!");
 				logger.error(e.getMessage());
-				logger.error("Rolling back now...");
+				throw new RuntimeException("Couldn't commit the changes!");
 			}
 		}
-		
+
 		logger.info("Deletion of company \"" + c.getName() + "\" its related computers done.");
 	}
 

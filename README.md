@@ -103,7 +103,7 @@ Important Points: Maven structure? Library scopes? Architecture (daos, mappers, 
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
 ####4.3.5. Connection pool, Transactions
-Add a connection pool (BoneCP), put your credentials in an external properties file.  
+Add a connection pool (HikariCP), put your credentials in an external properties file.  
 Implement a solid transaction handling model.  
 
 ####4.3.6. Implement all other features in the web-ui
@@ -124,7 +124,7 @@ Point about Threading (Connections, concurrency), and Transactions.
 Replace existing connection logic with a ThreadLocal object. 
 
 ###4.4 Continuous Integration / Continuous Delivery
-We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment,  build and push the new image to a registry, then manually deploy the new image to a staging server.
+We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
 
 ####4.4.1 Jenkins & Docker
 Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers. Do not use [links](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) since the feature will be deprecated.
@@ -135,18 +135,20 @@ We now want to put our Jenkins in a Docker container. Create a Docker container 
 Warning: Sharing the host docker socket with the Jenkins container is forbidden.
 
 ####4.4.3 Continuous Delivery
-Create two Docker images: one for the computer database webapp and one for the mysql. Push them to DockerHub.
+Create four Docker images: one for jenkins, one for compilation and tests, one for production (tomcat) and one for the mysql. Push them to DockerHub.
 
-Connect with ssh to your staging server kindergarten (login: student, password: student) and setup your staging environment:
+- Connect with your login to [Docker Cloud](https://cloud.docker.com/) 
 
- - ``` $ mkdir $HOME/yourname ``` -- this will be your working directory for your conf files, launch scripts and data if any
- - ``` $ docker network create yourname``` -- this will be your private network
- - Choose a port to publish your webapp.
- - Start your database and webapp containers and add them to your private network
+- Create a [free account](https://aws.amazon.com/fr/free/) on Amazon Web Services.
 
-Update your Jenkins to rebuild your webapp image with the latest successful war and push it to DockerHub.
+- [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard. Be careful when choosing the type of node on Docker Cloud, select 't2.micro' under the conditions of free AWS account.
 
-From now on, you must manually update your stagging environment after a success build.
+- Observe the diagram below to properly configure the architecture of Docker containers to set up the continuous delivery:
+![image](http://s24.postimg.org/4hwvay1mt/Continuous_delivery_1.png)
+
+- Below the activity diagram to figure out all the process:
+![image](http://s22.postimg.org/4sxvlgtw1/CDProcess_Diagram_1.png)
+
 
 ####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
 Jenkins + DinD: which service actually starts the containers ?   
