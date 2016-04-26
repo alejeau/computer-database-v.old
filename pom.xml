@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.exclilys.formation.computerdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>4.5.4-SNAPSHOT</version>
+	<version>4.6.1-SNAPSHOT</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -20,13 +20,17 @@
 		<mockito.version>1.10.19</mockito.version>
 
 		<!-- compile -->
+		<!-- logs -->
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.19</slf4j.version>
 		<jstl.version>1.2</jstl.version>
 		<logback.version>1.1.6</logback.version>
+		<!-- connection manager -->
 		<hikaricp.version>2.4.5</hikaricp.version>
+		<!-- spring -->
 		<spring.version>4.2.5.RELEASE</spring.version>
-
+		<!-- persistence -->
+		<hibernate.core.version>5.1.0.Final</hibernate.core.version>
 		<!-- Validators -->
 		<hibernate.version>5.2.4.Final</hibernate.version>
 		<commonsValidator.version>1.4.0</commonsValidator.version>
@@ -175,13 +179,22 @@
 			<artifactId>javaee-api</artifactId>
 			<version>${javax.version}</version>
 		</dependency>
+		<!-- connection manager -->
 		<dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-           <version>${hikaricp.version}</version>
-        </dependency>
-		
-		
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricp.version}</version>
+		</dependency>
+		<!-- persistence -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.core.version}</version>
+		</dependency>
+
+
+
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>

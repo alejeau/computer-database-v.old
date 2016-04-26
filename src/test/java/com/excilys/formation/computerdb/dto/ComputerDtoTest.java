@@ -11,12 +11,14 @@ import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 
 public class ComputerDtoTest {
-private static final long 	COMPUTER_ID 	= 0;
-private static final String COMPUTER_NAME 	= "TESTOUILLE";
-private static final String COMPUTER_INTRO 	= "01-03-2016";
-private static final String COMPUTER_OUTRO 	= "17-03-2016";
-private static final String COMPANY 		= "Testy";
-private static final String LOCALE 			= "fr";
+private static final long 	COMPUTER_ID 		= 0;
+private static final String COMPUTER_NAME 		= "TESTOUILLE";
+private static final String COMPUTER_INTRO 		= "01-03-2016";
+private static final String COMPUTER_INTRO_ISO 	= "2016-03-01";
+private static final String COMPUTER_OUTRO	 	= "17-03-2016";
+private static final String COMPUTER_OUTRO_ISO 	= "2016-03-17";
+private static final String COMPANY 			= "Testy";
+private static final String LOCALE 				= "fr";
 
 
 @Test
@@ -51,13 +53,13 @@ public void getNameNull() throws ComputerCreationException {
 @Test
 public void getIntro() throws ComputerCreationException {
 	ComputerDto c = new ComputerDto(COMPUTER_ID, COMPUTER_NAME, COMPUTER_INTRO, COMPUTER_OUTRO, COMPANY, LOCALE);
-	assertEquals(COMPUTER_INTRO, c.getIntro());
+	assertEquals(COMPUTER_INTRO_ISO, c.getIntro());
 }
 
 @Test
 public void getOutro() throws ComputerCreationException {
 	ComputerDto c = new ComputerDto(COMPUTER_ID, COMPUTER_NAME, COMPUTER_INTRO, COMPUTER_OUTRO, COMPANY, LOCALE);
-	assertEquals(COMPUTER_OUTRO, c.getOutro());
+	assertEquals(COMPUTER_OUTRO_ISO, c.getOutro());
 }
 
 @Test
