@@ -12,7 +12,7 @@ public class Main {
 		CLI cli = context.getBean(CLI.class);
 		cli.setScanner(sc);
 		cli.init();
-		
+
 		boolean keepOnRocking = true;
 
 		while (keepOnRocking) {

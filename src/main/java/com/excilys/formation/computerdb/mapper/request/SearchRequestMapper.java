@@ -9,7 +9,7 @@ import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.pagination.SearchPage;
 
 public class SearchRequestMapper {
-	
+
 	public static ComputerSearchPageRequest mapGet(Map<String, String> params) {
 		String url = Paths.PATH_COMPUTER_SEARCH;
 		SearchPage<Computer> page = new SearchPage<>();
@@ -25,7 +25,8 @@ public class SearchRequestMapper {
 		if (notEmpty(pageNb)) {
 			try {
 				nb = Integer.parseInt(pageNb);
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+			}
 		}
 		page.setCurrentPageNumber(nb);
 		url = setUrl(url, UrlFields.URL_PAGE_NB, String.valueOf(nb));
@@ -35,11 +36,12 @@ public class SearchRequestMapper {
 		if (notEmpty(displayBy)) {
 			try {
 				db = Integer.parseInt(displayBy);
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+			}
 		}
 		page.setObjectsPerPages(db);
 		url = setUrl(url, UrlFields.URL_DISPLAY_BY, String.valueOf(db));
-		
+
 		// Retrieving and setting the sort field
 		Fields field = Fields.NAME;
 		if (notEmpty(stringField)) {
@@ -63,7 +65,7 @@ public class SearchRequestMapper {
 		}
 		page.setAscending(ascend);
 		url = setUrl(url, UrlFields.URL_ASCENDING, String.valueOf(ascend));
-		
+
 		// Retrieving and setting the research field
 		String search = null;
 		if ((searchField != null) && !searchField.equals("")) {
@@ -74,7 +76,7 @@ public class SearchRequestMapper {
 
 		return new ComputerSearchPageRequest(page, url);
 	}
-	
+
 	/**
 	 * Adds var=value to the url, with the correct ? or &
 	 * 
@@ -92,9 +94,10 @@ public class SearchRequestMapper {
 		url += var + "=" + value;
 		return url;
 	}
-	
+
 	/**
 	 * Returns the list of computer IDs to delete
+	 * 
 	 * @param params the request to process
 	 * @return the list of computer IDs to delete
 	 */
@@ -111,9 +114,10 @@ public class SearchRequestMapper {
 		}
 		return listId;
 	}
-	
+
 	/**
 	 * Checks if a String is not null, different than "" and different than "null".
+	 * 
 	 * @param s the String to check
 	 * @return true if the String is not null, different than "" and different than "null"
 	 */

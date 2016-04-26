@@ -14,7 +14,7 @@ public class SortedPage<T> extends Page<T> {
 		this.field = Fields.NAME;
 		this.ascending = true;
 	}
-	
+
 	/**
 	 * Creates a page of T.
 	 * 
@@ -25,7 +25,8 @@ public class SortedPage<T> extends Page<T> {
 	 * @param field the sort field (from enum Fields)
 	 * @param ascending true if the sort is ascending, false else
 	 */
-	public SortedPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries, Fields field, boolean ascending) {
+	public SortedPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries,
+			Fields field, boolean ascending) {
 		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries);
 		this.field = field;
 		this.ascending = ascending;
@@ -87,48 +88,50 @@ public class SortedPage<T> extends Page<T> {
 		private int nestedCurrentPageNumber = -1;
 		private Fields nestedField = Fields.NAME;
 		private boolean nestedAscending = true;
-		
-		public Builder() {}
-		
+
+		public Builder() {
+		}
+
 		public Builder<T> page(List<T> list) {
 			this.nestedPage = new LinkedList<T>(list);
 			this.nestedPage.size();
 			return this;
 		}
-		
+
 		public Builder<T> nbEntries(int nbEntries) {
 			this.nestedNbEntries = nbEntries;
 			return this;
 		}
-		
+
 		public Builder<T> maxPageNumber(int maxPageNumber) {
 			this.nestedMaxPageNumber = maxPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> objectsPerPages(int objectsPerPages) {
 			this.nestedObjectsPerPages = objectsPerPages;
 			return this;
 		}
-		
+
 		public Builder<T> currentPageNumber(int currentPageNumber) {
 			this.nestedCurrentPageNumber = currentPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> field(Fields field) {
 			this.nestedField = field;
 			return this;
 		}
-		
+
 		public Builder<T> ascending(boolean ascending) {
 			this.nestedAscending = ascending;
 			return this;
 		}
-		
+
 		public SortedPage<T> build() {
-			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries, nestedField, nestedAscending);
+			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages,
+					nestedNbEntries, nestedField, nestedAscending);
 		}
 	}
-	
+
 }

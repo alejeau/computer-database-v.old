@@ -25,46 +25,51 @@ public class PageDtoMapper {
 		}
 		return list;
 	}
-	
+
 	public static Page<ComputerDto> toPageDto(Page<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
-		Page<ComputerDto> sp = new Page<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries());
-		
+		Page<ComputerDto> sp = new Page<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(),
+				p.getObjectsPerPages(), p.getNbEntries());
+
 		for (Computer c : cList) {
 			dtoList.add(new ComputerDto(c, locale));
 		}
-		
+
 		sp.setPage(dtoList);
-		
+
 		return sp;
 	}
-	
+
 	public static SortedPageDto<ComputerDto> toSortedPageDto(SortedPage<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
-		SortedPageDto<ComputerDto> spdto = new SortedPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending());
-		
+		SortedPageDto<ComputerDto> spdto = new SortedPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(),
+				p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(),
+				p.isAscending());
+
 		for (Computer c : cList) {
 			dtoList.add(new ComputerDto(c, locale));
 		}
-		
+
 		spdto.setPage(dtoList);
-		
+
 		return spdto;
 	}
-	
+
 	public static SearchPageDto<ComputerDto> toSearchPageDto(SearchPage<Computer> p, String locale) {
 		List<Computer> cList = p.getPage();
 		List<ComputerDto> dtoList = new ArrayList<>();
-		SearchPageDto<ComputerDto> spdto = new SearchPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(), p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(), p.isAscending(), p.getSearch());
-		
+		SearchPageDto<ComputerDto> spdto = new SearchPageDto<>(new LinkedList<>(), p.getCurrentPageNumber(),
+				p.getMaxPageNumber(), p.getObjectsPerPages(), p.getNbEntries(), p.getField().toString(),
+				p.isAscending(), p.getSearch());
+
 		for (Computer c : cList) {
 			dtoList.add(new ComputerDto(c, locale));
 		}
-		
+
 		spdto.setPage(dtoList);
-		
+
 		return spdto;
 	}
 }

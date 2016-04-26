@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.constants.Time;
-import com.excilys.formation.computerdb.exceptions.ComputerCreationException;
 import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -264,10 +263,8 @@ public class ComputerDaoImpl implements ComputerDao {
 	/**
 	 * Tries to insert a computer in the database
 	 * 
-	 * @param computer
-	 *            the computer to insert
+	 * @param computer the computer to insert
 	 * @return
-	 * @throws ComputerCreationException
 	 */
 	@Override
 	public int createComputer(Computer computer) {
@@ -351,7 +348,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		for (long l : listId) {
 			args[0] = l;
-			jdbcTemplate.update(query, args);	
+			jdbcTemplate.update(query, args);
 		}
 	}
 

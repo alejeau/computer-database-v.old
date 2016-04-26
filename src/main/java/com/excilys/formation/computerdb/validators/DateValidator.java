@@ -17,11 +17,11 @@ public class DateValidator implements ConstraintValidator<ValidDate, String> {
 	public boolean isValid(String date, ConstraintValidatorContext arg) {
 
 		String dateRegex = "^^(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})"
-						+ "-"
-						+ "(1[0-2]{1}|0[1-9]{1})"
-						+ "-"
-						+ "(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$"
-						+ "|^$";
+				+ "-"
+				+ "(1[0-2]{1}|0[1-9]{1})"
+				+ "-"
+				+ "(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})$"
+				+ "|^$";
 
 		if (date == null || date.isEmpty()) {
 			return true;

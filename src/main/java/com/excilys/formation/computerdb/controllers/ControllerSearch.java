@@ -26,29 +26,31 @@ public class ControllerSearch {
 
 	/**
 	 * Displays a list of computers matching the search keyword.
+	 * 
 	 * @param params the list of parameter given by the URL
 	 * @return the ModelAndView modified accordingly
 	 */
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView get(@RequestParam Map<String, String> params) {
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("dashboard");
-    	ComputerSearchPageRequest page = SearchRequestMapper.mapGet(params);
-		
+		ComputerSearchPageRequest page = SearchRequestMapper.mapGet(params);
+
 		// We feed content to the page
 		SearchPage<Computer> sp = page.getComputerSearchPage();
 		int currentPageNumber = sp.getCurrentPageNumber();
 		sp = this.services.getComputerSearchPage(currentPageNumber, sp);
 		page.setPage(sp);
-		
+
 		maw = setRequest(maw, page);
 		return maw;
 	}
 
-    /**
+	/**
 	 * Deletes a list of computer.
+	 * 
 	 * @param params the list of parameter given by the URL
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+	 */
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public void post(@RequestParam Map<String, String> params) {
 		long[] listId = SearchRequestMapper.mapPost(params);
 		this.services.deleteComputers(listId);

@@ -9,6 +9,7 @@ public class ProblemDto {
 
 	/**
 	 * Converts a Problem to a HashMap<String, String> with a single entry.
+	 * 
 	 * @param p the Problem to convert
 	 * @return a HashMap with Problem.field as key and Problem.message as entry
 	 */
@@ -24,6 +25,7 @@ public class ProblemDto {
 
 	/**
 	 * Converts a List<Problem> to a HashMap<String, String>.
+	 * 
 	 * @param l the List<Problem> to convert
 	 * @return a HashMap with Problem.field as key and Problem.message as entry
 	 */

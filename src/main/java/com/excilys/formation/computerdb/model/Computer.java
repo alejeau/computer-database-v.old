@@ -11,16 +11,18 @@ public class Computer implements Comparable<Computer> {
 	protected LocalDate outro = null;
 	protected Company company = null;
 
-	public Computer() { }
+	public Computer() {
+	}
 
 	/**
 	 * Creates a computer without id, useful to insert it into the database.
+	 * 
 	 * @param name Computer's name
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
 	 * @param comp The manufacturer
 	 */
-	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {	
+	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.name = name;
 		this.intro = intro;
 		this.outro = outro;
@@ -29,6 +31,7 @@ public class Computer implements Comparable<Computer> {
 
 	/**
 	 * Creates a computer with an existing id
+	 * 
 	 * @param id the computer's id in the database
 	 * @param name Computer's name
 	 * @param intro Date of start of production
@@ -45,6 +48,7 @@ public class Computer implements Comparable<Computer> {
 
 	/**
 	 * Creates a computer without id, useful to insert it into the database
+	 * 
 	 * @param name Computer's name
 	 * @param intro Date of start of production
 	 * @param outro Date of end of production
@@ -52,7 +56,7 @@ public class Computer implements Comparable<Computer> {
 	 */
 	public Computer(String name, String intro, String outro, Company comp) {
 		this.name = name;
-		
+
 		if (intro != null) {
 			intro = intro.split(" ")[0];
 			this.intro = LocalDate.parse(intro);
@@ -72,6 +76,7 @@ public class Computer implements Comparable<Computer> {
 
 	/**
 	 * Creates a computer with an existing id
+	 * 
 	 * @param id the computer's id in the database
 	 * @param name Computer's name
 	 * @param intro Date of start of production
@@ -81,7 +86,7 @@ public class Computer implements Comparable<Computer> {
 	public Computer(long id, String name, String intro, String outro, Company comp) {
 		this.id = id;
 		this.name = name;
-		
+
 		if (intro != null) {
 			intro = intro.split(" ")[0];
 			this.intro = LocalDate.parse(intro);
@@ -117,6 +122,7 @@ public class Computer implements Comparable<Computer> {
 
 	/**
 	 * If the param is null, the LocalDate will be set to null
+	 * 
 	 * @param intro the date of start of production
 	 */
 	public void setIntro(String intro) {
@@ -135,8 +141,10 @@ public class Computer implements Comparable<Computer> {
 	public void setOutro(LocalDate outro) {
 		this.outro = outro;
 	}
+
 	/**
 	 * If the param is null, the LocalDate will be set to null
+	 * 
 	 * @param outro the date of start of production
 	 */
 	public void setOutro(String outro) {
@@ -170,6 +178,7 @@ public class Computer implements Comparable<Computer> {
 
 	/**
 	 * Checks whether the computer is associated to manufacturing company
+	 * 
 	 * @return true if there is a manufacturing company associated to the computer, false else
 	 */
 	public boolean hasACompany() {
@@ -259,8 +268,8 @@ public class Computer implements Comparable<Computer> {
 		private LocalDate nestedOutro = null;
 		private Company nestedCompany = null;
 
-
-		public Builder() {}
+		public Builder() {
+		}
 
 		public Builder id(final long id) {
 			this.nestedId = id;

@@ -13,9 +13,10 @@ import com.excilys.formation.computerdb.model.Company;
 
 public class CompanyMapper implements RowMapper<Company> {
 	protected static final Logger LOG = LoggerFactory.getLogger(CompanyMapper.class);
-	
+
 	/**
 	 * Converts a List of Company to a HashMap<ID, Name>
+	 * 
 	 * @param list
 	 * @return
 	 */
@@ -34,13 +35,10 @@ public class CompanyMapper implements RowMapper<Company> {
 	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 		long id = -1;
 		String name = null;
-		
+
 		id = rs.getLong("id");
 		name = rs.getString("name");
 
-		return new Company.Builder()
-				.id(id)
-				.name(name)
-				.build();
+		return new Company.Builder().id(id).name(name).build();
 	}
 }

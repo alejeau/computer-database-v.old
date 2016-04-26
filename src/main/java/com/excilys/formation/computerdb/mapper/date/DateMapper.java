@@ -4,6 +4,7 @@ public class DateMapper {
 
 	/**
 	 * Converts a non-ISO date to an ISO date given a locale.
+	 * 
 	 * @param date a date to convert
 	 * @param locale the date's locale
 	 * @return an ISO date
@@ -18,12 +19,13 @@ public class DateMapper {
 				tmp = datum[2] + "-" + datum[1] + "-" + datum[0];
 			}
 		}
-		
+
 		return tmp;
 	}
-	
+
 	/**
 	 * Converts an ISO date to a non-ISO date given a locale.
+	 * 
 	 * @param date an ISO date
 	 * @param locale the date's locale
 	 * @return an localized date
@@ -38,7 +40,7 @@ public class DateMapper {
 				tmp = datum[2] + "-" + datum[1] + "-" + datum[0];
 			}
 		}
-		
+
 		return tmp;
 	}
 

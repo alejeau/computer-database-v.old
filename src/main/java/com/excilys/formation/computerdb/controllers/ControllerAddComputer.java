@@ -21,6 +21,7 @@ import com.excilys.formation.computerdb.validators.ComputerValidator;
 
 /**
  * Allows for the addition
+ * 
  * @author excilys
  *
  */
@@ -33,6 +34,7 @@ public class ControllerAddComputer {
 
 	/**
 	 * Displays problems encountered while adding a Computer if appropriate.
+	 * 
 	 * @param params the list of parameter given by the URL
 	 * @return the ModelAndView modified accordingly
 	 */
@@ -45,6 +47,7 @@ public class ControllerAddComputer {
 
 	/**
 	 * Adds a computer into the database
+	 * 
 	 * @param params the list of parameter given by the URL
 	 * @return the ModelAndView modified accordingly
 	 */
@@ -53,7 +56,7 @@ public class ControllerAddComputer {
 		ModelAndView maw = new ModelAndView("addComputer");
 		List<Problem> listPbs = null;
 
-		String name  = params.get("computerName");
+		String name = params.get("computerName");
 		String intro = params.get("introduced");
 		String outro = params.get("discontinued");
 		intro = parseDate(intro);
@@ -61,7 +64,7 @@ public class ControllerAddComputer {
 
 		// We check the validity of the data
 		listPbs = ComputerValidator.validateComputer(name, intro, outro);
-		
+
 		// If valid, we try to add the computer
 		if (listPbs == null) {
 			long cid = Long.valueOf(params.get("companyId"));

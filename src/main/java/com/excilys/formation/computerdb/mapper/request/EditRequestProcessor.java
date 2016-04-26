@@ -29,6 +29,7 @@ public class EditRequestProcessor {
 
 	/**
 	 * Sets the corrects information to display about the computer edition
+	 * 
 	 * @param params the params
 	 * @param maw the ModelAndView to modify
 	 * @return the modified MAW
@@ -48,6 +49,7 @@ public class EditRequestProcessor {
 
 	/**
 	 * Creates a ComputerEditObject containing the computer to edit and the URL.
+	 * 
 	 * @param params the params
 	 * @param maw the ModelAndView to modify
 	 * @return the modified MAW
@@ -59,7 +61,6 @@ public class EditRequestProcessor {
 		String newName = params.get("computerName");
 		String intro = params.get("introduced");
 		String outro = params.get("discontinued");
-
 
 		maw.addObject("pathDashboard", Paths.PATH_DASHBOARD);
 		maw.addObject("pathAddComputer", Paths.PATH_COMPUTER_ADD);
@@ -94,6 +95,7 @@ public class EditRequestProcessor {
 
 	/**
 	 * Sets the selectedId of the company's computer.
+	 * 
 	 * @param params the params
 	 * @param maw the ModelAndView to modify
 	 * @return the modified MAW

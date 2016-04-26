@@ -20,17 +20,13 @@ public class Page<T> {
 
 	/**
 	 * Creates a page of T.<br>
-	 * The number of objects per page is based on the size of the list given in
-	 * argument, so if your list is empty, do not forget to set it manually!
+	 * The number of objects per page is based on the size of the list given in argument, so if your
+	 * list is empty, do not forget to set it manually!
 	 * 
-	 * @param list
-	 *            a list to put in the page
-	 * @param currentPageNumber
-	 *            the current page number
-	 * @param maxPageNumber
-	 *            the maximum page number
-	 * @param nbEntries
-	 *            the number of entries
+	 * @param list a list to put in the page
+	 * @param currentPageNumber the current page number
+	 * @param maxPageNumber the maximum page number
+	 * @param nbEntries the number of entries
 	 */
 	public Page(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries) {
 		this.page = list;

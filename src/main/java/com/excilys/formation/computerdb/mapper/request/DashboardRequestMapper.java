@@ -10,9 +10,10 @@ import com.excilys.formation.computerdb.pagination.SortedPage;
 public class DashboardRequestMapper {
 
 	/**
-	 * Maps the request and creates a ComputerSortedPageRequest containing all
-	 * pertaining to the page display.<br>
+	 * Maps the request and creates a ComputerSortedPageRequest containing all pertaining to the
+	 * page display.<br>
 	 * Please note that the SearchPage actual page will have to be filled.
+	 * 
 	 * @param params
 	 * @return
 	 */
@@ -20,7 +21,6 @@ public class DashboardRequestMapper {
 		String url = com.excilys.formation.computerdb.controllers.Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 
-		
 		String pageNb = params.get(UrlFields.URL_PAGE_NB);
 		String displayBy = params.get(UrlFields.URL_DISPLAY_BY);
 		String stringField = params.get(UrlFields.URL_FIELD);
@@ -78,8 +78,7 @@ public class DashboardRequestMapper {
 	/**
 	 * Returns the list of computer IDs to delete
 	 * 
-	 * @param params
-	 *            the request to process
+	 * @param params the request to process
 	 * @return the list of computer IDs to delete
 	 */
 	public static long[] mapPost(Map<String, String> params) {
@@ -99,12 +98,9 @@ public class DashboardRequestMapper {
 	/**
 	 * Adds var=value to the url, with the correct ? or &
 	 * 
-	 * @param url
-	 *            the current url
-	 * @param var
-	 *            the name of the var
-	 * @param value
-	 *            the value of the var
+	 * @param url the current url
+	 * @param var the name of the var
+	 * @param value the value of the var
 	 * @return url + ?|& + var=value
 	 */
 	protected static String setUrl(String url, String var, String value) {
@@ -118,13 +114,10 @@ public class DashboardRequestMapper {
 	}
 
 	/**
-	 * Checks if a String is not null, different than "" and different than
-	 * "null".
+	 * Checks if a String is not null, different than "" and different than "null".
 	 * 
-	 * @param s
-	 *            the String to check
-	 * @return true if the String is not null, different than "" and different
-	 *         than "null"
+	 * @param s the String to check
+	 * @return true if the String is not null, different than "" and different than "null"
 	 */
 	protected static boolean notEmpty(String s) {
 		if (s != null && !s.equals("") && !s.equals("null")) {

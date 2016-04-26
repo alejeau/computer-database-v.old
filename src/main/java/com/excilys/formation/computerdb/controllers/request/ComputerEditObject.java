@@ -7,8 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.excilys.formation.computerdb.errors.Problem;
 
 /**
- * Container for the ModelAndView and a list of Problem
- * for the edition of a computer.
+ * Container for the ModelAndView and a list of Problem for the edition of a computer.
  */
 public class ComputerEditObject {
 	ModelAndView maw;
@@ -37,7 +36,5 @@ public class ComputerEditObject {
 	public void setListPbs(List<Problem> listPbs) {
 		this.listPbs = listPbs;
 	}
-	
-	
 
 }

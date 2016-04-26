@@ -7,12 +7,12 @@ import com.excilys.formation.computerdb.constants.Fields;
 
 public class SearchPage<T> extends SortedPage<T> {
 	String search;
-	
+
 	public SearchPage() {
 		super();
 		this.search = null;
 	}
-	
+
 	/**
 	 * Creates a page of T.
 	 * 
@@ -24,7 +24,8 @@ public class SearchPage<T> extends SortedPage<T> {
 	 * @param ascending true if the sort is ascending, false else
 	 * @param search the String to look for in the database
 	 */
-	public SearchPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries, Fields field, boolean ascending, String search) {
+	public SearchPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries,
+			Fields field, boolean ascending, String search) {
 		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries, field, ascending);
 		this.search = search;
 	}
@@ -61,7 +62,7 @@ public class SearchPage<T> extends SortedPage<T> {
 			return false;
 		return true;
 	}
-	
+
 	public static class Builder<T> {
 		private List<T> nestedPage = null;
 		private int nestedNbEntries = -1;
@@ -71,52 +72,54 @@ public class SearchPage<T> extends SortedPage<T> {
 		private Fields nestedField = null;
 		private boolean nestedAscending = true;
 		private String nestedSearch = null;
-		
-		public Builder() {}
-		
+
+		public Builder() {
+		}
+
 		public Builder<T> page(List<T> list) {
 			this.nestedPage = new LinkedList<T>(list);
 			this.nestedPage.size();
 			return this;
 		}
-		
+
 		public Builder<T> nbEntries(int nbEntries) {
 			this.nestedNbEntries = nbEntries;
 			return this;
 		}
-		
+
 		public Builder<T> maxPageNumber(int maxPageNumber) {
 			this.nestedMaxPageNumber = maxPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> objectsPerPages(int objectsPerPages) {
 			this.nestedObjectsPerPages = objectsPerPages;
 			return this;
 		}
-		
+
 		public Builder<T> currentPageNumber(int currentPageNumber) {
 			this.nestedCurrentPageNumber = currentPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> field(Fields field) {
 			this.nestedField = field;
 			return this;
 		}
-		
+
 		public Builder<T> ascending(boolean ascending) {
 			this.nestedAscending = ascending;
 			return this;
 		}
-		
+
 		public Builder<T> search(String search) {
 			this.nestedSearch = search;
 			return this;
 		}
-		
+
 		public Page<T> build() {
-			return new SearchPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries, nestedField, nestedAscending, nestedSearch);
+			return new SearchPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages,
+					nestedNbEntries, nestedField, nestedAscending, nestedSearch);
 		}
 	}
 

@@ -41,8 +41,7 @@ public class CLI {
 	/**
 	 * Creates a CLI using a Scanner
 	 * 
-	 * @param sc
-	 *            a Scanner
+	 * @param sc a Scanner
 	 */
 	public CLI() {
 	}
@@ -62,7 +61,7 @@ public class CLI {
 		mpn = maxPageNumber(objectsPerPage, nbEntries);
 		companyPage = new Page<>(companyList, 0, mpn, objectsPerPage, nbEntries);
 	}
-	
+
 	protected int maxPageNumber(int objectsPerPage, int nbEntries) {
 		int maxPageNumber = -1;
 		double opp = (double) objectsPerPage;
@@ -318,7 +317,7 @@ public class CLI {
 		} else {
 			LocalDate d1 = mapDate(infos[1]);
 			LocalDate d2 = mapDate(infos[2]);
-			
+
 			Company cy = service.getCompanyByName(infos[3]);
 			service.createComputer(new Computer(infos[0], d1, d2, cy));
 		}
@@ -340,10 +339,10 @@ public class CLI {
 
 			LocalDate d1 = mapDate(infos[1]);
 			LocalDate d2 = mapDate(infos[2]);
-			
+
 			computer.setIntro(d1);
 			computer.setOutro(d2);
-			
+
 			Company cy = this.service.getCompanyByName(infos[3]);
 			computer.setCompany(cy);
 			this.service.updateComputer(computer, oldName);
@@ -405,46 +404,44 @@ public class CLI {
 	/**
 	 * Checks whether a date is in a valid format or not
 	 * 
-	 * @param date
-	 *            a String representing the date
+	 * @param date a String representing the date
 	 * @return the date or null if the date's wrong
 	 */
 	protected static LocalDate mapDate(String date) {
 		LocalDate ld = null;
-		
+
 		if ((date != null) && (date.length() == 10)) {
 			String[] s = date.split("-");
 			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
 			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
-				int year  = Integer.valueOf(s[0]);
+				int year = Integer.valueOf(s[0]);
 				int month = Integer.valueOf(s[1]);
-				int day   = Integer.valueOf(s[2]);
+				int day = Integer.valueOf(s[2]);
 				ld = LocalDate.of(year, month, day);
 			}
 		}
-		
+
 		return ld;
 	}
-	
 
 	protected static String validateDate(String date) {
 		LocalDate ld = null;
-		
+
 		if ((date != null) && (date.length() == 10)) {
 			String[] s = date.split("-");
 			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
 				date = "";
 			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
-				int year  = Integer.valueOf(s[0]);
+				int year = Integer.valueOf(s[0]);
 				int month = Integer.valueOf(s[1]);
-				int day   = Integer.valueOf(s[2]);
+				int day = Integer.valueOf(s[2]);
 				ld = LocalDate.of(year, month, day);
 				date = ld.toString();
 			}
 		}
-		
+
 		return date;
 	}
 }

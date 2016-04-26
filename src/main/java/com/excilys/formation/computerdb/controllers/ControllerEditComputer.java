@@ -22,7 +22,7 @@ public class ControllerEditComputer {
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
-	
+
 	@Autowired
 	EditRequestProcessor erm;
 
@@ -36,12 +36,11 @@ public class ControllerEditComputer {
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("editComputer");
 		maw = erm.processGet(params, maw);
-		
+
 		Page<Company> companyList = this.services.getAllCompanies();
-		maw.addObject("companies",  companyList.getPage());
+		maw.addObject("companies", companyList.getPage());
 		return maw;
 	}
-
 
 	/**
 	 * Deletes a list of Computer.
@@ -54,14 +53,14 @@ public class ControllerEditComputer {
 		ModelAndView maw = new ModelAndView("editComputer");
 		Page<Company> companies = this.services.getAllCompanies();
 		ComputerEditObject ceo = erm.processPost(params, maw);
-		
+
 		if ((ceo.getMaw() == null) && (ceo.getListPbs() == null)) {
 			return maw;
 		}
-		
+
 		maw.addObject("mapErrors", ProblemDto.toHashMap(ceo.getListPbs()));
-		maw.addObject("companies",  companies.getPage());
-		
+		maw.addObject("companies", companies.getPage());
+
 		return maw;
 	}
 }

@@ -1,7 +1,7 @@
 package com.excilys.formation.computerdb.constants;
 
 public final class Time {
-	
+
 	/**
 	 * Represents a not-given time
 	 */

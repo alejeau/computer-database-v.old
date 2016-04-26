@@ -6,7 +6,7 @@ import java.util.List;
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.pagination.Page;
 
-public class SortedPageDto<T> extends Page<T>{
+public class SortedPageDto<T> extends Page<T> {
 	protected String field;
 	protected boolean ascending;
 
@@ -15,7 +15,7 @@ public class SortedPageDto<T> extends Page<T>{
 		this.field = Fields.NAME.toString();
 		this.ascending = true;
 	}
-	
+
 	/**
 	 * Creates a page of T.
 	 * 
@@ -26,7 +26,8 @@ public class SortedPageDto<T> extends Page<T>{
 	 * @param field the sort field (from enum Fields)
 	 * @param ascending true if the sort is ascending, false else
 	 */
-	public SortedPageDto(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries, String field, boolean ascending) {
+	public SortedPageDto(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries,
+			String field, boolean ascending) {
 		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries);
 		this.field = field;
 		this.ascending = ascending;
@@ -88,47 +89,49 @@ public class SortedPageDto<T> extends Page<T>{
 		private int nestedCurrentPageNumber = -1;
 		private String nestedField = Fields.NAME.toString();
 		private boolean nestedAscending = true;
-		
-		public Builder() {}
-		
+
+		public Builder() {
+		}
+
 		public Builder<T> page(List<T> list) {
 			this.nestedPage = new LinkedList<T>(list);
 			this.nestedPage.size();
 			return this;
 		}
-		
+
 		public Builder<T> nbEntries(int nbEntries) {
 			this.nestedNbEntries = nbEntries;
 			return this;
 		}
-		
+
 		public Builder<T> maxPageNumber(int maxPageNumber) {
 			this.nestedMaxPageNumber = maxPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> objectsPerPages(int objectsPerPages) {
 			this.nestedObjectsPerPages = objectsPerPages;
 			return this;
 		}
-		
+
 		public Builder<T> currentPageNumber(int currentPageNumber) {
 			this.nestedCurrentPageNumber = currentPageNumber;
 			return this;
 		}
-		
+
 		public Builder<T> field(String field) {
 			this.nestedField = field;
 			return this;
 		}
-		
+
 		public Builder<T> ascending(boolean ascending) {
 			this.nestedAscending = ascending;
 			return this;
 		}
-		
+
 		public SortedPageDto<T> build() {
-			return new SortedPageDto<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages, nestedNbEntries, nestedField, nestedAscending);
+			return new SortedPageDto<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages,
+					nestedNbEntries, nestedField, nestedAscending);
 		}
 	}
 

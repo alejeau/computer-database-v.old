@@ -3,11 +3,13 @@ package com.excilys.formation.computerdb.model;
 public class Company implements Comparable<Company> {
 	protected String name = null;
 	protected long id = -1;
-	
-	public Company() {}
+
+	public Company() {
+	}
 
 	/**
 	 * Creates a Company with a given name and id
+	 * 
 	 * @param id a long representing the company id in the database
 	 * @param name the name of the company
 	 */
@@ -81,16 +83,16 @@ public class Company implements Comparable<Company> {
 	public String toString() {
 		return name;
 	}
-	
+
 	public static class Builder {
 		private long nestedId = -1;
 		private String nestedName = null;
-		
+
 		public Builder(final long id, final String name) {
 			this.nestedId = id;
 			this.nestedName = name;
 		}
-		
+
 		public Builder() {
 		}
 
@@ -98,15 +100,15 @@ public class Company implements Comparable<Company> {
 			this.nestedId = id;
 			return this;
 		}
-		
+
 		public Builder name(String name) {
 			this.nestedName = name;
 			return this;
 		}
-		
+
 		public Company build() {
 			return new Company(nestedId, nestedName);
 		}
-		
+
 	}
 }

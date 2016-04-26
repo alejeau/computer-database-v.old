@@ -10,35 +10,37 @@ import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.validators.annotations.ValidDate;
 
 public class ComputerDto {
-	protected long   id = -1;
+	protected long id = -1;
 
-    @Size(min=1, message = "Name must have at least 1 character")
+	@Size(min = 1, message = "Name must have at least 1 character")
 	protected String name;
-    @ValidDate
+	@ValidDate
 	protected String intro;
-    @ValidDate
+	@ValidDate
 	protected String outro;
 	protected String company;
 
 	/**
 	 * Creates a lighter Computer version with only Company name instead of a Company.
+	 * 
 	 * @param c the Computer to convert
 	 * @param locale the language chosen
 	 */
 	public ComputerDto(Computer c, String locale) {
 		LocalDate i = c.getIntro(), o = c.getOutro();
-		Company  cy = c.getCompany();
+		Company cy = c.getCompany();
 		final String EMPTY = "";
 
-		this.id 	 = 	c.getId();
-		this.name 	 = 	c.getName();
-		this.intro   = 	(i  != null) ? (DateMapper.unmapDate(i.toString(), locale)) : (EMPTY);
-		this.outro   = 	(o  != null) ? (DateMapper.unmapDate(o.toString(), locale)) : (EMPTY);
-		this.company =  (cy != null) ? (cy.getName()) : (EMPTY);
+		this.id = c.getId();
+		this.name = c.getName();
+		this.intro = (i != null) ? (DateMapper.unmapDate(i.toString(), locale)) : (EMPTY);
+		this.outro = (o != null) ? (DateMapper.unmapDate(o.toString(), locale)) : (EMPTY);
+		this.company = (cy != null) ? (cy.getName()) : (EMPTY);
 	}
 
 	/**
 	 * Creates a lighter Computer version with only Company name instead of a Company.
+	 * 
 	 * @param cid the Computer cid
 	 * @param name the Computer name
 	 * @param intro the Computer intro
@@ -93,17 +95,17 @@ public class ComputerDto {
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	
+
 	public static class ComputerDTOBuilder {
-		private long   nestedId = -1;
+		private long nestedId = -1;
 		private String nestedName = null;
 		private String nestedIntro = null;
 		private String nestedOutro = null;
 		private String nestedCompany = null;
 		private String nestedLocale = null;
 
-
-		public ComputerDTOBuilder() {}
+		public ComputerDTOBuilder() {
+		}
 
 		public ComputerDTOBuilder(final long id, final String name) {
 			this.nestedId = id;
@@ -124,7 +126,7 @@ public class ComputerDto {
 			this.nestedIntro = intro;
 			return this;
 		}
-		
+
 		public ComputerDTOBuilder outro(final String outro) {
 			this.nestedOutro = outro;
 			return this;
