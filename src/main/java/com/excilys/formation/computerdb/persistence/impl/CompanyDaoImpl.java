@@ -6,18 +6,18 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.computerdb.mapper.model.CompanyMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.persistence.CompanyDao;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
-	
+
 	@PersistenceContext
 	protected EntityManager entityManager;
 
@@ -29,32 +29,35 @@ public class CompanyDaoImpl implements CompanyDao {
 	@Override
 	public int getNbEntries() {
 		final String QUERY_TXT = "SELECT COUNT(*) as nb_companys FROM company";
-		Query query = entityManager.createQuery(QUERY_TXT);
+		TypedQuery<Integer> query = entityManager.createQuery(QUERY_TXT, Integer.class);
+
 		int nbEntries = 0;
-		nbEntries = (int) query.getSingleResult();
+		nbEntries = query.getSingleResult();
 		return nbEntries;
 	}
 
 	@Override
 	public List<Company> getFromTo(int offset, int limit) {
-		List<Company> list = null;
-		list = new ArrayList<>();
-		String query = "SELECT * FROM company ORDER BY name LIMIT ?, ? ";
+		final String QUERY_TXT = "SELECT * FROM company ORDER BY name LIMIT :offset, :limit ";
+		Query query = null;
+		query = entityManager.createQuery(QUERY_TXT);
+		query.setParameter("offset", offset);
+		query.setParameter("limit", limit);
 
-		Object args[] = new Object[2];
-		args[0] = offset;
-		args[1] = limit;
-//		list = jdbcTemplate.query(query, args, new CompanyMapper());
+		@SuppressWarnings("unchecked")
+		List<Company> list = (List<Company>) query.getResultList();
 
 		return list;
 	}
 
 	@Override
 	public List<Company> getAll() {
-		List<Company> list = null;
-		list = new ArrayList<>();
-		String query = "SELECT * FROM company ORDER BY name";
-//		list = jdbcTemplate.query(query, new CompanyMapper());
+		final String QUERY_TXT = "SELECT * FROM company ORDER BY name";
+		Query query = null;
+		query = entityManager.createQuery(QUERY_TXT);
+
+		@SuppressWarnings("unchecked")
+		List<Company> list = (List<Company>) query.getResultList();
 
 		return list;
 	}
@@ -65,12 +68,12 @@ public class CompanyDaoImpl implements CompanyDao {
 			return null;
 		}
 
-		Company company = null;
-		String query = "SELECT * FROM company WHERE id = ?";
+		final String QUERY_TXT = "SELECT * FROM company WHERE id = :id";
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
+		query.setParameter("id", id);
 
-		Object args[] = new Object[1];
-		args[0] = id;
-//		company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
+		Company company = null;
+		company = query.getSingleResult();
 
 		return company;
 	}
@@ -82,7 +85,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 		Object args[] = new Object[] { name };
 		try {
-//			company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
+			// company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
 		} catch (Exception e) {
 			String error = "An error occured while deleting the company. Try to check the company name.";
 			LOG.error(error);
@@ -100,7 +103,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		Object args[] = new Object[1];
 		args[0] = id;
 		try {
-//			jdbcTemplate.update(query, args);
+			// jdbcTemplate.update(query, args);
 		} catch (Exception e) {
 			String error = "An error occured while deleting the company. Try to check the company name.";
 			LOG.error(error);
@@ -115,6 +118,5 @@ public class CompanyDaoImpl implements CompanyDao {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
-	
+
 }
