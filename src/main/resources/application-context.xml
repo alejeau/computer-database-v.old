@@ -23,24 +23,25 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<!-- dataSource configuration -->
+	<context:property-placeholder location="classpath:dao.properties" />
+    <!-- dataSource configuration -->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"  destroy-method="close">
-		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
+		<property name="dataSourceClassName" value="${dataSourceClassName}"/>
 		<!-- Tomcat is in BIO mode, so it accepts 200 threads/connections -->
-		<property name="maximumPoolSize" value="200" />
+		<property name="maximumPoolSize" value="${maximumPoolSize}" />
 		<!-- Maximum lifetime of a connection in the pool. -->
-		<property name="maxLifetime" value="30000" />
+		<property name="maxLifetime" value="${maxLifetime}" />
 		<!-- Maximum amount of time that a connection is allowed to sit idle in the pool. -->
-		<property name="idleTimeout" value="30000" />
+		<property name="idleTimeout" value="${idleTimeout}" />
 		<property name="dataSourceProperties">
 			<props>
-				<prop key="url">jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull</prop>
-				<prop key="user">admincdb</prop>
-				<prop key="password">qwerty1234</prop>
-				<prop key="prepStmtCacheSize">250</prop>
-				<prop key="prepStmtCacheSqlLimit">2048</prop>
-				<prop key="cachePrepStmts">true</prop>
-				<prop key="useServerPrepStmts">true</prop>
+				<prop key="url">${url}</prop>
+				<prop key="user">${user}</prop>
+				<prop key="password">${password}</prop>
+				<prop key="prepStmtCacheSize">${prepStmtCacheSize}</prop>
+				<prop key="prepStmtCacheSqlLimit">${prepStmtCacheSqlLimit}</prop>
+				<prop key="cachePrepStmts">${cachePrepStmts}</prop>
+				<prop key="useServerPrepStmts">${useServerPrepStmts}</prop>
 			</props>
 		</property>
 	</bean>
