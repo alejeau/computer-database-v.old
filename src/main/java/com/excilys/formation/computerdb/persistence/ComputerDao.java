@@ -104,7 +104,7 @@ public interface ComputerDao {
 	 * @param computer the computer to add
 	 * @return -1 if failure
 	 */
-	int createComputer(Computer computer);
+	void createComputer(Computer computer);
 
 	/**
 	 * Returns the computer with the ID id, null else.

@@ -3,12 +3,12 @@ package com.excilys.formation.computerdb.persistence.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
@@ -22,14 +22,11 @@ import com.excilys.formation.computerdb.persistence.ComputerDao;
 public class ComputerDaoImpl implements ComputerDao {
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
+	@PersistenceContext
+	protected EntityManager entityManager;
+	
 	@Autowired
 	protected ComputerMapper compMap;
-
-	@Autowired
-	protected CompanyDaoImpl companyDAOImpl;
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 
 	protected List<Computer> list = null;
 
@@ -45,7 +42,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
 
 		// Getting the company for each computer
 		if (tmp != null) {
@@ -95,14 +92,14 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
 
 		// Getting the company for each computer
 		for (Computer c : tmp) {
 			long cid = -1L;
 			Company company = null;
 			cid = c.getCompany().getId();
-			company = this.companyDAOImpl.getCompanyById(cid);
+//			company = this.companyDAOImpl.getCompanyById(cid);
 			c.setCompany(company);
 			list.add(c);
 		}
@@ -133,14 +130,14 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
 
 		// Getting the company for each computer
 		for (Computer c : tmp) {
 			long cid = -1L;
 			Company company = null;
 			cid = c.getCompany().getId();
-			company = this.companyDAOImpl.getCompanyById(cid);
+//			company = this.companyDAOImpl.getCompanyById(cid);
 			c.setCompany(company);
 			list.add(c);
 		}
@@ -152,7 +149,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public int getNbEntries() {
 		int nbEntries = 0;
 		String query = "SELECT COUNT(*) as nb_computers FROM computer";
-		nbEntries = jdbcTemplate.queryForObject(query, Integer.class);
+//		nbEntries = jdbcTemplate.queryForObject(query, Integer.class);
 		return nbEntries;
 	}
 
@@ -167,7 +164,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		String arg = "%" + name + "%";
 		args = new Object[] { arg, arg };
 		// Executing the query
-		nbEntries = jdbcTemplate.queryForObject(query, args, Integer.class);
+//		nbEntries = jdbcTemplate.queryForObject(query, args, Integer.class);
 
 		return nbEntries;
 	}
@@ -193,14 +190,14 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, new ComputerMapper());
 
 		// Getting the company for each computer
 		for (Computer c : tmp) {
 			long cid = -1L;
 			Company company = null;
 			cid = c.getCompany().getId();
-			company = this.companyDAOImpl.getCompanyById(cid);
+//			company = this.companyDAOImpl.getCompanyById(cid);
 			c.setCompany(company);
 			list.add(c);
 		}
@@ -218,7 +215,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
 
 		// Getting the company for each computer
 		if (tmp != null) {
@@ -227,7 +224,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			computer = tmp.get(0);
 
 			cid = computer.getCompany().getId();
-			company = this.companyDAOImpl.getCompanyById(cid);
+//			company = this.companyDAOImpl.getCompanyById(cid);
 			computer.setCompany(company);
 		}
 
@@ -243,7 +240,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		logger.debug(query);
 
 		// Executing the query
-		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
 
 		// Getting the company for each computer
 		if ((tmp != null) && (!tmp.isEmpty())) {
@@ -252,7 +249,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			computer = tmp.get(0);
 
 			cid = computer.getCompany().getId();
-			company = this.companyDAOImpl.getCompanyById(cid);
+//			company = this.companyDAOImpl.getCompanyById(cid);
 			computer.setCompany(company);
 			list = new ArrayList<>();
 		}
@@ -267,37 +264,8 @@ public class ComputerDaoImpl implements ComputerDao {
 	 * @return
 	 */
 	@Override
-	public int createComputer(Computer computer) {
-		Object[] args = null;
-		int nbRow = 0;
-
-		Computer tmp = null;
-		tmp = getComputerByName(computer.getName());
-
-		if (tmp != null) {
-			nbRow = -1;
-		} else {
-			args = new Object[3];
-			String query = "INSERT INTO computer (name, introduced, discontinued) VALUES (?, ?, ?)";
-			String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
-			String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
-
-			boolean hasACompany = computer.hasACompany();
-			if (hasACompany) {
-				query = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-				args = new Object[4];
-				args[3] = computer.getCompany().getId();
-			}
-			args[0] = computer.getName();
-			args[1] = intro;
-			args[2] = outro;
-
-			logger.debug(query);
-
-			jdbcTemplate.update(query, args);
-		}
-
-		return nbRow;
+	public void createComputer(Computer computer) {
+		entityManager.persist(computer);
 	}
 
 	@Override
@@ -314,7 +282,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 		logger.debug(query);
 
-		jdbcTemplate.update(query, args);
+//		jdbcTemplate.update(query, args);
 	}
 
 	@Override
@@ -324,7 +292,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		String query = "DELETE FROM computer WHERE id = ?";
 		logger.debug(query);
 
-		jdbcTemplate.update(query, args);
+//		jdbcTemplate.update(query, args);
 
 	}
 
@@ -335,11 +303,10 @@ public class ComputerDaoImpl implements ComputerDao {
 		String query = "DELETE FROM computer WHERE name = ?";
 		logger.debug(query);
 
-		jdbcTemplate.update(query, args);
+//		jdbcTemplate.update(query, args);
 	}
 
 	@Override
-	@Transactional
 	public void deleteComputers(long[] listId) {
 		Object[] args = new Object[1];
 
@@ -348,18 +315,17 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		for (long l : listId) {
 			args[0] = l;
-			jdbcTemplate.update(query, args);
+//			jdbcTemplate.update(query, args);
 		}
 	}
 
 	@Override
-	@Transactional
 	public void deleteComputersWhereCompanyIdEquals(long id) {
 		Object[] args = new Object[] { id };
 
 		String query = "DELETE FROM computer WHERE company_id = ?";
 		logger.debug(query);
 
-		jdbcTemplate.update(query, args);
+//		jdbcTemplate.update(query, args);
 	}
 }

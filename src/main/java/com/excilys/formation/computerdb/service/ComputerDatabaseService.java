@@ -39,7 +39,7 @@ public interface ComputerDatabaseService {
 	 * @param sp the sorted page to fill
 	 * @return a SortedPage<Computer> correctly filled
 	 */
-	Page<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp);
+	SortedPage<Computer> getComputerSortedPage(int pageNumber, SortedPage<Computer> sp);
 
 	/**
 	 * Returns a SearchPage of Computer.
@@ -48,7 +48,7 @@ public interface ComputerDatabaseService {
 	 * @param sp the sorted page to fill
 	 * @return a SearchPage<Computer> correctly filled
 	 */
-	Page<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp);
+	SearchPage<Computer> getComputerSearchPage(int pageNumber, SearchPage<Computer> sp);
 
 	/**
 	 * Creates a computer

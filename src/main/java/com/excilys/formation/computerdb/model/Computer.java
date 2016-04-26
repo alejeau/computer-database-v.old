@@ -2,13 +2,33 @@ package com.excilys.formation.computerdb.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import com.excilys.formation.computerdb.constants.Time;
 
+@Entity
 public class Computer implements Comparable<Computer> {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	protected long id = -1;
+
+	@Column(name = "name")
 	protected String name = null;
+
+	@Column(name = "introduced")
 	protected LocalDate intro = null;
+
+	@Column(name = "discontinued")
 	protected LocalDate outro = null;
+	
+	@ManyToOne
 	protected Company company = null;
 
 	public Computer() {
