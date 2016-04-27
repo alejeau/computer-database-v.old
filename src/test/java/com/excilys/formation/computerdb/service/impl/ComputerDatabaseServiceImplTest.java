@@ -82,6 +82,7 @@ public class ComputerDatabaseServiceImplTest {
 	}
 
 	@Test
+	@Ignore
 	public void testCreateComputer() {
 		int oldNb = services.getNbComputers();
 		Computer c = new Computer.Builder().name("ComputerXXX").build();
