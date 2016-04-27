@@ -51,9 +51,21 @@ public class ControllerSearch {
 	 * @param params the list of parameter given by the URL
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public void post(@RequestParam Map<String, String> params) {
+	public ModelAndView post(@RequestParam Map<String, String> params) {
+		ModelAndView maw = new ModelAndView("dashboard");
 		long[] listId = SearchRequestMapper.mapPost(params);
 		this.services.deleteComputers(listId);
+		
+		ComputerSearchPageRequest page = SearchRequestMapper.mapGet(params);
+
+		// We feed content to the page
+		SearchPage<Computer> sp = page.getComputerSearchPage();
+		int currentPageNumber = sp.getCurrentPageNumber();
+		sp = this.services.getComputerSearchPage(currentPageNumber, sp);
+		page.setPage(sp);
+
+		maw = setRequest(maw, page);
+		return maw;
 	}
 
 	protected static ModelAndView setRequest(ModelAndView maw, ComputerSearchPageRequest page) {

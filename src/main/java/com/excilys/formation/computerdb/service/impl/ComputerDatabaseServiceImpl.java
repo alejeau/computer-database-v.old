@@ -194,7 +194,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	@Transactional
 	public void deleteComputers(long[] listId) {
-		logger.info("Starting mass computer deletion...");
+		logger.debug("Starting mass computer deletion...");
 
 		try {
 			computerDaoImpl.deleteComputers(listId);
@@ -204,13 +204,13 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			throw new RuntimeException("Couldn't commit the changes!");
 		}
 
-		logger.info("Mass deletion completed.");
+		logger.debug("Mass deletion completed.");
 	}
 
 	@Override
 	@Transactional
 	public void deleteCompany(Company c) {
-		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
+		logger.debug("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
 
 		if (c != null) {
 			long id = c.getId();
@@ -224,7 +224,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			}
 		}
 
-		logger.info("Deletion of company \"" + c.getName() + "\" its related computers done.");
+		logger.debug("Deletion of company \"" + c.getName() + "\" its related computers done.");
 	}
 
 }

@@ -52,9 +52,22 @@ public class ControllerDashboard {
 	 * @param params the list of parameter given by the URL
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public void post(@RequestParam Map<String, String> params) {
+	public ModelAndView post(@RequestParam Map<String, String> params) {
+		ModelAndView maw = new ModelAndView("dashboard");
 		long[] listId = DashboardRequestMapper.mapPost(params);
 		this.services.deleteComputers(listId);
+		
+		ComputerSortedPageRequest page = DashboardRequestMapper.mapGet(params);
+
+		// We feed content to the page
+		SortedPage<Computer> sp = page.getComputerSortedPage();
+		int currentPageNumber = sp.getCurrentPageNumber();
+		sp = this.services.getComputerSortedPage(currentPageNumber, sp);
+		page.setPage(sp);
+
+		maw = setRequest(maw, page);
+		
+		return maw;
 	}
 
 	protected static ModelAndView setRequest(ModelAndView maw, ComputerSortedPageRequest page) {
