@@ -34,6 +34,10 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public ComputerDatabaseServiceImpl() {
 	}
 
+	public List<Computer> test() {
+		return computerDaoImpl.test();
+	}
+	
 	@Override
 	public boolean alreadyExists(String name) {
 		return this.computerDaoImpl.exists(name);
@@ -176,7 +180,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	@Override
 	@Transactional
 	public void deleteComputer(Computer c) {
-
+		computerDaoImpl.createComputer(c);
 	}
 
 	@Override

@@ -32,6 +32,16 @@ public class ComputerDaoImpl implements ComputerDao {
 	public ComputerDaoImpl() {
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Computer> test() {
+		final String QUERY = "select * from computer as cmp order by cmp.name asc limit 10 offset 0";
+		List<Computer> tmp = null;
+
+		tmp = entityManager.createNativeQuery(QUERY, Computer.class).getResultList();
+		
+		return tmp;
+	}
+	
 	@Override
 	public boolean exists(String name) {
 		Computer tmp = null;
