@@ -91,6 +91,8 @@ public interface ComputerDatabaseService {
 	 */
 	List<Problem> updateComputer(Computer c, String oldName);
 
+	void deleteComputer(Computer c);
+	
 	void deleteComputer(Long id);
 
 	void deleteComputer(String name);

@@ -18,6 +18,7 @@
 	<context:component-scan
 		base-package="com.excilys.formation.computerdb.persistence.impl" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.service.impl" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.model" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.ui" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.validators" />
 
@@ -30,7 +31,7 @@
 		</property>
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.id.new_generator_mappings">false</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
 			</props>
 		</property>
@@ -41,16 +42,17 @@
 	</bean>
 	<tx:annotation-driven proxy-target-class="true" />
 
-	<context:property-placeholder location="classpath:dao.properties" />
 	<!-- dataSource configuration -->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
-		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+		<property name="dataSourceClassName"
+			value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
 		<!-- Tomcat is in BIO mode, so it accepts 200 threads/connections -->
 		<property name="maximumPoolSize" value="200" />
 		<property name="dataSourceProperties">
 			<props>
-				<prop key="url">jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull</prop>
+				<prop key="url">jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull
+				</prop>
 				<prop key="user">admincdb</prop>
 				<prop key="password">qwerty1234</prop>
 			</props>

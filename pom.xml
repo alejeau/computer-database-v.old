@@ -196,6 +196,12 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.core.version}</version>
 		</dependency>
+		<!-- useful for LocalDate serialization -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate.core.version}</version>
+		</dependency>
 
 
 

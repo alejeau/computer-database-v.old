@@ -2,31 +2,25 @@ package com.excilys.formation.computerdb.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.excilys.formation.computerdb.constants.Time;
 
 @Entity
+@Table(name = "computer")
 public class Computer implements Comparable<Computer> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id = -1;
-
-	@Column(name = "name")
 	protected String name = null;
-
-	@Column(name = "introduced")
-	protected LocalDate intro = null;
-
-	@Column(name = "discontinued")
-	protected LocalDate outro = null;
+	protected LocalDate introduced = null;
+	protected LocalDate discontinued = null;
 	
 	@ManyToOne
 	protected Company company = null;
@@ -44,8 +38,8 @@ public class Computer implements Comparable<Computer> {
 	 */
 	public Computer(String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.name = name;
-		this.intro = intro;
-		this.outro = outro;
+		this.introduced = intro;
+		this.discontinued = outro;
 		this.company = comp;
 	}
 
@@ -61,8 +55,8 @@ public class Computer implements Comparable<Computer> {
 	public Computer(long id, String name, LocalDate intro, LocalDate outro, Company comp) {
 		this.id = id;
 		this.name = name;
-		this.intro = intro;
-		this.outro = outro;
+		this.introduced = intro;
+		this.discontinued = outro;
 		this.company = comp;
 	}
 
@@ -79,14 +73,14 @@ public class Computer implements Comparable<Computer> {
 
 		if (intro != null) {
 			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
+			this.introduced = LocalDate.parse(intro);
 		} else {
 			intro = null;
 		}
 
 		if (outro != null) {
 			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
+			this.discontinued = LocalDate.parse(outro);
 		} else {
 			outro = null;
 		}
@@ -109,14 +103,14 @@ public class Computer implements Comparable<Computer> {
 
 		if (intro != null) {
 			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
+			this.introduced = LocalDate.parse(intro);
 		} else {
 			intro = null;
 		}
 
 		if (outro != null) {
 			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
+			this.discontinued = LocalDate.parse(outro);
 		} else {
 			outro = null;
 		}
@@ -133,11 +127,11 @@ public class Computer implements Comparable<Computer> {
 	}
 
 	public LocalDate getIntro() {
-		return intro;
+		return introduced;
 	}
 
 	public void setIntro(LocalDate intro) {
-		this.intro = intro;
+		this.introduced = intro;
 	}
 
 	/**
@@ -148,18 +142,18 @@ public class Computer implements Comparable<Computer> {
 	public void setIntro(String intro) {
 		if (intro != null) {
 			intro = intro.split(" ")[0];
-			this.intro = LocalDate.parse(intro);
+			this.introduced = LocalDate.parse(intro);
 		} else {
 			intro = null;
 		}
 	}
 
 	public LocalDate getOutro() {
-		return outro;
+		return discontinued;
 	}
 
 	public void setOutro(LocalDate outro) {
-		this.outro = outro;
+		this.discontinued = outro;
 	}
 
 	/**
@@ -170,7 +164,7 @@ public class Computer implements Comparable<Computer> {
 	public void setOutro(String outro) {
 		if (outro != null) {
 			outro = outro.split(" ")[0];
-			this.outro = LocalDate.parse(outro);
+			this.discontinued = LocalDate.parse(outro);
 		} else {
 			outro = null;
 		}
@@ -210,9 +204,9 @@ public class Computer implements Comparable<Computer> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((company == null) ? 0 : company.hashCode());
-		result = prime * result + ((intro == null) ? 0 : intro.hashCode());
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((outro == null) ? 0 : outro.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
 		return result;
 	}
 
@@ -237,11 +231,11 @@ public class Computer implements Comparable<Computer> {
 		} else if (!company.equals(other.company)) {
 			return false;
 		}
-		if (intro == null) {
-			if (other.intro != null) {
+		if (introduced == null) {
+			if (other.introduced != null) {
 				return false;
 			}
-		} else if (!intro.equals(other.intro)) {
+		} else if (!introduced.equals(other.introduced)) {
 			return false;
 		}
 		if (name == null) {
@@ -251,11 +245,11 @@ public class Computer implements Comparable<Computer> {
 		} else if (!name.equals(other.name)) {
 			return false;
 		}
-		if (outro == null) {
-			if (other.outro != null) {
+		if (discontinued == null) {
+			if (other.discontinued != null) {
 				return false;
 			}
-		} else if (!outro.equals(other.outro)) {
+		} else if (!discontinued.equals(other.discontinued)) {
 			return false;
 		}
 		return true;
@@ -264,11 +258,11 @@ public class Computer implements Comparable<Computer> {
 	@Override
 	public String toString() {
 		String s = "\"" + name + "\"";
-		if (intro != null) {
-			s += ", introduced in " + intro;
+		if (introduced != null) {
+			s += ", introduced in " + introduced;
 		}
-		if (outro != null) {
-			s += ", discontinued in " + outro;
+		if (discontinued != null) {
+			s += ", discontinued in " + discontinued;
 		}
 		if (company != null) {
 			s += ", manufactured by " + company.getName();

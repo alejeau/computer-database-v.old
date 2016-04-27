@@ -95,8 +95,8 @@ public class ComputerValidator {
 	 * Checks whether data parameters are valid or not
 	 * 
 	 * @param name name of the computer
-	 * @param intro date of introduction of the computer
-	 * @param outro date of end of life of the computer
+	 * @param introduced date of introduction of the computer
+	 * @param discontinued date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
 	public static List<Problem> validateComputer(Computer c) {
@@ -140,8 +140,8 @@ public class ComputerValidator {
 	 * 
 	 * @param newName new name of the computer
 	 * @param oldName old name of the computer
-	 * @param intro date of introduction of the computer
-	 * @param outro date of end of life of the computer
+	 * @param introduced date of introduction of the computer
+	 * @param discontinued date of end of life of the computer
 	 * @return null if everything went well, a list of Problem else
 	 */
 	public static List<Problem> validateNewComputer(Computer c, String oldName) {

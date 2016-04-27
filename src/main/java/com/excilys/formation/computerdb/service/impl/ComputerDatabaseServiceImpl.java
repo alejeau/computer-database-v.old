@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
@@ -30,7 +31,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
-	private ComputerDatabaseServiceImpl() {
+	public ComputerDatabaseServiceImpl() {
 	}
 
 	@Override
@@ -123,6 +124,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	@Transactional
 	public List<Problem> createComputer(Computer c) {
 		List<Problem> listErrors = new ArrayList<>();
 
@@ -131,6 +133,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	@Transactional
 	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = null;
 		listErrors = ComputerValidator.validateComputer(name, intro, outro);
@@ -146,6 +149,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	@Transactional
 	public List<Problem> createComputer(long id, String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = ComputerValidator.validateComputer(name, intro, outro);
 
@@ -159,6 +163,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	@Transactional
 	public List<Problem> updateComputer(Computer computer, String oldName) {
 		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
 
@@ -169,17 +174,27 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		return listErrors;
 	}
 
+
 	@Override
+	@Transactional
+	public void deleteComputer(Computer c) {
+		
+	}
+	
+	@Override
+	@Transactional
 	public void deleteComputer(Long id) {
 		computerDaoImpl.deleteComputer(id);
 	}
 
 	@Override
+	@Transactional
 	public void deleteComputer(String name) {
 		computerDaoImpl.deleteComputer(name);
 	}
 
 	@Override
+	@Transactional
 	public void deleteComputers(long[] listId) {
 		logger.info("Starting mass computer deletion...");
 
@@ -187,7 +202,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			computerDaoImpl.deleteComputers(listId);
 		} catch (Exception e) {
 			logger.error("Couldn't commit the changes!");
-			logger.error(e.getMessage());
+			logger.error("Message: " + e.getMessage());
 			throw new RuntimeException("Couldn't commit the changes!");
 		}
 
@@ -195,6 +210,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteCompany(Company c) {
 		logger.info("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
 

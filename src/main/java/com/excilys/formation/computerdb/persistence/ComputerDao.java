@@ -129,6 +129,13 @@ public interface ComputerDao {
 	void updateComputer(Computer computer);
 
 	/**
+	 * Deletes a computer from the database.
+	 * 
+	 * @param c the Computer to delete
+	 */
+	void deleteComputer(Computer c);
+
+	/**
 	 * Deletes a computer from the database from a given ID.
 	 * 
 	 * @param id the computer's id

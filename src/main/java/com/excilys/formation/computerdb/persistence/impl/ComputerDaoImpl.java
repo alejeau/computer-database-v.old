@@ -1,10 +1,13 @@
 package com.excilys.formation.computerdb.persistence.impl;
 
-import java.util.ArrayList;
+import static java.lang.Math.toIntExact;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.constants.Time;
 import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
-import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDao;
 
@@ -24,31 +25,25 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
-	
+
 	@Autowired
 	protected ComputerMapper compMap;
 
-	protected List<Computer> list = null;
-
-	protected ComputerDaoImpl() {
+	public ComputerDaoImpl() {
 	}
 
 	@Override
 	public boolean exists(String name) {
-		List<Computer> tmp = null;
-		Object[] args = new Object[] { name };
+		Computer tmp = null;
 
-		String query = "SELECT * FROM computer WHERE name=? ORDER BY name;";
-		logger.debug(query);
+		final String QUERY_TXT = "SELECT c FROM Computer WHERE c.name = :name ORDER BY c.name;";
+		TypedQuery<Computer> query = entityManager.createQuery(QUERY_TXT, Computer.class);
+		query.setParameter("name", name);
+		tmp = query.getSingleResult();
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
-
-		// Getting the company for each computer
 		if (tmp != null) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -64,45 +59,28 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public List<Computer> getNamedFromToSortedBy(String name, int offset, int limit, Fields field, boolean ascending) {
-		List<Computer> tmp = null;
-		list = new ArrayList<>();
-		Object[] args;
+		List<Computer> list = null;
+		TypedQuery<Computer> query = null;
 
 		// Creating the query
-		String query = "SELECT * FROM computer WHERE name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
+		String query_txt = "SELECT c FROM Computer c WHERE c.name LIKE :name OR c.company IN (SELECT cy FROM Company cy WHERE cy.name LIKE :name)";
+		query = entityManager.createQuery(query_txt, Computer.class);
 		if (field != Fields.NONE) {
 			String order = (ascending) ? "ASC" : "DESC";
 			if (field == Fields.COMPANY) {
-				query = "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id WHERE computer.name LIKE ? OR company_id IN (SELECT id FROM company WHERE name LIKE ?)";
+				query_txt = "SELECT c FROM Computer c LEFT JOIN Company cy ON c.id=cy.id WHERE c.name LIKE :name OR c.company IN (SELECT cy.id FROM Company cy WHERE name LIKE :name)";
 			}
-			query += " ORDER BY " + field.toString() + " " + order;
+			query_txt += " ORDER BY " + field.toString() + " " + order;
 
-			args = new Object[4];
-			args[0] = "%" + name + "%";
-			args[1] = "%" + name + "%";
-			args[2] = offset;
-			args[3] = limit;
-		} else {
-			args = new Object[2];
-			args[2] = offset;
-			args[3] = limit;
+			query = entityManager.createQuery(query_txt, Computer.class);
+			query.setParameter("name", "%" + name + "%");
 		}
-		query += " LIMIT ?, ?;";
+		logger.debug(query_txt);
 
-		logger.debug(query);
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
-
-		// Getting the company for each computer
-		for (Computer c : tmp) {
-			long cid = -1L;
-			Company company = null;
-			cid = c.getCompany().getId();
-//			company = this.companyDAOImpl.getCompanyById(cid);
-			c.setCompany(company);
-			list.add(c);
-		}
+		list = query.getResultList();
 
 		return list;
 	}
@@ -114,59 +92,51 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public List<Computer> getFromToSortedBy(int offset, int limit, Fields field, boolean ascending) {
-		List<Computer> tmp = null;
-		list = new ArrayList<>();
-		Object[] args = new Object[] { offset, limit };
+		List<Computer> list = null;
+		TypedQuery<Computer> query = null;
 
-		String query = "SELECT * FROM computer";
+		String query_txt = "SELECT c FROM Computer c";
 		if (field != Fields.NONE) {
 			String order = (ascending) ? "ASC" : "DESC";
 			if (field == Fields.COMPANY) {
-				query += " LEFT JOIN company on computer.company_id=company.id";
+				query_txt += " LEFT JOIN Company cy ON c.id=cy.id";
 			}
-			query += " ORDER BY " + field.toString() + " " + order;
+			query_txt += " ORDER BY " + field.toString() + " " + order;
 		}
-		query += " LIMIT ?, ?;";
-		logger.debug(query);
+		logger.debug(query_txt);
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
+		query = entityManager.createQuery(query_txt, Computer.class);
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
 
-		// Getting the company for each computer
-		for (Computer c : tmp) {
-			long cid = -1L;
-			Company company = null;
-			cid = c.getCompany().getId();
-//			company = this.companyDAOImpl.getCompanyById(cid);
-			c.setCompany(company);
-			list.add(c);
-		}
+		list = query.getResultList();
 
 		return list;
 	}
 
 	@Override
 	public int getNbEntries() {
-		int nbEntries = 0;
-		String query = "SELECT COUNT(*) as nb_computers FROM computer";
-//		nbEntries = jdbcTemplate.queryForObject(query, Integer.class);
-		return nbEntries;
+		Long nbEntries = 0L;
+		final String QUERY_TXT = "SELECT COUNT(c) FROM Computer c";
+		TypedQuery<Long> query = entityManager.createQuery(QUERY_TXT, Long.class);
+
+		nbEntries = query.getSingleResult();
+
+		return toIntExact(nbEntries);
 	}
 
 	@Override
 	public int getNbEntriesNamed(String name) {
-		Object[] args = null;
-		int nbEntries = 0;
-		String query = "SELECT count(*) as nb_computers FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
+		Long nbEntries = 0L;
+		final String QUERY_TXT = "SELECT count(c) FROM Computer c WHERE c.name LIKE :name OR c.company IN (SELECT c.id FROM Company c WHERE c.name LIKE :name)";
+		TypedQuery<Long> query = entityManager.createQuery(QUERY_TXT, Long.class);
+		query.setParameter("name", "%" + name + "%");
 
-		logger.debug(query);
+		logger.debug(QUERY_TXT);
 
-		String arg = "%" + name + "%";
-		args = new Object[] { arg, arg };
-		// Executing the query
-//		nbEntries = jdbcTemplate.queryForObject(query, args, Integer.class);
+		nbEntries = query.getSingleResult();
 
-		return nbEntries;
+		return toIntExact(nbEntries);
 	}
 
 	@Override
@@ -176,83 +146,45 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public List<Computer> getAllSortedBy(Fields field, boolean ascending) {
-		List<Computer> tmp = null;
-		list = new ArrayList<>();
+		List<Computer> list = null;
+		TypedQuery<Computer> query = null;
 
-		String query = "SELECT * FROM computer";
+		String query_txt = "SELECT * FROM computer";
 		if (field != Fields.NONE) {
 			String order = (ascending) ? "ASC" : "DESC";
 			if (field == Fields.COMPANY) {
-				query += " LEFT JOIN company on computer.company_id=company.id";
+				query_txt += " LEFT JOIN company on computer.company_id=company.id";
 			}
-			query += " ORDER BY " + field.toString() + " " + order + ";";
+			query_txt += " ORDER BY " + field.toString() + " " + order + ";";
 		}
-		logger.debug(query);
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, new ComputerMapper());
-
-		// Getting the company for each computer
-		for (Computer c : tmp) {
-			long cid = -1L;
-			Company company = null;
-			cid = c.getCompany().getId();
-//			company = this.companyDAOImpl.getCompanyById(cid);
-			c.setCompany(company);
-			list.add(c);
-		}
+		query = entityManager.createQuery(query_txt, Computer.class);
+		list = query.getResultList();
 
 		return list;
 	}
 
 	@Override
 	public Computer getComputerById(long id) {
-		List<Computer> tmp = null;
-		Object[] args = new Object[] { id };
-
 		Computer computer = null;
-		String query = "SELECT * FROM computer WHERE id = ?";
-		logger.debug(query);
+		TypedQuery<Computer> query = null;
+		final String QUERY_TXT = "SELECT c FROM Computer c WHERE c.id = :id";
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
-
-		// Getting the company for each computer
-		if (tmp != null) {
-			Company company = null;
-			long cid = -1L;
-			computer = tmp.get(0);
-
-			cid = computer.getCompany().getId();
-//			company = this.companyDAOImpl.getCompanyById(cid);
-			computer.setCompany(company);
-		}
+		query = entityManager.createQuery(QUERY_TXT, Computer.class);
+		query.setParameter("id", id);
+		computer = query.getSingleResult();
 
 		return computer;
 	}
 
 	public Computer getComputerByName(String name) {
-		List<Computer> tmp = null;
-		Object[] args = new Object[] { name };
-
 		Computer computer = null;
-		String query = "SELECT * FROM computer WHERE name = ?";
-		logger.debug(query);
+		TypedQuery<Computer> query = null;
+		final String QUERY_TXT = "SELECT c FROM Computer c WHERE c.name = :name";
 
-		// Executing the query
-//		tmp = jdbcTemplate.query(query, args, new ComputerMapper());
-
-		// Getting the company for each computer
-		if ((tmp != null) && (!tmp.isEmpty())) {
-			Company company = null;
-			long cid = -1L;
-			computer = tmp.get(0);
-
-			cid = computer.getCompany().getId();
-//			company = this.companyDAOImpl.getCompanyById(cid);
-			computer.setCompany(company);
-			list = new ArrayList<>();
-		}
+		query = entityManager.createQuery(QUERY_TXT, Computer.class);
+		query.setParameter("name", name);
+		computer = query.getSingleResult();
 
 		return computer;
 	}
@@ -270,62 +202,50 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public void updateComputer(Computer computer) {
-		String intro = (computer.getIntro() != null) ? (computer.getIntro().toString()) : Time.TIMESTAMP_ZERO;
-		String outro = (computer.getOutro() != null) ? (computer.getOutro().toString()) : Time.TIMESTAMP_ZERO;
-		Object[] args = new Object[] { computer.getName(), intro, outro, computer.getId() };
+		Computer tmp = entityManager.find(Computer.class, computer.getId());
+		tmp.setName(computer.getName());
+		tmp.setIntro(computer.getIntro());
+		tmp.setOutro(computer.getOutro());
+		tmp.setCompany(computer.getCompany());
+	}
 
-		String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?";
-		boolean hasACompany = computer.hasACompany();
-		if (hasACompany) {
-			query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-			args = new Object[] { computer.getName(), intro, outro, computer.getCompany().getId(), computer.getId() };
-		}
-		logger.debug(query);
-
-//		jdbcTemplate.update(query, args);
+	@Override
+	public void deleteComputer(Computer c) {
+		entityManager.remove(c);
 	}
 
 	@Override
 	public void deleteComputer(long id) {
-		Object[] args = new Object[] { id };
-
-		String query = "DELETE FROM computer WHERE id = ?";
-		logger.debug(query);
-
-//		jdbcTemplate.update(query, args);
-
+		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
+		Query query = entityManager.createQuery(QUERY_TXT);
+		query.setParameter("id", id);
+		query.executeUpdate();
 	}
 
 	@Override
 	public void deleteComputer(String name) {
-		Object[] args = new Object[] { name };
-
-		String query = "DELETE FROM computer WHERE name = ?";
-		logger.debug(query);
-
-//		jdbcTemplate.update(query, args);
+		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.name = :name";
+		Query query = entityManager.createQuery(QUERY_TXT);
+		query.setParameter("name", name);
+		query.executeUpdate();
 	}
 
 	@Override
 	public void deleteComputers(long[] listId) {
-		Object[] args = new Object[1];
+		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
+		Query query = entityManager.createQuery(QUERY_TXT);
 
-		String query = "DELETE FROM computer WHERE id = ?";
-		logger.debug(query);
-
-		for (long l : listId) {
-			args[0] = l;
-//			jdbcTemplate.update(query, args);
+		for (long id : listId) {
+			query.setParameter("id", id);
+			query.executeUpdate();
 		}
 	}
 
 	@Override
 	public void deleteComputersWhereCompanyIdEquals(long id) {
-		Object[] args = new Object[] { id };
-
-		String query = "DELETE FROM computer WHERE company_id = ?";
-		logger.debug(query);
-
-//		jdbcTemplate.update(query, args);
+		String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
+		Query query = entityManager.createQuery(QUERY_TXT);
+		query.setParameter("id", id);
+		query.executeUpdate();
 	}
 }

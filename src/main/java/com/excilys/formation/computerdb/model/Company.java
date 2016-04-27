@@ -1,20 +1,18 @@
 package com.excilys.formation.computerdb.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "company")
 public class Company implements Comparable<Company> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected long id = -1;
-	
-	@Column(name = "name")
 	protected String name = null;
 
 	public Company() {
@@ -34,10 +32,7 @@ public class Company implements Comparable<Company> {
 	public String getName() {
 		return name;
 	}
-	
-//	@Id
-//	@GeneratedValue
-//	@Column(name = "id")
+
 	public long getId() {
 		return id;
 	}

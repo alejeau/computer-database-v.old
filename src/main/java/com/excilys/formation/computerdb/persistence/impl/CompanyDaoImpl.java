@@ -1,7 +1,8 @@
 package com.excilys.formation.computerdb.persistence.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.toIntExact;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,36 +29,33 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	@Override
 	public int getNbEntries() {
-		final String QUERY_TXT = "SELECT COUNT(*) as nb_companys FROM company";
-		TypedQuery<Integer> query = entityManager.createQuery(QUERY_TXT, Integer.class);
+		final String QUERY_TXT = "SELECT COUNT(c) FROM Company c";
+		TypedQuery<Long> query = entityManager.createQuery(QUERY_TXT, Long.class);
 
-		int nbEntries = 0;
+		Long nbEntries = 0L;
 		nbEntries = query.getSingleResult();
-		return nbEntries;
+
+		return toIntExact(nbEntries);
 	}
 
 	@Override
 	public List<Company> getFromTo(int offset, int limit) {
-		final String QUERY_TXT = "SELECT * FROM company ORDER BY name LIMIT :offset, :limit ";
-		Query query = null;
-		query = entityManager.createQuery(QUERY_TXT);
-		query.setParameter("offset", offset);
-		query.setParameter("limit", limit);
+		final String QUERY_TXT = "SELECT c FROM Company c ORDER BY c.name";
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
 
-		@SuppressWarnings("unchecked")
-		List<Company> list = (List<Company>) query.getResultList();
+		List<Company> list = query.getResultList();
 
 		return list;
 	}
 
 	@Override
 	public List<Company> getAll() {
-		final String QUERY_TXT = "SELECT * FROM company ORDER BY name";
-		Query query = null;
-		query = entityManager.createQuery(QUERY_TXT);
+		final String QUERY_TXT = "SELECT c FROM Company c ORDER BY c.name";
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
 
-		@SuppressWarnings("unchecked")
-		List<Company> list = (List<Company>) query.getResultList();
+		List<Company> list = query.getResultList();
 
 		return list;
 	}
@@ -68,7 +66,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			return null;
 		}
 
-		final String QUERY_TXT = "SELECT * FROM company WHERE id = :id";
+		final String QUERY_TXT = "SELECT c FROM Company c WHERE c.id = :id";
 		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
 		query.setParameter("id", id);
 
@@ -80,43 +78,25 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	@Override
 	public Company getCompanyByName(String name) {
-		Company company = null;
-		String query = "SELECT * FROM company WHERE name = ?";
+		final String QUERY_TXT = "SELECT c FROM Company c WHERE c.name = :name";
 
-		Object args[] = new Object[] { name };
-		try {
-			// company = jdbcTemplate.queryForObject(query, args, new CompanyMapper());
-		} catch (Exception e) {
-			String error = "An error occured while deleting the company. Try to check the company name.";
-			LOG.error(error);
-			// throw new RuntimeException(error + "\n" + e.getMessage());
-		}
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
+		query.setParameter("name", name);
+
+		Company company = null;
+		company = query.getSingleResult();
 
 		return company;
 	}
 
 	@Override
 	public void deleteCompany(long id) {
-		LOG.info("Company deletion: \"DELETE FROM company WHERE id = " + id + "\"");
-		String query = "DELETE FROM company WHERE id = ?";
+		LOG.info("Company deletion: \"DELETE FROM Company WHERE id = " + id + "\"");
+		final String QUERY_TXT = "DELETE FROM Company c WHERE c.id = :id";
 
-		Object args[] = new Object[1];
-		args[0] = id;
-		try {
-			// jdbcTemplate.update(query, args);
-		} catch (Exception e) {
-			String error = "An error occured while deleting the company. Try to check the company name.";
-			LOG.error(error);
-			throw new RuntimeException(error + "\n" + e.getMessage());
-		}
+		Query query = null;
+		query = entityManager.createQuery(QUERY_TXT);
+		query.setParameter("id", id);
+		query.executeUpdate();
 	}
-
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
-
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
 }
