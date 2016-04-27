@@ -137,11 +137,10 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	public List<Problem> createComputer(String name, String intro, String outro, Company comp) {
 		List<Problem> listErrors = null;
 		listErrors = ComputerValidator.validateComputer(name, intro, outro);
-		System.out.println("listErrors = " + listErrors);
+
 		if (listErrors == null) {
 			Computer c = null;
 			c = new Computer.Builder().name(name).intro(intro).outro(outro).company(comp).build();
-			System.out.println("c = " + c);
 			computerDaoImpl.createComputer(c);
 		}
 
@@ -174,13 +173,12 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		return listErrors;
 	}
 
-
 	@Override
 	@Transactional
 	public void deleteComputer(Computer c) {
-		
+
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteComputer(Long id) {
