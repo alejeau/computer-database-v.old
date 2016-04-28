@@ -11,11 +11,9 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.mapper.model.ComputerMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.persistence.ComputerDao;
 
@@ -25,9 +23,6 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
-
-	@Autowired
-	protected ComputerMapper compMap;
 
 	public ComputerDaoImpl() {
 	}
