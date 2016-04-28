@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.Page;
 
 public class SortedPageDto<T> extends Page<T> {
 	protected String field;

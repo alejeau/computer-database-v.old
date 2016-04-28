@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.formation.computerdb.constants.Paths;
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.mapper.date.DateMapper;
 import com.excilys.formation.computerdb.model.Company;
-import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
 

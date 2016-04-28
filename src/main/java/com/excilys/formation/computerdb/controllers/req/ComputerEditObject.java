@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.controllers.request;
+package com.excilys.formation.computerdb.controllers.req;
 
 import java.util.List;
 

@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.computerdb.controllers.request.ComputerSortedPageRequest;
+import com.excilys.formation.computerdb.constants.Paths;
+import com.excilys.formation.computerdb.controllers.req.ComputerSortedPageRequest;
 import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
 import com.excilys.formation.computerdb.mapper.request.DashboardRequestMapper;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.SortedPage;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 @Controller

@@ -3,10 +3,10 @@ package com.excilys.formation.computerdb.mapper.request;
 import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.controllers.Paths;
-import com.excilys.formation.computerdb.controllers.request.ComputerSearchPageRequest;
+import com.excilys.formation.computerdb.constants.Paths;
+import com.excilys.formation.computerdb.controllers.req.ComputerSearchPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.SearchPage;
+import com.excilys.formation.computerdb.model.pagination.SearchPage;
 
 public class SearchRequestMapper {
 

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.computerdb.controllers.request.ComputerEditObject;
+import com.excilys.formation.computerdb.controllers.req.ComputerEditObject;
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.mapper.request.EditRequestProcessor;
 import com.excilys.formation.computerdb.model.Company;
-import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 @Controller

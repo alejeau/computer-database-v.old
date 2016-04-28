@@ -1,10 +1,10 @@
-package com.excilys.formation.computerdb.pagination.pager;
+package com.excilys.formation.computerdb.ui.pager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.SearchPage;
+import com.excilys.formation.computerdb.model.pagination.SearchPage;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 @Component

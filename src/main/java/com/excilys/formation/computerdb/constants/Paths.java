@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.controllers;
+package com.excilys.formation.computerdb.constants;
 
 public class Paths {
 	public static final String PATH_DASHBOARD = "/computer-database/access";

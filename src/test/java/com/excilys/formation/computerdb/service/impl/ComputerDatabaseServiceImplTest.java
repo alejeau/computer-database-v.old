@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.Page;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

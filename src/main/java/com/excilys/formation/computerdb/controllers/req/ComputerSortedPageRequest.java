@@ -1,8 +1,8 @@
-package com.excilys.formation.computerdb.controllers.request;
+package com.excilys.formation.computerdb.controllers.req;
 
-import com.excilys.formation.computerdb.controllers.Paths;
+import com.excilys.formation.computerdb.constants.Paths;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.SortedPage;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 
 /**
  * Page encapsulating a SortedPage and its associated URL

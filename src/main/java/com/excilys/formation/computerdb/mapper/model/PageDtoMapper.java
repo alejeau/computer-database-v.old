@@ -8,9 +8,9 @@ import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.dto.page.SearchPageDto;
 import com.excilys.formation.computerdb.dto.page.SortedPageDto;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.Page;
-import com.excilys.formation.computerdb.pagination.SearchPage;
-import com.excilys.formation.computerdb.pagination.SortedPage;
+import com.excilys.formation.computerdb.model.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.SearchPage;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 
 public class PageDtoMapper {
 

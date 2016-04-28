@@ -3,9 +3,9 @@ package com.excilys.formation.computerdb.mapper.request;
 import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.controllers.request.ComputerSortedPageRequest;
+import com.excilys.formation.computerdb.controllers.req.ComputerSortedPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.SortedPage;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 
 public class DashboardRequestMapper {
 
@@ -18,7 +18,7 @@ public class DashboardRequestMapper {
 	 * @return
 	 */
 	public static ComputerSortedPageRequest mapGet(Map<String, String> params) {
-		String url = com.excilys.formation.computerdb.controllers.Paths.PATH_DASHBOARD;
+		String url = com.excilys.formation.computerdb.constants.Paths.PATH_DASHBOARD;
 		SortedPage<Computer> page = new SortedPage<>();
 
 		String pageNb = params.get(UrlFields.URL_PAGE_NB);

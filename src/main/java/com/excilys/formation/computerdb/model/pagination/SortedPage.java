@@ -1,16 +1,18 @@
-package com.excilys.formation.computerdb.pagination;
+package com.excilys.formation.computerdb.model.pagination;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import com.excilys.formation.computerdb.constants.Fields;
 
-public class SearchPage<T> extends SortedPage<T> {
-	String search;
+public class SortedPage<T> extends Page<T> {
+	protected Fields field;
+	protected boolean ascending;
 
-	public SearchPage() {
+	public SortedPage() {
 		super();
-		this.search = null;
+		this.field = Fields.NAME;
+		this.ascending = true;
 	}
 
 	/**
@@ -22,27 +24,36 @@ public class SearchPage<T> extends SortedPage<T> {
 	 * @param nbEntries the number of entries
 	 * @param field the sort field (from enum Fields)
 	 * @param ascending true if the sort is ascending, false else
-	 * @param search the String to look for in the database
 	 */
-	public SearchPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries,
-			Fields field, boolean ascending, String search) {
-		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries, field, ascending);
-		this.search = search;
+	public SortedPage(List<T> list, int currentPageNumber, int maxPageNumber, int objectsPerPages, int nbEntries,
+			Fields field, boolean ascending) {
+		super(list, currentPageNumber, maxPageNumber, objectsPerPages, nbEntries);
+		this.field = field;
+		this.ascending = ascending;
 	}
 
-	public String getSearch() {
-		return search;
+	public Fields getField() {
+		return field;
 	}
 
-	public void setSearch(String search) {
-		this.search = search;
+	public void setField(Fields field) {
+		this.field = field;
+	}
+
+	public boolean isAscending() {
+		return ascending;
+	}
+
+	public void setAscending(boolean ascending) {
+		this.ascending = ascending;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((search == null) ? 0 : search.hashCode());
+		result = prime * result + (ascending ? 1231 : 1237);
+		result = prime * result + ((field == null) ? 0 : field.hashCode());
 		return result;
 	}
 
@@ -54,13 +65,19 @@ public class SearchPage<T> extends SortedPage<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SearchPage<?> other = (SearchPage<?>) obj;
-		if (search == null) {
-			if (other.search != null)
-				return false;
-		} else if (!search.equals(other.search))
+		SortedPage<?> other = (SortedPage<?>) obj;
+		if (ascending != other.ascending)
+			return false;
+		if (field != other.field)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "SortedPage [field=" + field + ", ascending=" + ascending + ", currentPageNumber=" + currentPageNumber
+				+ ", maxPageNumber=" + maxPageNumber + ", objectsPerPages=" + objectsPerPages + ", nbEntries="
+				+ nbEntries + "]";
 	}
 
 	public static class Builder<T> {
@@ -69,9 +86,8 @@ public class SearchPage<T> extends SortedPage<T> {
 		private int nestedMaxPageNumber = -1;
 		private int nestedObjectsPerPages = -1;
 		private int nestedCurrentPageNumber = -1;
-		private Fields nestedField = null;
+		private Fields nestedField = Fields.NAME;
 		private boolean nestedAscending = true;
-		private String nestedSearch = null;
 
 		public Builder() {
 		}
@@ -112,14 +128,9 @@ public class SearchPage<T> extends SortedPage<T> {
 			return this;
 		}
 
-		public Builder<T> search(String search) {
-			this.nestedSearch = search;
-			return this;
-		}
-
-		public Page<T> build() {
-			return new SearchPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages,
-					nestedNbEntries, nestedField, nestedAscending, nestedSearch);
+		public SortedPage<T> build() {
+			return new SortedPage<T>(nestedPage, nestedCurrentPageNumber, nestedMaxPageNumber, nestedObjectsPerPages,
+					nestedNbEntries, nestedField, nestedAscending);
 		}
 	}
 

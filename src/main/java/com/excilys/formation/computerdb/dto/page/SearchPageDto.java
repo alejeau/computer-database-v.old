@@ -3,7 +3,7 @@ package com.excilys.formation.computerdb.dto.page;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.excilys.formation.computerdb.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.Page;
 
 public class SearchPageDto<T> extends SortedPageDto<T> {
 	String search;

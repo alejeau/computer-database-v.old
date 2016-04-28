@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.Page;
-import com.excilys.formation.computerdb.pagination.SortedPage;
-import com.excilys.formation.computerdb.pagination.pager.CompanyPager;
-import com.excilys.formation.computerdb.pagination.pager.SortedPageComputer;
+import com.excilys.formation.computerdb.model.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
+import com.excilys.formation.computerdb.ui.pager.CompanyPager;
+import com.excilys.formation.computerdb.ui.pager.SortedPageComputer;
 
 @Controller
 public class CLI {

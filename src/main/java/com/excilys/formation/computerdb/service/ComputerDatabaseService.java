@@ -5,9 +5,9 @@ import java.util.List;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.pagination.Page;
-import com.excilys.formation.computerdb.pagination.SearchPage;
-import com.excilys.formation.computerdb.pagination.SortedPage;
+import com.excilys.formation.computerdb.model.pagination.Page;
+import com.excilys.formation.computerdb.model.pagination.SearchPage;
+import com.excilys.formation.computerdb.model.pagination.SortedPage;
 
 public interface ComputerDatabaseService {
 	boolean alreadyExists(String name);

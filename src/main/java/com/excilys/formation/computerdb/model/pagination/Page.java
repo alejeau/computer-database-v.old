@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.pagination;
+package com.excilys.formation.computerdb.model.pagination;
 
 import java.util.LinkedList;
 import java.util.List;
