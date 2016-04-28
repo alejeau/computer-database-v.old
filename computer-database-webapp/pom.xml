@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.excilys.formation.computerdb</groupId>
+		<artifactId>computer-database</artifactId>
+		<version>${computer-database.version}</version>
+	</parent>
+	<groupId>com.excilys.formation.computerdb.webapp</groupId>
+	<artifactId>computer-database-webapp</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>computer-database-webapp Maven Webapp</name>
+	
+	<build>
+		<finalName>computer-database-webapp</finalName>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.excilys.formation.computerdb.service</groupId>
+			<artifactId>computer-database-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<!-- Tests -->
+		<!-- selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

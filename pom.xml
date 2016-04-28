@@ -1,15 +1,32 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+	http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.exclilys.formation.computerdb</groupId>
-	<artifactId>computer-database</artifactId>
-	<version>4.6.2-SNAPSHOT</version>
-	<name>computer-database</name>
-	<packaging>war</packaging>
 
+	<groupId>com.excilys.formation.computerdb</groupId>
+	<artifactId>computer-database</artifactId>
+	<version>${computer-database.version}</version>
+	<packaging>pom</packaging>
+
+	<name>computer-database</name>
+
+	<modules>
+		<module>computer-database-core</module>
+		<module>computer-database-binding</module>
+		<module>computer-database-persistence</module>
+		<module>computer-database-service</module>
+		<module>computer-database-webapp</module>
+		<module>computer-database-console</module>
+	</modules>
+	
 	<properties>
 		<!-- sets the projects encoding to UTF-8 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Project version -->
+		<computer-database.version>4.6.2-SNAPSHOT</computer-database.version>
 
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
@@ -99,25 +116,6 @@
 	</dependencyManagement>
 	<dependencies>
 		<!-- Tests -->
-		<!-- selenium -->
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-server</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-firefox-driver</artifactId>
-			<version>${selenium.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -179,29 +177,6 @@
 			<artifactId>javaee-api</artifactId>
 			<version>${javax.version}</version>
 		</dependency>
-		<!-- connection manager -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>${hikaricp.version}</version>
-		</dependency>
-		<!-- persistence -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.core.version}</version>
-		</dependency>
-		<!-- useful for LocalDate serialization -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-java8</artifactId>
-			<version>${hibernate.core.version}</version>
-		</dependency>
 
 
 
@@ -246,14 +221,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
-
-		<!-- runtime -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-			<scope>runtime</scope>
-		</dependency>
 	</dependencies>
 	<url>https://github.com/alejeau/computer-database</url>
+	
 </project>
