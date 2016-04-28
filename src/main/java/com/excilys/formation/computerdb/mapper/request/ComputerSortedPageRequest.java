@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.controllers.req;
+package com.excilys.formation.computerdb.mapper.request;
 
 import com.excilys.formation.computerdb.constants.Paths;
 import com.excilys.formation.computerdb.model.Computer;

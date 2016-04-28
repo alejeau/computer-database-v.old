@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.constants.Paths;
-import com.excilys.formation.computerdb.controllers.req.ComputerSearchPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.model.pagination.SearchPage;
 

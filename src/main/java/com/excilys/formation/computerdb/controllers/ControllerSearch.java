@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.computerdb.constants.Paths;
-import com.excilys.formation.computerdb.controllers.req.ComputerSearchPageRequest;
 import com.excilys.formation.computerdb.mapper.model.PageDtoMapper;
+import com.excilys.formation.computerdb.mapper.request.ComputerSearchPageRequest;
 import com.excilys.formation.computerdb.mapper.request.SearchRequestMapper;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.model.pagination.SearchPage;

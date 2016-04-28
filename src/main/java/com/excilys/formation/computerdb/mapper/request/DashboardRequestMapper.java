@@ -3,7 +3,6 @@ package com.excilys.formation.computerdb.mapper.request;
 import java.util.Map;
 
 import com.excilys.formation.computerdb.constants.Fields;
-import com.excilys.formation.computerdb.controllers.req.ComputerSortedPageRequest;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.model.pagination.SortedPage;
 

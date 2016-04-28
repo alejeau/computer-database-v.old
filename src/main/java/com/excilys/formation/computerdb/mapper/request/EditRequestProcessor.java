@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.computerdb.constants.Paths;
-import com.excilys.formation.computerdb.controllers.req.ComputerEditObject;
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.mapper.date.DateMapper;
