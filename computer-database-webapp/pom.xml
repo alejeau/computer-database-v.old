@@ -14,7 +14,7 @@
 	<name>computer-database-webapp Maven Webapp</name>
 	
 	<build>
-		<finalName>computer-database-webapp</finalName>
+		<finalName>computer-database</finalName>
 	</build>
 	
 	<dependencies>

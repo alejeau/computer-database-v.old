@@ -10,11 +10,11 @@
 <%@attribute name="ascending" required="false"%>
 <%@attribute name="lang" required="false"%>
 
-<c:set var="pathDash" value="/computer-database/access" />
-<c:set var="pathAdd" value="/computer-database/access/add" />
-<c:set var="pathEdit" value="/computer-database/access/edit" />
-<c:set var="pathSearch" value="/computer-database/access/search" />
-<c:set var="pathReset " value="/computer-database/access?reset=true" />
+<c:set var="pathDash" value="/computer-database-webapp/access" />
+<c:set var="pathAdd" value="/computer-database-webapp/access/add" />
+<c:set var="pathEdit" value="/computer-database-webapp/access/edit" />
+<c:set var="pathSearch" value="/computer-database-webapp/access/search" />
+<c:set var="pathReset " value="/computer-database-webapp/access?reset=true" />
 
 <c:set var="emptyText" value="" />
 <c:set var="tmpPath" value="" />
@@ -40,23 +40,23 @@
 			<c:when
 				test="${ linkTo.equals('dashboard') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database/access') }" />
+					value="${ tmpPath.concat('/computer-database-webapp/access') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('add') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database/access/add') }" />
+					value="${ tmpPath.concat('/computer-database-webapp/access/add') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('edit') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database/access/edit') }" />
+					value="${ tmpPath.concat('/computer-database-webapp/access/edit') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('search') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database/access/search') }" />
+					value="${ tmpPath.concat('/computer-database-webapp/access/search') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('reset') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database/access?') }" />
+					value="${ tmpPath.concat('/computer-database-webapp/access?') }" />
 				<c:set var="tmpPageNb"
 					value="${ emptyText.concat('?pageNb=0') }" />
 				<c:set var="tmpDisplayBy"

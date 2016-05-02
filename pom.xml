@@ -178,10 +178,6 @@
 			<version>${javax.version}</version>
 		</dependency>
 
-
-
-
-
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
