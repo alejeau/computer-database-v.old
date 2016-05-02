@@ -1,12 +1,12 @@
 package com.excilys.formation.computerdb.ui;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.computerdb.model.User;
@@ -105,7 +105,7 @@ public class UserManagement {
 	public void createUser() throws NoSuchAlgorithmException {
 		String [] creds = getInfo();
 		String login = creds[0];
-		String password = toSha256(creds[1]);
+		String password = encode(creds[1]);
 		
 		User u = new User(login, password);
 		this.service.createUser(u);
@@ -155,10 +155,10 @@ public class UserManagement {
 		return infos;
 	}
 	
-	private static String toSha256(final String password) throws NoSuchAlgorithmException {
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
-		byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-		return String.format("%064x", new java.math.BigInteger(1, hash));
+	private static String encode(final String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(password);
+		return hashedPassword;
 	}
 	
 	

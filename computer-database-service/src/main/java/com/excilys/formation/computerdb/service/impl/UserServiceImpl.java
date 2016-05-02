@@ -8,8 +8,8 @@ import com.excilys.formation.computerdb.model.User;
 import com.excilys.formation.computerdb.persistence.impl.UserDaoImpl;
 import com.excilys.formation.computerdb.service.UserService;
 
-@Service("userService")
-public class UserServiceImpl implements UserService{
+@Service
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDaoImpl userDaoImpl;
