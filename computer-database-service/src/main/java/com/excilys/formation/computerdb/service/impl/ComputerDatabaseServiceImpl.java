@@ -33,10 +33,6 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	public ComputerDatabaseServiceImpl() {
 	}
-
-	public List<Computer> test() {
-		return computerDaoImpl.test();
-	}
 	
 	@Override
 	public boolean alreadyExists(String name) {

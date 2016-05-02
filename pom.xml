@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 	http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -20,7 +19,7 @@
 		<module>computer-database-webapp</module>
 		<module>computer-database-console</module>
 	</modules>
-	
+
 	<properties>
 		<!-- sets the projects encoding to UTF-8 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +45,7 @@
 		<hikaricp.version>2.4.5</hikaricp.version>
 		<!-- spring -->
 		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.security.version>4.0.4.RELEASE</spring.security.version>
 		<!-- persistence -->
 		<hibernate.core.version>5.1.0.Final</hibernate.core.version>
 		<!-- Validators -->
@@ -217,7 +217,19 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
 	</dependencies>
+
+
 	<url>https://github.com/alejeau/computer-database</url>
-	
+
 </project>
