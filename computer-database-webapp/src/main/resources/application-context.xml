@@ -12,11 +12,10 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+	<context:component-scan base-package="com.excilys.formation.computerdb.config" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.mapper.*" />
-	<context:component-scan
-		base-package="com.excilys.formation.computerdb.pagination.pager" />
-	<context:component-scan
-		base-package="com.excilys.formation.computerdb.persistence.impl" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.pagination.pager" />
+	<context:component-scan base-package="com.excilys.formation.computerdb.persistence.impl" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.service.impl" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.ui" />
 	<context:component-scan base-package="com.excilys.formation.computerdb.validators" />

@@ -120,6 +120,5 @@ public class Company implements Comparable<Company> {
 		public Company build() {
 			return new Company(nestedId, nestedName);
 		}
-
 	}
 }
