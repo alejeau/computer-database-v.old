@@ -1,8 +1,6 @@
 package com.excilys.formation.computerdb.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,13 +8,13 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class User implements Comparable<User> {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	String login;
 	String password;
-	
-	public User() {}
-	
-	public User(String login, String password){
+
+	public User() {
+	}
+
+	public User(String login, String password) {
 		this.login = login;
 		this.password = password;
 	}
@@ -77,14 +75,14 @@ public class User implements Comparable<User> {
 	public int compareTo(User u) {
 		return this.login.compareTo(u.getLogin());
 	}
-	
+
 	public static class Builder {
 		private String nestedLogin = null;
 		private String nestedPassword = null;
 
 		public Builder() {
 		}
-		
+
 		public Builder(final String login, final String password) {
 			this.nestedLogin = login;
 			this.nestedPassword = password;

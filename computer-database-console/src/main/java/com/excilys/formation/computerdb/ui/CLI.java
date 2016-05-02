@@ -47,7 +47,6 @@ public class CLI {
 	}
 
 	public void init() {
-
 		int objectsPerPage = 10;
 		if (this.service == null) {
 			System.out.println("this.service is null");

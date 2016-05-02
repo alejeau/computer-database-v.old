@@ -1,7 +1,5 @@
 package com.excilys.formation.computerdb.persistence.impl;
 
-import java.sql.SQLException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -27,7 +25,7 @@ public class UserDaoImpl implements UserDao {
 		final String QUERY_TXT = "SELECT u FROM User u WHERE u.login = :login";
 
 		TypedQuery<User> query = entityManager.createQuery(QUERY_TXT, User.class);
-		query.setParameter("name", login);
+		query.setParameter("login", login);
 
 		User u = null;
 		u = query.getSingleResult();
@@ -41,12 +39,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void deleteUser(User u) throws SQLException {
+	public void deleteUser(String login) {
 		final String QUERY_TXT = "DELETE FROM User u WHERE u.login = :login";
 
 		Query query = null;
 		query = entityManager.createQuery(QUERY_TXT);
-		query.setParameter("login", u.getLogin());
+		query.setParameter("login", login);
 		query.executeUpdate();
 	}
 

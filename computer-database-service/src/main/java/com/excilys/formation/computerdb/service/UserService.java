@@ -1,7 +1,5 @@
 package com.excilys.formation.computerdb.service;
 
-import java.sql.SQLException;
-
 import com.excilys.formation.computerdb.model.User;
 
 public interface UserService {
@@ -26,6 +24,6 @@ public interface UserService {
 	 * 
 	 * @param u the User to delete
 	 */
-	public void deleteUser(User u) throws SQLException;
+	public void deleteUser(String login);
 
 }

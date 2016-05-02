@@ -1,7 +1,5 @@
 package com.excilys.formation.computerdb.persistence;
 
-import java.sql.SQLException;
-
 import com.excilys.formation.computerdb.model.User;
 
 public interface UserDao {
@@ -26,5 +24,5 @@ public interface UserDao {
 	 * 
 	 * @param u the User to delete
 	 */
-	public void deleteUser(User u) throws SQLException;
+	public void deleteUser(String login);
 }
