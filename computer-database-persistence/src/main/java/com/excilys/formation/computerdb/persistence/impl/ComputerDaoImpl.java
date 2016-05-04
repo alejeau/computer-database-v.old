@@ -94,11 +94,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		if (field != Fields.NONE) {
 			String order = (ascending) ? "ASC" : "DESC";
 			if (field == Fields.COMPANY) {
-				query_txt += " LEFT JOIN Company cy ON c.id=cy.id";
+				query_txt += " ORDER BY c.company.name " + order;
+			} else {
+				query_txt += " ORDER BY " + field.toString() + " " + order;
 			}
-			query_txt += " ORDER BY " + field.toString() + " " + order;
 		}
 		logger.debug(query_txt);
+		System.out.println(query_txt);
 
 		query = entityManager.createQuery(query_txt, Computer.class);
 		query.setFirstResult(offset);
