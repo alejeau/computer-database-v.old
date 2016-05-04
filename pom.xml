@@ -26,7 +26,7 @@
 
 		<!-- Project version -->
 		<release.type>RELEASE</release.type>
-		<computer-database.version>4.6.3-${release.type}</computer-database.version>
+		<computer-database.version>4.6.4-${release.type}</computer-database.version>
 		<computer-database.core.version>1.1.0-${release.type}</computer-database.core.version>
 		<computer-database.binding.version>1.1.0-${release.type}</computer-database.binding.version>
 		<computer-database.persistence.version>1.1.0-${release.type}</computer-database.persistence.version>
