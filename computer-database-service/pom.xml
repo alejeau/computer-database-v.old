@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.excilys.formation.computerdb.service</groupId>
 	<artifactId>computer-database-service</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>${computer-database.service.version}</version>
 	<name>computer-database-service</name>
 	
 	<properties>
@@ -23,13 +23,13 @@
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.binding</groupId>
 			<artifactId>computer-database-binding</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>${computer-database.binding.version}</version>
 		</dependency>
 		<!-- project's persistence -->
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.persistence</groupId>
 			<artifactId>computer-database-persistence</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>${computer-database.persistence.version}</version>
 		</dependency>
 	</dependencies>
 </project>

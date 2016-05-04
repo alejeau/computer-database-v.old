@@ -25,7 +25,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Project version -->
-		<computer-database.version>4.6.2-SNAPSHOT</computer-database.version>
+		<release.type>RELEASE</release.type>
+		<computer-database.version>4.6.3-${release.type}</computer-database.version>
+		<computer-database.core.version>1.1.0-${release.type}</computer-database.core.version>
+		<computer-database.binding.version>1.1.0-${release.type}</computer-database.binding.version>
+		<computer-database.persistence.version>1.1.0-${release.type}</computer-database.persistence.version>
+		<computer-database.service.version>1.1.0-${release.type}</computer-database.service.version>
+		<computer-database.webapp.version>1.1.0-${release.type}</computer-database.webapp.version>
+		<computer-database.console.version>1.1.0-${release.type}</computer-database.console.version>
 
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
@@ -105,6 +112,8 @@
 	</reporting>
 	<dependencyManagement>
 		<dependencies>
+			<!-- Spring Bill of Material -->
+			<!-- Manages Spring dependencies versions -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-framework-bom</artifactId>
@@ -114,6 +123,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
 	<dependencies>
 		<!-- Tests -->
 		<!-- junit -->
@@ -167,6 +177,8 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		
+		<!-- J2EE -->
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
