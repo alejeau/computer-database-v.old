@@ -21,7 +21,6 @@
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.core</groupId>
 			<artifactId>computer-database-core</artifactId>
-			<version>${computer-database.core.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -23,13 +23,11 @@
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.binding</groupId>
 			<artifactId>computer-database-binding</artifactId>
-			<version>${computer-database.binding.version}</version>
 		</dependency>
 		<!-- project's persistence -->
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.persistence</groupId>
 			<artifactId>computer-database-persistence</artifactId>
-			<version>${computer-database.persistence.version}</version>
 		</dependency>
 	</dependencies>
 </project>

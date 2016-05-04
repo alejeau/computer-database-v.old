@@ -21,38 +21,32 @@
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.core</groupId>
 			<artifactId>computer-database-core</artifactId>
-			<version>${computer-database.core.version}</version>
 		</dependency>
 	
 		<!-- connection manager -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>${hikaricp.version}</version>
 		</dependency>
 		<!-- persistence -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.core.version}</version>
 		</dependency>
 		<!-- useful for LocalDate serialization -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
-			<version>${hibernate.core.version}</version>
 		</dependency>
 
 		<!-- runtime -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

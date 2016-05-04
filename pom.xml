@@ -122,6 +122,86 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<!-- project's core -->
+			<dependency>
+				<groupId>com.excilys.formation.computerdb.core</groupId>
+				<artifactId>computer-database-core</artifactId>
+				<version>${computer-database.core.version}</version>
+			</dependency>
+			<!-- project's binding -->
+			<dependency>
+				<groupId>com.excilys.formation.computerdb.binding</groupId>
+				<artifactId>computer-database-binding</artifactId>
+				<version>${computer-database.binding.version}</version>
+			</dependency>
+			<!-- project's service -->
+			<dependency>
+				<groupId>com.excilys.formation.computerdb.service</groupId>
+				<artifactId>computer-database-service</artifactId>
+				<version>${computer-database.service.version}</version>
+			</dependency>
+			<!-- project's persistence -->
+			<dependency>
+				<groupId>com.excilys.formation.computerdb.persistence</groupId>
+				<artifactId>computer-database-persistence</artifactId>
+				<version>${computer-database.persistence.version}</version>
+			</dependency>
+
+			<!-- Persistence dependencies -->
+			<!-- connection manager -->
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikaricp.version}</version>
+			</dependency>
+			<!-- persistence -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate.core.version}</version>
+			</dependency>
+			<!-- useful for LocalDate serialization -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-java8</artifactId>
+				<version>${hibernate.core.version}</version>
+			</dependency>
+
+			<!-- runtime -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!-- Webapp dependencies -->
+			<!-- Tests -->
+			<!-- selenium -->
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-java</artifactId>
+				<version>${selenium.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-server</artifactId>
+				<version>${selenium.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-firefox-driver</artifactId>
+				<version>${selenium.version}</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	
@@ -230,6 +310,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
+		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>

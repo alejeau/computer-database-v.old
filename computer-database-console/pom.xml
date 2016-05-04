@@ -23,7 +23,6 @@
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.service</groupId>
 			<artifactId>computer-database-service</artifactId>
-			<version>${computer-database.service.version}</version>
 		</dependency>
 	</dependencies>
 </project>
