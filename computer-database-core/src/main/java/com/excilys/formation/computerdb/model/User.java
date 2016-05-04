@@ -14,6 +14,11 @@ public class User implements Comparable<User> {
 	public User() {
 	}
 
+	/**
+	 * Creates a User to be stored in the database
+	 * @param login the user's login
+	 * @param password the user's password as BCrypt String
+	 */
 	public User(String login, String password) {
 		this.login = login;
 		this.password = password;
@@ -31,6 +36,10 @@ public class User implements Comparable<User> {
 		return password;
 	}
 
+	/**
+	 * The password must be a BCrypt String
+	 * @param password a BCrypt String of the password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
