@@ -62,6 +62,7 @@
                             or
                             <a href='<cst:links linkTo="dashboard" />' class="btn btn-default"><spring:message code="misc.cancel" text="" /></a>
                         </div>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     </form>
                 </div>
             </div>

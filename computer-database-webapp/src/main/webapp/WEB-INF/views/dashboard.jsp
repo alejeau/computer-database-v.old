@@ -19,7 +19,8 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href='<cst:links linkTo="reset" />'> Application - Computer Database </a>
-			<span style="float: right; color: white;"><spring:message code="lang.current" text="Current language" /> ${pageContext.response.locale} <a href='<cst:links linkTo="self" lang="en" />'><img src="${resourcesUrl}/img/thumbs/en.png"></a> | <a href='<cst:links linkTo="self" lang="fr" />'><img src="${resourcesUrl}/img/thumbs/fr.png"></a></span>
+			<span style="float: right; color: white;"><spring:message code="lang.current" text="Current language" /> ${pageContext.response.locale} <a href='<cst:links linkTo="self" lang="en" />'><img src="${resourcesUrl}/img/thumbs/en.png"></a> | <a href='<cst:links linkTo="self" lang="fr" />'><img src="${resourcesUrl}/img/thumbs/fr.png"></a>
+			<a href="<c:url value="/logout" />" > Logout</a></span>
 		</div>
 	</header>
 	
@@ -35,6 +36,7 @@
 							class="form-control" placeholder="<spring:message code="header.search" text="Search name" />" value='<c:out value="${ param.search != null ? param.search : '' }" />' /> <input
 							type="submit" id="searchsubmit" name="searchSubmit" value="<spring:message code="header.filter" text="Filter by name" />"
 							class="btn btn-primary" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					</form>
 				</div>
 				<div class="pull-right">
@@ -46,6 +48,7 @@
 
 		<form id="deleteForm" action='<c:out value="${ currentUrl }"/>' method="POST">
 			<input type="hidden" name="selection" value="">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -85,8 +88,8 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-<c:set var="PAGE_NB" value="?pageNb=" />
-<c:set var="DISPLAY_BY" value="?displayBy=" />
+		<c:set var="PAGE_NB" value="?pageNb=" />
+		<c:set var="DISPLAY_BY" value="?displayBy=" />
 		<div class="container text-center">
 			<ul class="pagination">
 				<cst:pager/>
