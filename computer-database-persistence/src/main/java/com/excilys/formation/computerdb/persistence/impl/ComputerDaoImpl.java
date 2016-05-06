@@ -26,7 +26,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	public ComputerDaoImpl() {
 	}
-	
+
 	@Override
 	public boolean exists(String name) {
 		Computer tmp = null;
@@ -39,6 +39,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		if (tmp != null) {
 			return true;
 		}
+
 		return false;
 	}
 
