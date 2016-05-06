@@ -34,6 +34,7 @@ public class ControllerDashboard {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("dashboard");
+		System.out.println("Fucking ACCESS GET");
 		ComputerSortedPageRequest page = DashboardRequestMapper.mapGet(params);
 
 		// We feed content to the page
@@ -44,30 +45,6 @@ public class ControllerDashboard {
 
 		maw = setRequest(maw, page);
 
-		return maw;
-	}
-
-	/**
-	 * Deletes a list of computer.
-	 * 
-	 * @param params the list of parameter given by the URL
-	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView post(@RequestParam Map<String, String> params) {
-		ModelAndView maw = new ModelAndView("dashboard");
-		long[] listId = DashboardRequestMapper.mapPost(params);
-		this.services.deleteComputers(listId);
-		
-		ComputerSortedPageRequest page = DashboardRequestMapper.mapGet(params);
-
-		// We feed content to the page
-		SortedPage<Computer> sp = page.getComputerSortedPage();
-		int currentPageNumber = sp.getCurrentPageNumber();
-		sp = this.services.getComputerSortedPage(currentPageNumber, sp);
-		page.setPage(sp);
-
-		maw = setRequest(maw, page);
-		
 		return maw;
 	}
 

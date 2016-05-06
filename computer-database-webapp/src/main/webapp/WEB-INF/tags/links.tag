@@ -13,6 +13,7 @@
 <c:set var="pathDash" value="/computer-database-webapp/access" />
 <c:set var="pathAdd" value="/computer-database-webapp/access/add" />
 <c:set var="pathEdit" value="/computer-database-webapp/access/edit" />
+<c:set var="pathDelete" value="/computer-database-webapp/access/delete" />
 <c:set var="pathSearch" value="/computer-database-webapp/access/search" />
 <c:set var="pathReset " value="/computer-database-webapp/access?reset=true" />
 
@@ -49,6 +50,10 @@
 			<c:when test="${ linkTo.equals('edit') }">
 				<c:set var="tmpPath"
 					value="${ tmpPath.concat('/computer-database-webapp/access/edit') }" />
+			</c:when>
+			<c:when test="${ linkTo.equals('delete') }">
+				<c:set var="tmpPath"
+					value="${ tmpPath.concat('/computer-database-webapp/access/delete') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('search') }">
 				<c:set var="tmpPath"

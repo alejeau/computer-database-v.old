@@ -46,7 +46,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action='<c:out value="${ currentUrl }"/>' method="POST">
+		<form id="deleteForm" action='<c:out value="${ pathComputerDelete }"/>' method="POST">
 			<input type="hidden" name="selection" value="">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
@@ -59,7 +59,7 @@
 						<!-- Table header for Computer Name -->
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="${ currentUrl }"
+							style="vertical-align: top;"> - <a href="${ pathComputerDelete }"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
