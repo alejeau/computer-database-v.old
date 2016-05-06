@@ -13,7 +13,7 @@ import com.excilys.formation.computerdb.mapper.request.DashboardRequestMapper;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 @Controller
-@RequestMapping("/access/delete")
+@RequestMapping("/delete")
 public class ControllerDelete {
 
 	@Autowired
@@ -26,6 +26,7 @@ public class ControllerDelete {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get() {
+		System.out.println("DELETE GET");
 		ModelAndView maw = new ModelAndView("redirect:/access");
 		return maw;
 	}
@@ -37,6 +38,7 @@ public class ControllerDelete {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public void post(@RequestParam Map<String, String> params) {
+		System.out.println("DELETE POST");
 		long[] listId = DashboardRequestMapper.mapPost(params);
 		this.services.deleteComputers(listId);
 	}

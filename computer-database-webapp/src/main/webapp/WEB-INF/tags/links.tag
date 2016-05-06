@@ -10,12 +10,12 @@
 <%@attribute name="ascending" required="false"%>
 <%@attribute name="lang" required="false"%>
 
-<c:set var="pathDash" value="/computer-database-webapp/access" />
-<c:set var="pathAdd" value="/computer-database-webapp/access/add" />
-<c:set var="pathEdit" value="/computer-database-webapp/access/edit" />
-<c:set var="pathDelete" value="/computer-database-webapp/access/delete" />
-<c:set var="pathSearch" value="/computer-database-webapp/access/search" />
-<c:set var="pathReset " value="/computer-database-webapp/access?reset=true" />
+<c:set var="pathDash" value="/computer-database/access" />
+<c:set var="pathAdd" value="/computer-database/access/add" />
+<c:set var="pathEdit" value="/computer-database/access/edit" />
+<c:set var="pathDelete" value="/computer-database/access/delete" />
+<c:set var="pathSearch" value="/computer-database/access/search" />
+<c:set var="pathReset " value="/computer-database/access?reset=true" />
 
 <c:set var="emptyText" value="" />
 <c:set var="tmpPath" value="" />
@@ -41,27 +41,27 @@
 			<c:when
 				test="${ linkTo.equals('dashboard') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access') }" />
+					value="${ tmpPath.concat('/computer-database/access') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('add') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access/add') }" />
+					value="${ tmpPath.concat('/computer-database/access/add') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('edit') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access/edit') }" />
+					value="${ tmpPath.concat('/computer-database/access/edit') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('delete') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access/delete') }" />
+					value="${ tmpPath.concat('/computer-database/access/delete') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('search') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access/search') }" />
+					value="${ tmpPath.concat('/computer-database/access/search') }" />
 			</c:when>
 			<c:when test="${ linkTo.equals('reset') }">
 				<c:set var="tmpPath"
-					value="${ tmpPath.concat('/computer-database-webapp/access?') }" />
+					value="${ tmpPath.concat('/computer-database/access?') }" />
 				<c:set var="tmpPageNb"
 					value="${ emptyText.concat('?pageNb=0') }" />
 				<c:set var="tmpDisplayBy"

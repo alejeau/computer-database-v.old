@@ -34,7 +34,7 @@ public class ControllerDashboard {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		ModelAndView maw = new ModelAndView("dashboard");
-		System.out.println("Fucking ACCESS GET");
+		System.out.println("ACCESS GET");
 		ComputerSortedPageRequest page = DashboardRequestMapper.mapGet(params);
 
 		// We feed content to the page
@@ -46,6 +46,11 @@ public class ControllerDashboard {
 		maw = setRequest(maw, page);
 
 		return maw;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public void post() {
+		System.out.println("ACCESS POST");
 	}
 
 	protected static ModelAndView setRequest(ModelAndView maw, ComputerSortedPageRequest page) {
