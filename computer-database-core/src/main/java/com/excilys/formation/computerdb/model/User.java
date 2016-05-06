@@ -10,6 +10,7 @@ public class User implements Comparable<User> {
 	@Id
 	String login;
 	String password;
+	UsersRoles role;
 
 	public User() {
 	}
@@ -19,9 +20,10 @@ public class User implements Comparable<User> {
 	 * @param login the user's login
 	 * @param password the user's password as BCrypt String
 	 */
-	public User(String login, String password) {
+	public User(String login, String password, UsersRoles role) {
 		this.login = login;
 		this.password = password;
+		this.role = role;
 	}
 
 	public String getLogin() {
@@ -49,12 +51,21 @@ public class User implements Comparable<User> {
 		return "User [login=" + login + ", password=" + password + "]";
 	}
 
+	public UsersRoles getRole() {
+		return role;
+	}
+
+	public void setRole(UsersRoles role) {
+		this.role = role;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		return result;
 	}
 
@@ -77,6 +88,8 @@ public class User implements Comparable<User> {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
+		if (role != other.role)
+			return false;
 		return true;
 	}
 
@@ -88,13 +101,9 @@ public class User implements Comparable<User> {
 	public static class Builder {
 		private String nestedLogin = null;
 		private String nestedPassword = null;
+		private UsersRoles nestedRole = UsersRoles.ROLE_USER;
 
 		public Builder() {
-		}
-
-		public Builder(final String login, final String password) {
-			this.nestedLogin = login;
-			this.nestedPassword = password;
 		}
 
 		public Builder id(final String login) {
@@ -107,8 +116,13 @@ public class User implements Comparable<User> {
 			return this;
 		}
 
+		public Builder name(final UsersRoles role) {
+			this.nestedRole = role;
+			return this;
+		}
+
 		public User build() {
-			return new User(nestedLogin, nestedPassword);
+			return new User(nestedLogin, nestedPassword, nestedRole);
 		}
 	}
 }

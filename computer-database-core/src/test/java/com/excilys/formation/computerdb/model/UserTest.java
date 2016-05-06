@@ -11,7 +11,8 @@ public class UserTest {
 	private static final String LOGIN2 		= "test2";
 	private static final String PASSWORD 	= encode("password");
 	private static final String PASSWORD2 	= encode("password2");
-	private static final User 	USER	 	= new User(LOGIN, PASSWORD);
+	private static final UsersRoles ROLE 	= UsersRoles.ROLE_ADMIN;
+	private static final User 	USER	 	= new User(LOGIN, PASSWORD, ROLE);
 
 	@Test
 	public void constructor() {
@@ -26,7 +27,7 @@ public class UserTest {
 	
 	@Test
 	public void setLogin() {
-		User u = new User(LOGIN, PASSWORD);
+		User u = new User(LOGIN, PASSWORD, ROLE);
 		u.setLogin(LOGIN2);
 		assertEquals(LOGIN2, u.getLogin());
 	}
@@ -38,7 +39,7 @@ public class UserTest {
 	
 	@Test
 	public void setPassword() {
-		User u = new User(LOGIN, PASSWORD);
+		User u = new User(LOGIN, PASSWORD, ROLE);
 		u.setPassword(PASSWORD2);
 		assertEquals(PASSWORD2, u.getPassword());
 	}

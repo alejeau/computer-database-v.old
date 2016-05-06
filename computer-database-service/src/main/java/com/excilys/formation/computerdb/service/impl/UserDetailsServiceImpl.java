@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		User u = userDaoImpl.getUser(login);
-		List<GrantedAuthority> authorities = buildUserAuthority();
+		List<GrantedAuthority> authorities = buildUserAuthority(u);
 		return UserMapper.buildUserForAuthentication(u, authorities);
 	}
 
@@ -35,9 +35,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * 
 	 * @return a List<GrantedAuthority> with only the role ROLE_USER
 	 */
-	private List<GrantedAuthority> buildUserAuthority() {
+	private List<GrantedAuthority> buildUserAuthority(User u) {
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
-		setAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+		setAuths.add(new SimpleGrantedAuthority(u.getRole().getValue()));
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 		return Result;
 	}

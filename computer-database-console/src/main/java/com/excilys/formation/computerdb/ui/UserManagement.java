@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.computerdb.model.User;
+import com.excilys.formation.computerdb.model.UsersRoles;
 import com.excilys.formation.computerdb.service.impl.UserServiceImpl;
 
 @Controller
@@ -106,8 +107,9 @@ public class UserManagement {
 		String [] creds = getInfo();
 		String login = creds[0];
 		String password = encode(creds[1]);
+		UsersRoles role = (creds[2].equals("0")) ? UsersRoles.ROLE_ADMIN : UsersRoles.ROLE_USER;
 		
-		User u = new User(login, password);
+		User u = new User(login, password, role);
 		this.service.createUser(u);
 	}
 	
@@ -125,8 +127,8 @@ public class UserManagement {
 	 */
 	protected String getLogin() {
 		String login = "";
-		while (login.length() < 8) {
-			System.out.println("Please enter user login (must be eight characters long minimum):");
+		while (login.length() < 4) {
+			System.out.println("Please enter user login (must be four characters long minimum):");
 			login = sc.nextLine();
 		}
 
@@ -141,15 +143,20 @@ public class UserManagement {
 	 * @return an array of String containing the previously stated infos
 	 */
 	protected String[] getInfo() {
-		String[] infos = new String[]{"", ""};
-		while (infos[0].length() < 8) {
-			System.out.println("Please enter user login (must be eight characters long minimum):");
+		String[] infos = new String[]{"", "", ""};
+		while (infos[0].length() < 4) {
+			System.out.println("Please enter user login (must be four characters long minimum):");
 			infos[0] = sc.nextLine();
 		}
 
 		while (infos[1].length() < 8) {
 			System.out.println("Please enter user password (must be eight characters long minimum):");
 			infos[1] = sc.nextLine();
+		}
+
+		while (infos[2].length() != 1) {
+			System.out.println("Please enter user role (ADMIN = 0 and USER = 1):");
+			infos[2] = sc.nextLine();
 		}
 
 		return infos;

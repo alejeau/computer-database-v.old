@@ -37,7 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	  http.authorizeRequests()
-		.antMatchers("/**").access("hasRole('ROLE_USER')")
+		.antMatchers("/access/add/**").access("hasRole('ROLE_ADMIN')")
+		.antMatchers("/access/edit/**").access("hasRole('ROLE_ADMIN')")
+		.antMatchers("/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 		.and()
 			.formLogin()
 			.loginPage("/login")
@@ -46,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		    .passwordParameter("password")
 			.defaultSuccessUrl("/access")
 		.and()
-		    .logout().logoutSuccessUrl("/login?logout");
+		    .logout()
+//		    .logoutSuccessUrl("/login?logout");
+		    .permitAll();
 	}
 	
 	@Bean
