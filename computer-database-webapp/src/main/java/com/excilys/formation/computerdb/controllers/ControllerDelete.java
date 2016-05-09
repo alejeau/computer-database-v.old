@@ -15,7 +15,7 @@ import com.excilys.formation.computerdb.mapper.request.DashboardRequestMapper;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 
 @Controller
-@RequestMapping("/delete")
+@RequestMapping("/access/delete")
 public class ControllerDelete {
 	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 

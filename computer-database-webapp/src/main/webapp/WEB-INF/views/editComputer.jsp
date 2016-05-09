@@ -31,7 +31,7 @@
                     <h1><spring:message code="header.edit" text="" /></h1>
 
                     <form action="<c:out value="${ pathEditComputer }" />" method="POST">
-                        <input type="hidden" name="computerId" value="<c:out value="${ cdto.id }" />" id="computer_id"/>
+                        <input type="hidden" id="computerId" name="computerId" value="<c:out value="${ cdto.id }" />" />
                         <fieldset>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="<spring:message code="computer.name" text="" />"

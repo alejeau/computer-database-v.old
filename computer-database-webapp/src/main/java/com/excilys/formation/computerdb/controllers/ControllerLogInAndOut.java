@@ -35,6 +35,19 @@ public class ControllerLogInAndOut {
 	public void loginPost(@RequestParam Map<String, String> params) {
 		LOG.info("LOGIN POST");
 	}
+
+	@RequestMapping(value = "/j_spring_security_check", method = RequestMethod.GET)
+	public ModelAndView j(@RequestParam Map<String, String> params) {
+		LOG.info("J GET");
+		ModelAndView maw = new ModelAndView("redirect:/access");
+		maw = setRequest(maw);
+		return maw;
+	}
+	
+	@RequestMapping(value = "/j_spring_security_check", method = RequestMethod.POST)
+	public void jPost(@RequestParam Map<String, String> params) {
+		LOG.info("J POST");
+	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ModelAndView logout(@RequestParam Map<String, String> params) {

@@ -3,6 +3,8 @@ package com.excilys.formation.computerdb.controllers;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.formation.computerdb.constants.Paths;
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.mapper.date.DateMapper;
 import com.excilys.formation.computerdb.model.Company;
+import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.model.pagination.Page;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
 import com.excilys.formation.computerdb.validators.ComputerValidator;
@@ -66,6 +66,10 @@ public class ControllerAddComputer {
 		String name = params.get("computerName");
 		String intro = params.get("introduced");
 		String outro = params.get("discontinued");
+		LOG.info("name = " + name);
+		LOG.info("intro = " + intro);
+		LOG.info("outro = " + outro);
+		
 		intro = parseDate(intro);
 		outro = parseDate(outro);
 
@@ -76,7 +80,13 @@ public class ControllerAddComputer {
 		if (listPbs == null) {
 			long cid = Long.valueOf(params.get("companyId"));
 			Company cy = services.getCompanyById(cid);
+			Computer c = new Computer(name, intro, outro, cy);
+			LOG.info(c.toString());
 			services.createComputer(name, intro, outro, cy);
+		} else {
+			LOG.info("Liste des pbs :");
+			for (Problem p : listPbs)
+				LOG.info(p.toString());
 		}
 
 		maw = setRequest(maw, listPbs);

@@ -74,9 +74,11 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 				<c:forEach items="${ PAGE.page }" var="computer" >
+				
+                        <input type="hidden" name="computerId" value="<c:out value="${ computer.id }" />" id="computer_id" />
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" id='<c:out value="${ computer.name }_name" />' value="<c:out value="${ computer.id }" />"></td>
-						<td><a href="<c:out value="${ pathEditComputer }?computer=${ computer.name }" />" onclick="" id="computer_id" ><c:out value="${ computer.name }" /></a></td>
+						<td><a href="<c:out value="${ pathEditComputer }?computer=${ computer.name }" />" onclick="" id="${ computer.name }_id" ><c:out value="${ computer.name }" /></a></td>
 						<td><c:out value="${ computer.intro }" /></td>
 						<td><c:out value="${ computer.outro }" /></td>
 						<td><c:out value="${ computer.company }" /></td>
