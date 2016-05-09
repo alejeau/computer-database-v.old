@@ -3,6 +3,8 @@ package com.excilys.formation.computerdb.controllers;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 @Controller
 @RequestMapping("/access")
 public class ControllerEditComputer {
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
@@ -37,6 +40,7 @@ public class ControllerEditComputer {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
+		LOG.info("EDIT GET");
 		ModelAndView maw = new ModelAndView("editComputer");
 
 		String name = params.get("computer");
@@ -57,6 +61,7 @@ public class ControllerEditComputer {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public ModelAndView post(@RequestParam Map<String, String> params) {
+		LOG.info("EDIT POST");
 		ModelAndView maw = new ModelAndView("editComputer");
 		Page<Company> companies = this.services.getAllCompanies();
 

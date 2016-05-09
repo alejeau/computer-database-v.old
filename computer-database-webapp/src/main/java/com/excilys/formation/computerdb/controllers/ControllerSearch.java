@@ -2,6 +2,8 @@ package com.excilys.formation.computerdb.controllers;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 @Controller
 @RequestMapping("/access")
 public class ControllerSearch {
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
@@ -33,6 +36,7 @@ public class ControllerSearch {
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
+		LOG.info("SEARCH GET");
 		ModelAndView maw = new ModelAndView("dashboard");
 		ComputerSearchPageRequest page = SearchRequestMapper.mapGet(params);
 
@@ -44,6 +48,12 @@ public class ControllerSearch {
 
 		maw = setRequest(maw, page);
 		return maw;
+	}
+	
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public void loginPost(@RequestParam Map<String, String> params) {
+		LOG.info("SEARCH POST");
 	}
 
 	protected static ModelAndView setRequest(ModelAndView maw, ComputerSearchPageRequest page) {

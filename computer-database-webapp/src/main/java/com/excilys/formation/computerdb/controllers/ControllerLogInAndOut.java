@@ -2,7 +2,10 @@ package com.excilys.formation.computerdb.controllers;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,22 +18,41 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 @Controller
 @RequestMapping("")
 public class ControllerLogInAndOut {
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam Map<String, String> params) {
+		LOG.info("LOGIN GET");
 		ModelAndView maw = new ModelAndView("login");
 		maw = setRequest(maw);
 		return maw;
 	}
 	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public void loginPost(@RequestParam Map<String, String> params) {
+		LOG.info("LOGIN POST");
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ModelAndView logout(@RequestParam Map<String, String> params) {
-		ModelAndView maw = new ModelAndView("login");
+		LOG.info("LOGOUT GET");
+		
+		SecurityContextHolder.getContext().setAuthentication(null);
+        
+//		ModelAndView maw = new ModelAndView("redirect:/login");
+		ModelAndView maw = new ModelAndView("redirect:/j_spring_security_check");
+        maw.addObject("logout", "out");
 		maw = setRequest(maw);
+		
 		return maw;
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public void logoutPost(@RequestParam Map<String, String> params) {
+		LOG.info("LOGOUT POST");
 	}
 
 	protected static ModelAndView setRequest(ModelAndView maw) {

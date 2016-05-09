@@ -34,6 +34,10 @@
                     <h1><spring:message code="login.header" text="Login" /></h1>
 						<c:url var="loginUrl" value="/login" />
 						<form action="${loginUrl}" method="post" class="form-horizontal">
+<!-- 						<form action="/j_spring_security_check" method="post" class="form-horizontal"> -->
+<!-- 						<form action="/login" method="post" class="form-horizontal"> -->
+<%-- 						<c:out value="${ loginUrl }"></c:out> --%>
+						
                         <fieldset>
                             <div class="form-group">
                                 <label for="username"><spring:message code="login.name" text="Username" /></label>
@@ -45,9 +49,9 @@
                             </div>              
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" name="submit" value="<spring:message code="login.header" text="Login" />" class="btn btn-primary">
+                            <input type="submit" name="submit" id="submit" value="<spring:message code="login.header" text="Login" />" class="btn btn-primary">
                         </div>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" id="_csrf" />
                     </form>
                 </div>
             </div>

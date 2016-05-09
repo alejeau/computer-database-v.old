@@ -56,7 +56,7 @@
                             <spring:message code="misc.or" text="or" />
                             <a href="<c:out value="${ pathDashboard }" />" class="btn btn-default"><spring:message code="misc.cancel" text="Cancel" /></a>
                         </div>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" id="_csrf" />
                     </form>
                 </div>
             </div>

@@ -36,7 +36,7 @@
 							class="form-control" placeholder="<spring:message code="header.search" text="Search name" />" value='<c:out value="${ param.search != null ? param.search : '' }" />' /> <input
 							type="submit" id="searchsubmit" name="searchSubmit" value="<spring:message code="header.filter" text="Filter by name" />"
 							class="btn btn-primary" />
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" id="_csrf" />
 					</form>
 				</div>
 				<div class="pull-right">
@@ -48,7 +48,7 @@
 
 		<form id="deleteForm" action='<c:out value="${ pathComputerDelete }"/>' method="POST">
 			<input type="hidden" name="selection" value="">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" id="_csrf" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -75,8 +75,8 @@
 				<tbody id="results">
 				<c:forEach items="${ PAGE.page }" var="computer" >
 					<tr>
-						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="<c:out value="${ computer.id }" />"></td>
-						<td><a href="<c:out value="${ pathEditComputer }?computer=${ computer.name }" />" onclick="" ><c:out value="${ computer.name }" /></a></td>
+						<td class="editMode"><input type="checkbox" name="cb" class="cb" id='<c:out value="${ computer.name }_name" />' value="<c:out value="${ computer.id }" />"></td>
+						<td><a href="<c:out value="${ pathEditComputer }?computer=${ computer.name }" />" onclick="" id="computer_id" ><c:out value="${ computer.name }" /></a></td>
 						<td><c:out value="${ computer.intro }" /></td>
 						<td><c:out value="${ computer.outro }" /></td>
 						<td><c:out value="${ computer.company }" /></td>

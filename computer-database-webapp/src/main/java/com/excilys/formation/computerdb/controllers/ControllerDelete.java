@@ -2,6 +2,8 @@ package com.excilys.formation.computerdb.controllers;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 @Controller
 @RequestMapping("/delete")
 public class ControllerDelete {
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
@@ -26,7 +29,7 @@ public class ControllerDelete {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView get() {
-		System.out.println("DELETE GET");
+		LOG.info("DELETE GET");
 		ModelAndView maw = new ModelAndView("redirect:/access");
 		return maw;
 	}
@@ -37,9 +40,11 @@ public class ControllerDelete {
 	 * @param params the list of parameter given by the URL
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public void post(@RequestParam Map<String, String> params) {
-		System.out.println("DELETE POST");
+	public ModelAndView post(@RequestParam Map<String, String> params) {
+		LOG.info("DELETE POST");
 		long[] listId = DashboardRequestMapper.mapPost(params);
 		this.services.deleteComputers(listId);
+		ModelAndView maw = new ModelAndView("redirect:/access");
+		return maw;
 	}
 }

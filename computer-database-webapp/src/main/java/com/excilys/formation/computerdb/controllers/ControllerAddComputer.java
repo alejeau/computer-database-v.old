@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.computerdb.constants.Paths;
 import com.excilys.formation.computerdb.dto.problems.ProblemDto;
 import com.excilys.formation.computerdb.errors.Problem;
@@ -29,6 +32,7 @@ import com.excilys.formation.computerdb.validators.ComputerValidator;
 @Controller
 @RequestMapping("/access")
 public class ControllerAddComputer {
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl services;
@@ -41,6 +45,7 @@ public class ControllerAddComputer {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView get(@RequestParam Map<String, String> params) {
+		LOG.info("ADD GET");
 		ModelAndView maw = new ModelAndView("addComputer");
 		maw = setRequest(maw, null);
 		return maw;
@@ -54,6 +59,7 @@ public class ControllerAddComputer {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ModelAndView post(@RequestParam Map<String, String> params) {
+		LOG.info("ADD POST");
 		ModelAndView maw = new ModelAndView("addComputer");
 		List<Problem> listPbs = null;
 
