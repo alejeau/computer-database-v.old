@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main {
 	public static void main(String[] args) {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-webapp/src/main/resources/application-context.xml");
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-persistence/src/main/resources/persistence-application-context.xml");
 
 		Scanner sc = new Scanner(System.in);
 		CLI cli = context.getBean(CLI.class);

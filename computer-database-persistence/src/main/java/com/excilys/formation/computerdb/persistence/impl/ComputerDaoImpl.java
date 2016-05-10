@@ -11,8 +11,6 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.constants.Fields;
@@ -30,7 +28,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@Cacheable("computer")
 	public boolean exists(String name) {
 		Computer tmp = null;
 
@@ -116,7 +113,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@Cacheable("computer")
 	public int getNbEntries() {
 		Long nbEntries = 0L;
 		final String QUERY_TXT = "SELECT COUNT(c) FROM Computer c";
@@ -128,7 +124,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@Cacheable("computer")
 	public int getNbEntriesNamed(String name) {
 		Long nbEntries = 0L;
 		final String QUERY_TXT = "SELECT count(c) FROM Computer c WHERE c.name LIKE :name OR c.company IN (SELECT c.id FROM Company c WHERE c.name LIKE :name)";
@@ -143,13 +138,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@Cacheable("computer")
 	public List<Computer> getAll() {
 		return getAllSortedBy(Fields.NONE, true);
 	}
 
 	@Override
-	@Cacheable("computer")
 	public List<Computer> getAllSortedBy(Fields field, boolean ascending) {
 		List<Computer> list = null;
 		TypedQuery<Computer> query = null;
@@ -170,7 +163,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@Cacheable("computer")
 	public Computer getComputerById(long id) {
 		Computer computer = null;
 		TypedQuery<Computer> query = null;
@@ -183,7 +175,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		return computer;
 	}
 
-	@Cacheable("computer")
 	public Computer getComputerByName(String name) {
 		Computer computer = null;
 		TypedQuery<Computer> query = null;
@@ -203,13 +194,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	 * @return
 	 */
 	@Override
-	@CacheEvict(cacheNames="computer", allEntries=true)
 	public void createComputer(Computer computer) {
 		entityManager.persist(computer);
 	}
 
 	@Override
-	@CacheEvict(cacheNames="computer", allEntries=true)
 	public void updateComputer(Computer computer) {
 		Computer tmp = entityManager.find(Computer.class, computer.getId());
 		tmp.setName(computer.getName());
@@ -219,13 +208,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteComputer(Computer c) {
 		entityManager.remove(c);
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteComputer(long id) {
 		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
 		Query query = entityManager.createQuery(QUERY_TXT);
@@ -234,7 +221,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteComputer(String name) {
 		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.name = :name";
 		Query query = entityManager.createQuery(QUERY_TXT);
@@ -243,7 +229,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteComputers(long[] listId) {
 		final String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
 		Query query = entityManager.createQuery(QUERY_TXT);
@@ -255,7 +240,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteComputersWhereCompanyIdEquals(long id) {
 		String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
 		Query query = entityManager.createQuery(QUERY_TXT);

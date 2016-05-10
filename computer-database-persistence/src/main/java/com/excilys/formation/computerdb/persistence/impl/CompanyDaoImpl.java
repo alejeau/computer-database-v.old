@@ -11,8 +11,6 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.computerdb.model.Company;
@@ -30,7 +28,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	@Cacheable("company")
 	public int getNbEntries() {
 		final String QUERY_TXT = "SELECT COUNT(c) FROM Company c";
 		TypedQuery<Long> query = entityManager.createQuery(QUERY_TXT, Long.class);
@@ -54,7 +51,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	@Cacheable("company")
 	public List<Company> getAll() {
 		final String QUERY_TXT = "SELECT c FROM Company c ORDER BY c.name";
 		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
@@ -65,7 +61,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	@Cacheable("company")
 	public Company getCompanyById(long id) {
 		if ((id == -1l) || (id == 0L)) {
 			return null;
@@ -82,7 +77,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	@Cacheable(cacheNames="company", key="#name")
 	public Company getCompanyByName(String name) {
 		final String QUERY_TXT = "SELECT c FROM Company c WHERE c.name = :name";
 
@@ -96,7 +90,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	@CacheEvict(cacheNames="company", allEntries=true)
 	public void deleteCompany(long id) {
 		LOG.info("Company deletion: \"DELETE FROM Company WHERE id = " + id + "\"");
 		final String QUERY_TXT = "DELETE FROM Company c WHERE c.id = :id";
