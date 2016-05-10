@@ -26,13 +26,13 @@
 
 		<!-- Project version -->
 		<release.type>RELEASE</release.type>
-		<computer-database.version>4.6.4-${release.type}</computer-database.version>
-		<computer-database.core.version>1.1.0-${release.type}</computer-database.core.version>
-		<computer-database.binding.version>1.1.0-${release.type}</computer-database.binding.version>
-		<computer-database.persistence.version>1.1.0-${release.type}</computer-database.persistence.version>
-		<computer-database.service.version>1.1.0-${release.type}</computer-database.service.version>
-		<computer-database.webapp.version>1.1.0-${release.type}</computer-database.webapp.version>
-		<computer-database.console.version>1.1.0-${release.type}</computer-database.console.version>
+		<computer-database.version>4.7.1-${release.type}</computer-database.version>
+		<computer-database.core.version>1.2.0-${release.type}</computer-database.core.version>
+		<computer-database.binding.version>1.2.0-${release.type}</computer-database.binding.version>
+		<computer-database.persistence.version>1.2.0-${release.type}</computer-database.persistence.version>
+		<computer-database.service.version>1.2.0-${release.type}</computer-database.service.version>
+		<computer-database.webapp.version>1.2.0-${release.type}</computer-database.webapp.version>
+		<computer-database.console.version>1.2.0-${release.type}</computer-database.console.version>
 
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
@@ -53,9 +53,6 @@
 		<!-- spring -->
 		<spring.version>4.2.6.RELEASE</spring.version>
 		<spring.security.version>4.1.0.RELEASE</spring.security.version>
-		<!-- echcache -->
-		<spring.ehcache.version>5.1.0.Final</spring.ehcache.version>
-		<ehcache.version>2.10.2</ehcache.version>
 
 		<!-- persistence -->
 		<hibernate.core.version>5.1.0.Final</hibernate.core.version>
@@ -174,17 +171,6 @@
 				<artifactId>hibernate-java8</artifactId>
 				<version>${hibernate.core.version}</version>
 			</dependency>
-			<!-- Cache manager -->
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-ehcache</artifactId>
-				<version>${spring.ehcache.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.sf.ehcache</groupId>
-				<artifactId>ehcache</artifactId>
-				<version>${ehcache.version}</version>
-			</dependency>
 
 			<!-- runtime -->
 			<dependency>
@@ -214,6 +200,18 @@
 				<artifactId>selenium-firefox-driver</artifactId>
 				<version>${selenium.version}</version>
 				<scope>test</scope>
+			</dependency>
+
+			<!-- Spring Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -295,54 +293,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-		</dependency>
-		<!-- Cache manager -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-
-		<!-- Spring Security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>${spring.security.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<version>${spring.security.version}</version>
-		</dependency>
 	</dependencies>
-
-
 	<url>https://github.com/alejeau/computer-database</url>
 
 </project>
