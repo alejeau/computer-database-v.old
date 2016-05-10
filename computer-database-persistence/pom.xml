@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.excilys.formation.computerdb</groupId>
@@ -11,18 +12,18 @@
 	<artifactId>computer-database-persistence</artifactId>
 	<version>${computer-database.persistence.version}</version>
 	<name>computer-database-persistence</name>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<dependencies>
 		<!-- project's core -->
 		<dependency>
 			<groupId>com.excilys.formation.computerdb.core</groupId>
 			<artifactId>computer-database-core</artifactId>
 		</dependency>
-	
+
 		<!-- connection manager -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
@@ -42,6 +43,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
 		</dependency>
+		<!-- Cache manager -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+		</dependency>
+
 
 		<!-- runtime -->
 		<dependency>
