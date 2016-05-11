@@ -20,6 +20,26 @@ public class ComputerDto {
 	protected String outro;
 	protected String company;
 
+	public ComputerDto() {
+	}
+
+	/**
+	 * Creates a lighter Computer version with only Company name instead of a Company.<br>
+	 * If any field other than computer name is empty, it will be set to null.
+	 * 
+	 * @param c the Computer to convert
+	 */
+	public ComputerDto(Computer c) {
+		LocalDate i = c.getIntro(), o = c.getOutro();
+		Company cy = c.getCompany();
+
+		this.id = c.getId();
+		this.name = c.getName();
+		this.intro = (i != null) ? (i.toString()) : null;
+		this.outro = (o != null) ? (o.toString()) : null;
+		this.company = (cy != null) ? (cy.getName()) : null;
+	}
+	
 	/**
 	 * Creates a lighter Computer version with only Company name instead of a Company.
 	 * 
@@ -94,6 +114,12 @@ public class ComputerDto {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+
+	@Override
+	public String toString() {
+		return "ComputerDto [id=" + id + ", name=" + name + ", intro=" + intro + ", outro=" + outro + ", company="
+				+ company + "]";
 	}
 
 	public static class ComputerDTOBuilder {

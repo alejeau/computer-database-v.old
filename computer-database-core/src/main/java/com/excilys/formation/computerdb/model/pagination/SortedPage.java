@@ -94,7 +94,6 @@ public class SortedPage<T> extends Page<T> {
 
 		public Builder<T> page(List<T> list) {
 			this.nestedPage = new LinkedList<T>(list);
-			this.nestedPage.size();
 			return this;
 		}
 

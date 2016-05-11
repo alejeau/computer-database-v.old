@@ -7,6 +7,10 @@ import com.excilys.formation.computerdb.model.Company;
 
 public interface CompanyDao {
 
+	public boolean exists(String name);
+
+	public boolean exists(Company c);
+
 	/**
 	 * Returns a list of all the Companies in the database
 	 * 

@@ -2,6 +2,7 @@ package com.excilys.formation.computerdb.service;
 
 import java.util.List;
 
+import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -10,7 +11,14 @@ import com.excilys.formation.computerdb.model.pagination.SearchPage;
 import com.excilys.formation.computerdb.model.pagination.SortedPage;
 
 public interface ComputerDatabaseService {
-	boolean alreadyExists(String name);
+	
+	boolean existsCompany(String name);
+	
+	boolean existsCompany(Company c);
+	
+	boolean existsComputer(String name);
+	
+	boolean existsComputer(Computer c);
 
 	int getNbCompanies();
 
@@ -31,6 +39,26 @@ public interface ComputerDatabaseService {
 	Page<Company> getCompanyPage(int pageNumber, Page<Company> p);
 
 	Page<Computer> getAllComputers();
+
+	/**
+	 * Returns a List of Computer.
+	 * 
+	 * @param offset the start of the list
+	 * @param limit the end of the list
+	 * @return a List<Computer> which size is limit-offset
+	 */
+	List<Computer> getComputerList(int offset, int limit);
+
+	/**
+	 * Returns a List of Computer sorted by filed and ascending.
+	 * 
+	 * @param offset the start of the list
+	 * @param limit the end of the list
+	 * @param field the sorting field
+	 * @param ascending whether the sort is ascending or not
+	 * @return a List<Computer> which size is limit-offset sorted
+	 */
+	List<Computer> getComputerSortedList(int offset, int limit, Fields field, boolean ascending);
 
 	/**
 	 * Returns a SortedPage of Computer.
@@ -81,6 +109,8 @@ public interface ComputerDatabaseService {
 	 */
 	List<Problem> createComputer(long id, String name, String intro, String outro, Company comp);
 
+	void updateComputer(Computer c);
+	
 	/**
 	 * Update a computer. The name of the previous computer is required in order to check whether
 	 * the computer's new name is already taken or not.
@@ -105,4 +135,16 @@ public interface ComputerDatabaseService {
 	 * @param c the company to remove from the database
 	 */
 	void deleteCompany(Company c);
+
+	List<Company> listAllCompanies();
+
+	List<Computer> listAllComputers();
+
+	List<Company> getCompanyList(int offset, int limit);
+
+	List<Computer> getComputerSearchList(String keyword, int pageNumber, int objectPerPages);
+
+	List<Computer> getComputerSearchList(String keyword, int offset, int limit, Fields field, boolean ascending);
+
+	void deleteCompany(long id);
 }
