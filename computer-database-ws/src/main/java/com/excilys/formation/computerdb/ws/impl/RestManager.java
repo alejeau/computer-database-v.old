@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.controllers.rest;
+package com.excilys.formation.computerdb.ws.impl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +26,9 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 @RequestMapping("")
 public class RestManager {
 	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	ComputerDatabaseServiceImpl service;
-
 
 	public RestManager() {
 	}
@@ -39,7 +38,7 @@ public class RestManager {
 	 */
 	@RequestMapping(value = "/computers/all", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listAllComputers() {
-		List<Computer> tmp = service.listAllComputers(); 
+		List<Computer> tmp = service.listAllComputers();
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -48,8 +47,7 @@ public class RestManager {
 	 * Displays a list of Computer by pages
 	 */
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listComputerPage(
-			@PathVariable("pageNumber") int pageNumber,
+	public ResponseEntity<List<ComputerDto>> listComputerPage(@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
 		List<Computer> tmp = service.getComputerList(offset, objectPerPage);
@@ -61,17 +59,15 @@ public class RestManager {
 	 * Displays a list of Computer by pages
 	 */
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}/{field}/{ascending}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listComputerSortedPage(
-			@PathVariable("pageNumber") int pageNumber,
-			@PathVariable("objectPerPage") int objectPerPage,
-			@PathVariable("field") String stringField,
+	public ResponseEntity<List<ComputerDto>> listComputerSortedPage(@PathVariable("pageNumber") int pageNumber,
+			@PathVariable("objectPerPage") int objectPerPage, @PathVariable("field") String stringField,
 			@PathVariable("ascending") boolean ascending) {
 		List<Computer> tmp;
 		int offset = pageNumber * objectPerPage;
-		
+
 		// Converting stringField into an actual Fields
 		Fields field = toFields(stringField);
-		
+
 		tmp = service.getComputerSortedList(offset, objectPerPage, field, ascending);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
@@ -88,8 +84,7 @@ public class RestManager {
 	 * Displays a list of Company by pages
 	 */
 	@RequestMapping(value = "/companies/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
-	public ResponseEntity<List<Company>> listCompanyPage(
-			@PathVariable("pageNumber") int pageNumber,
+	public ResponseEntity<List<Company>> listCompanyPage(@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
 		List<Company> list = service.getCompanyList(offset, objectPerPage);
@@ -97,23 +92,18 @@ public class RestManager {
 	}
 
 	@RequestMapping(value = "/computers/search/{keyword}/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listCompanySearch(
-			@PathVariable("keyword") String keyword,
-			@PathVariable("pageNumber") int pageNumber,
-			@PathVariable("objectPerPage") int objectPerPage) {
+	public ResponseEntity<List<ComputerDto>> listCompanySearch(@PathVariable("keyword") String keyword,
+			@PathVariable("pageNumber") int pageNumber, @PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
 		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
-	
+
 	@RequestMapping(value = "/computers/search/{keyword}/{pageNumber}/{objectPerPage}/{field}/{ascending}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listCompanySortedSearch(
-			@PathVariable("keyword") String keyword,
-			@PathVariable("pageNumber") int pageNumber,
-			@PathVariable("objectPerPage") int objectPerPage,
-			@PathVariable("field") String stringField,
-			@PathVariable("ascending") boolean ascending) {
+	public ResponseEntity<List<ComputerDto>> listCompanySortedSearch(@PathVariable("keyword") String keyword,
+			@PathVariable("pageNumber") int pageNumber, @PathVariable("objectPerPage") int objectPerPage,
+			@PathVariable("field") String stringField, @PathVariable("ascending") boolean ascending) {
 		int offset = pageNumber * objectPerPage;
 		Fields field = toFields(stringField);
 		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage, field, ascending);
@@ -149,10 +139,10 @@ public class RestManager {
 		LOG.info("REST CREATE POST");
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		List<Problem> pbs = new LinkedList<>();
-		
+
 		String name = cdto.getName();
 		String companyName = cdto.getCompany();
-		
+
 		if (service.existsComputer(name)) {
 			pbs.add(new Problem(Fields.NAME.toString(), "A computer with such a name already exists"));
 		} else if ((companyName != null) && !service.existsCompany(companyName)) {
@@ -166,7 +156,7 @@ public class RestManager {
 				status = HttpStatus.CREATED;
 			}
 		}
-		
+
 		return new ResponseEntity<List<Problem>>(pbs, status);
 	}
 
@@ -179,14 +169,19 @@ public class RestManager {
 		Computer ori = service.getComputerById(cdto.getId());
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		Problem pb = null;
-		
+
 		String name = cdto.getName();
 		String companyName = cdto.getCompany();
-		
+
 		// If new name is already taken
 		if (!name.equals(ori.getName()) && service.existsComputer(name)) {
 			pb = new Problem(Fields.NAME.toString(), "A computer with such a name already exists");
-		} else if ((companyName != null) && !service.existsCompany(companyName)) { // If the company does not exists
+		} else if ((companyName != null) && !service.existsCompany(companyName)) { // If
+																					// the
+																					// company
+																					// does
+																					// not
+																					// exists
 			pb = new Problem(Fields.COMPANY.toString(), "No company with such a name exists.");
 		} else {
 			String intro = cdto.getIntro();
@@ -196,7 +191,7 @@ public class RestManager {
 			service.updateComputer(c);
 			status = HttpStatus.CREATED;
 		}
-		
+
 		return new ResponseEntity<Problem>(pb, status);
 	}
 
@@ -208,17 +203,17 @@ public class RestManager {
 		LOG.info("REST DELETE COMPUTER");
 		Computer c = null;
 		c = service.getComputerById(id);
-		
+
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String pb = null;
-		
+
 		if (c == null) {
 			pb = "No such Computer exists!";
 		} else {
 			service.deleteComputer(id);
 			status = HttpStatus.OK;
 		}
-		
+
 		return new ResponseEntity<String>(pb, status);
 	}
 
@@ -230,21 +225,20 @@ public class RestManager {
 		LOG.info("REST DELETE COMPANY");
 		Company c = null;
 		c = service.getCompanyById(id);
-		
+
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String pb = null;
-		
+
 		if (c == null) {
 			pb = "No such Company exists!";
 		} else {
 			service.deleteCompany(id);
 			status = HttpStatus.OK;
 		}
-		
+
 		return new ResponseEntity<String>(pb, status);
 	}
 
-	
 	protected static Fields toFields(String f) {
 		// Converting stringField into an actual Fields
 		Fields field = Fields.NAME;

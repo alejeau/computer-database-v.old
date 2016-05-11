@@ -18,6 +18,7 @@
 		<module>computer-database-service</module>
 		<module>computer-database-webapp</module>
 		<module>computer-database-console</module>
+		<module>computer-database-ws</module>
 	</modules>
 
 	<properties>
@@ -33,6 +34,7 @@
 		<computer-database.service.version>1.2.0-${release.type}</computer-database.service.version>
 		<computer-database.webapp.version>1.2.0-${release.type}</computer-database.webapp.version>
 		<computer-database.console.version>1.2.0-${release.type}</computer-database.console.version>
+		<computer-database.ws.version>1.2.0-${release.type}</computer-database.ws.version>
 
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
