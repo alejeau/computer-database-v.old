@@ -18,6 +18,7 @@
 		<module>computer-database-service</module>
 		<module>computer-database-webapp</module>
 		<module>computer-database-console</module>
+		<module>computer-database-ws</module>
 	</modules>
 
 	<properties>
@@ -33,6 +34,7 @@
 		<computer-database.service.version>1.2.0-${release.type}</computer-database.service.version>
 		<computer-database.webapp.version>1.2.0-${release.type}</computer-database.webapp.version>
 		<computer-database.console.version>1.2.0-${release.type}</computer-database.console.version>
+		<computer-database.ws.version>1.2.0-${release.type}</computer-database.ws.version>
 
 		<!-- plugin -->
 		<surefire.version>2.19.1</surefire.version>
@@ -59,6 +61,9 @@
 		<!-- Validators -->
 		<hibernate.version>5.2.4.Final</hibernate.version>
 		<commonsValidator.version>1.4.0</commonsValidator.version>
+
+		<!-- Jackson -->
+		<jackson.version>2.7.4</jackson.version>
 
 		<!-- runtime -->
 		<mysql.version>5.1.38</mysql.version>
@@ -146,6 +151,15 @@
 				<artifactId>computer-database-persistence</artifactId>
 				<version>${computer-database.persistence.version}</version>
 			</dependency>
+
+			<!-- Console dependencies -->
+			<!-- Jackson -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
 
 			<!-- Persistence dependencies -->
 			<!-- connection manager -->

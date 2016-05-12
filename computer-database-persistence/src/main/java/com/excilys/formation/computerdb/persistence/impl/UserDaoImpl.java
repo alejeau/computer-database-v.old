@@ -29,7 +29,6 @@ public class UserDaoImpl implements UserDao {
 
 		User u = null;
 		u = query.getSingleResult();
-
 		return u;
 	}
 

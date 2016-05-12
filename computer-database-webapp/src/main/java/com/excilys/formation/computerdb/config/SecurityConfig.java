@@ -33,15 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 			.loginPage("/login")
 			.permitAll()
-//		    .loginProcessingUrl("/j_spring_security_check")
 		    .loginProcessingUrl("/login")
 		    .usernameParameter("username")
 		    .passwordParameter("password")
 			.defaultSuccessUrl("/access")
 		.and()
 		    .logout()
-//		    .logoutSuccessUrl("/login?logout");
-		    .permitAll();
+		    .permitAll()
+	  	.and()
+	  		.csrf().disable();
 	}
 	
 	@Bean

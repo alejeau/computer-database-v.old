@@ -29,23 +29,34 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public boolean exists(String name) {
-		Computer tmp = null;
+		List<Computer> tmp = null;
 
-		final String QUERY_TXT = "SELECT c FROM Computer WHERE c.name = :name ORDER BY c.name;";
+		final String QUERY_TXT = "SELECT c FROM Computer c WHERE c.name = :name";
 		TypedQuery<Computer> query = entityManager.createQuery(QUERY_TXT, Computer.class);
 		query.setParameter("name", name);
-		tmp = query.getSingleResult();
+		tmp = query.getResultList();
 
-		if (tmp != null) {
-			return true;
+		if (tmp.isEmpty()) {
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean exists(Computer computer) {
-		throw new UnsupportedOperationException();
+	public boolean exists(Computer c) {
+		List<Computer> tmp = null;
+
+		final String QUERY_TXT = "SELECT c FROM Computer c WHERE c.id = :id";
+		TypedQuery<Computer> query = entityManager.createQuery(QUERY_TXT, Computer.class);
+		query.setParameter("id", c.getId());
+		tmp = query.getResultList();
+
+		if (tmp.isEmpty()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -83,7 +94,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public List<Computer> getFromTo(int offset, int limit) {
-		return getFromToSortedBy(offset, limit, Fields.NONE, true);
+		return getFromToSortedBy(offset, limit, Fields.NONE, false);
 	}
 
 	@Override
@@ -153,7 +164,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			if (field == Fields.COMPANY) {
 				query_txt += " LEFT JOIN company on computer.company_id=company.id";
 			}
-			query_txt += " ORDER BY " + field.toString() + " " + order + ";";
+			query_txt += " ORDER BY " + field.toString() + " " + order;
 		}
 
 		query = entityManager.createQuery(query_txt, Computer.class);

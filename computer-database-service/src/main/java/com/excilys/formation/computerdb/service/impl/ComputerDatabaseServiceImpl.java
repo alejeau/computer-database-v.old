@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
@@ -27,7 +28,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	private ComputerDaoImpl computerDaoImpl;
 
 	@Autowired
-	private CompanyDaoImpl companyDAOImpl;
+	private CompanyDaoImpl companyDaoImpl;
 
 	protected final Logger logger = LoggerFactory.getLogger(ComputerDatabaseServiceImpl.class);
 
@@ -35,13 +36,28 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 	
 	@Override
-	public boolean alreadyExists(String name) {
+	public boolean existsCompany(String name) {
+		return this.companyDaoImpl.exists(name);
+	}
+	
+	@Override
+	public boolean existsCompany(Company c) {
+		return this.companyDaoImpl.exists(c);
+	}
+	
+	@Override
+	public boolean existsComputer(String name) {
 		return this.computerDaoImpl.exists(name);
+	}
+	
+	@Override
+	public boolean existsComputer(Computer c) {
+		return this.computerDaoImpl.exists(c);
 	}
 
 	@Override
 	public int getNbCompanies() {
-		return companyDAOImpl.getNbEntries();
+		return companyDaoImpl.getNbEntries();
 	}
 
 	@Override
@@ -57,12 +73,12 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	public Company getCompanyById(Long id) {
-		return companyDAOImpl.getCompanyById(id);
+		return companyDaoImpl.getCompanyById(id);
 	}
 
 	@Override
 	public Company getCompanyByName(String name) {
-		return companyDAOImpl.getCompanyByName(name);
+		return companyDaoImpl.getCompanyByName(name);
 	}
 
 	@Override
@@ -76,10 +92,22 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	public List<Company> listAllCompanies() {
+		List<Company> list = companyDaoImpl.getAll();
+		return list;
+	}
+
+	@Override
 	public Page<Company> getAllCompanies() {
-		List<Company> list = companyDAOImpl.getAll();
+		List<Company> list = companyDaoImpl.getAll();
 		int len = list.size();
 		return new Page<Company>(list, 1, 1, len, len);
+	}
+
+	@Override
+	public List<Computer> listAllComputers() {
+		List<Computer> list = computerDaoImpl.getAll();
+		return list;
 	}
 
 	@Override
@@ -90,13 +118,31 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 	}
 
 	@Override
+	public List<Company> getCompanyList(int offset, int limit) {
+		List<Company> list = companyDaoImpl.getFromTo(offset, limit);
+		return list;
+	}
+
+	@Override
 	public Page<Company> getCompanyPage(int pageNumber, Page<Company> p) {
 		int nbEntries = computerDaoImpl.getNbEntries();
-		List<Company> list = companyDAOImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
+		List<Company> list = companyDaoImpl.getFromTo(pageNumber * p.getObjectsPerPages(), p.getObjectsPerPages());
 		p.setPage(list);
 		p.setCurrentPageNumber(pageNumber);
 		p.setNbEntries(nbEntries);
 		return p;
+	}
+
+	@Override
+	public List<Computer> getComputerList(int offset, int limit) {
+		List<Computer> list = computerDaoImpl.getFromTo(offset, limit);
+		return list;
+	}
+
+	@Override
+	public List<Computer> getComputerSortedList(int offset, int limit, Fields field, boolean ascending) {
+		List<Computer> list = computerDaoImpl.getFromToSortedBy(offset, limit, field, ascending);
+		return list;
 	}
 
 	@Override
@@ -109,6 +155,21 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 		sp.setPage(list);
 
 		return sp;
+	}
+
+	@Override
+	public List<Computer> getComputerSearchList(String keyword, int offset, int limit) {
+		List<Computer> list = computerDaoImpl.getNamedFromToSortedBy(keyword,
+				offset, limit, Fields.NONE, true);
+		
+		return list;
+	}
+
+	@Override
+	public List<Computer> getComputerSearchList(String keyword, int offset, int limit, Fields field, boolean ascending) {
+		List<Computer> list = computerDaoImpl.getNamedFromToSortedBy(keyword, offset, limit, field, ascending);
+		
+		return list;
 	}
 
 	@Override
@@ -163,6 +224,12 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	@Transactional
+	public void updateComputer(Computer computer) {
+			this.computerDaoImpl.updateComputer(computer);
+	}
+
+	@Override
+	@Transactional
 	public List<Problem> updateComputer(Computer computer, String oldName) {
 		List<Problem> listErrors = ComputerValidator.validateNewComputer(computer, oldName);
 
@@ -209,6 +276,22 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 
 	@Override
 	@Transactional
+	public void deleteCompany(long id) {
+		logger.debug("Starting company \"" + id + "\" deletion and all the related computers...");
+		try {
+			computerDaoImpl.deleteComputersWhereCompanyIdEquals(id);
+			companyDaoImpl.deleteCompany(id);
+		} catch (Exception e) {
+			logger.error("Couldn't commit the changes!");
+			logger.error(e.getMessage());
+			throw new RuntimeException("Couldn't commit the changes!");
+		}
+
+		logger.debug("Deletion of company \"" + id + "\" its related computers done.");
+	}
+
+	@Override
+	@Transactional
 	public void deleteCompany(Company c) {
 		logger.debug("Starting company \"" + c.getName() + "\" deletion and all the related computers...");
 
@@ -216,7 +299,7 @@ public class ComputerDatabaseServiceImpl implements ComputerDatabaseService {
 			long id = c.getId();
 			try {
 				computerDaoImpl.deleteComputersWhereCompanyIdEquals(id);
-				companyDAOImpl.deleteCompany(id);
+				companyDaoImpl.deleteCompany(id);
 			} catch (Exception e) {
 				logger.error("Couldn't commit the changes!");
 				logger.error(e.getMessage());

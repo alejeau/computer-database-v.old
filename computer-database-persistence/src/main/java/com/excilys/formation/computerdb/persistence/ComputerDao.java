@@ -17,7 +17,7 @@ public interface ComputerDao {
 	boolean exists(String name);
 
 	/**
-	 * Checks whether a Computer exists.
+	 * Checks whether a Computer exists. The computer MUST HAVE a valid ID.
 	 * 
 	 * @param computer the Computer to check
 	 * @return true if the computer exists, false else.

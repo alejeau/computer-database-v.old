@@ -28,6 +28,38 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
+	public boolean exists(String name) {
+		List<Company> tmp = null;
+
+		final String QUERY_TXT = "SELECT c FROM Company c WHERE c.name = :name";
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
+		query.setParameter("name", name);
+		tmp = query.getResultList();
+
+		if (tmp.isEmpty()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean exists(Company c) {
+		List<Company> tmp = null;
+
+		final String QUERY_TXT = "SELECT c FROM Company c WHERE c.id = :id";
+		TypedQuery<Company> query = entityManager.createQuery(QUERY_TXT, Company.class);
+		query.setParameter("id", c.getId());
+		tmp = query.getResultList();
+
+		if (tmp.isEmpty()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
 	public int getNbEntries() {
 		final String QUERY_TXT = "SELECT COUNT(c) FROM Company c";
 		TypedQuery<Long> query = entityManager.createQuery(QUERY_TXT, Long.class);

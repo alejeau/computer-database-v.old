@@ -301,7 +301,7 @@ public class CLI {
 		if (c != null) {
 			System.out.println(c.toString());
 		} else {
-			System.out.println("The specicified computer does not exists!");
+			System.out.println("The specified computer does not exists!");
 		}
 	}
 
