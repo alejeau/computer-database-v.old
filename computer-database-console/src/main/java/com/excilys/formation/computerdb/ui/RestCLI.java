@@ -434,11 +434,6 @@ public class RestCLI {
 		
 		return null;
 	}
-	
-	private void delObject(String url) {
-		this.services = client.target(BASE_URL + url);
-		this.services.request().delete();
-	}
 
 	
 	private <T> List<T> getObjectList(String url, Class<T> type) {
@@ -452,6 +447,19 @@ public class RestCLI {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Class to represent a Generic List of T.
+	 *  
+	 * @author Aurélien LEJEAU
+	 *
+	 * @param <T> the List type 
+	 */
+	private class GenericList<T> extends GenericType<List<T>> {
+		public GenericList(){
+			super();
+		}
 	}
 	
 	private boolean addComputer(String url, ComputerDto cdto) {
@@ -482,17 +490,9 @@ public class RestCLI {
 		return false;
 	}
 	
-	/**
-	 * Class to represent a Generic List of T.
-	 *  
-	 * @author Aurélien LEJEAU
-	 *
-	 * @param <T> the List type 
-	 */
-	private class GenericList<T> extends GenericType<List<T>> {
-		public GenericList(){
-			super();
-		}
+	private void delObject(String url) {
+		this.services = client.target(BASE_URL + url);
+		this.services.request().delete();
 	}
 	
 	public static void main(String[] args) {
