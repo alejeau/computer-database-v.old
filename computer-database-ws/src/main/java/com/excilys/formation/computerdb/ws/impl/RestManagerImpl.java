@@ -21,21 +21,20 @@ import com.excilys.formation.computerdb.mapper.model.ComputerDtoMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
+import com.excilys.formation.computerdb.ws.rest.RestManager;
 
 @RestController
 @RequestMapping("")
-public class RestManager {
+public class RestManagerImpl implements RestManager {
 	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	ComputerDatabaseServiceImpl service;
 
-	public RestManager() {
+	public RestManagerImpl() {
 	}
 
-	/**
-	 * Displays the list of all Computer or Companies
-	 */
+	@Override
 	@RequestMapping(value = "/computers/all", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listAllComputers() {
 		List<Computer> tmp = service.listAllComputers();
@@ -43,11 +42,10 @@ public class RestManager {
 		return listResponse(list);
 	}
 
-	/**
-	 * Displays a list of Computer by pages
-	 */
+	@Override
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listComputerPage(@PathVariable("pageNumber") int pageNumber,
+	public ResponseEntity<List<ComputerDto>> listComputerPage(
+			@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
 		List<Computer> tmp = service.getComputerList(offset, objectPerPage);
@@ -55,12 +53,12 @@ public class RestManager {
 		return listResponse(list);
 	}
 
-	/**
-	 * Displays a list of Computer by pages
-	 */
+	@Override
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}/{field}/{ascending}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listComputerSortedPage(@PathVariable("pageNumber") int pageNumber,
-			@PathVariable("objectPerPage") int objectPerPage, @PathVariable("field") String stringField,
+	public ResponseEntity<List<ComputerDto>> listComputerSortedPage(
+			@PathVariable("pageNumber") int pageNumber,
+			@PathVariable("objectPerPage") int objectPerPage,
+			@PathVariable("field") String stringField,
 			@PathVariable("ascending") boolean ascending) {
 		List<Computer> tmp;
 		int offset = pageNumber * objectPerPage;
@@ -73,6 +71,7 @@ public class RestManager {
 		return listResponse(list);
 	}
 
+	@Override
 	@RequestMapping(value = "/companies/all", method = RequestMethod.GET)
 	public ResponseEntity<List<Company>> listAllCompanies() {
 		List<Company> list = null;
@@ -80,9 +79,7 @@ public class RestManager {
 		return listResponse(list);
 	}
 
-	/**
-	 * Displays a list of Company by pages
-	 */
+	@Override
 	@RequestMapping(value = "/companies/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
 	public ResponseEntity<List<Company>> listCompanyPage(@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
@@ -91,19 +88,26 @@ public class RestManager {
 		return listResponse(list);
 	}
 
+	@Override
 	@RequestMapping(value = "/computers/search/{keyword}/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listCompanySearch(@PathVariable("keyword") String keyword,
-			@PathVariable("pageNumber") int pageNumber, @PathVariable("objectPerPage") int objectPerPage) {
+	public ResponseEntity<List<ComputerDto>> listCompanySearch(
+			@PathVariable("keyword") String keyword,
+			@PathVariable("pageNumber") int pageNumber,
+			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
 		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
 
+	@Override
 	@RequestMapping(value = "/computers/search/{keyword}/{pageNumber}/{objectPerPage}/{field}/{ascending}", method = RequestMethod.GET)
-	public ResponseEntity<List<ComputerDto>> listCompanySortedSearch(@PathVariable("keyword") String keyword,
-			@PathVariable("pageNumber") int pageNumber, @PathVariable("objectPerPage") int objectPerPage,
-			@PathVariable("field") String stringField, @PathVariable("ascending") boolean ascending) {
+	public ResponseEntity<List<ComputerDto>> listCompanySortedSearch(
+			@PathVariable("keyword") String keyword,
+			@PathVariable("pageNumber") int pageNumber,
+			@PathVariable("objectPerPage") int objectPerPage,
+			@PathVariable("field") String stringField,
+			@PathVariable("ascending") boolean ascending) {
 		int offset = pageNumber * objectPerPage;
 		Fields field = toFields(stringField);
 		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage, field, ascending);
@@ -111,9 +115,7 @@ public class RestManager {
 		return listResponse(list);
 	}
 
-	/**
-	 * Displays the infos of the desired computer
-	 */
+	@Override
 	@RequestMapping(value = "/computer/name/{name}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerByName(@PathVariable("name") String name) {
 		Computer c = service.getComputerByName(name);
@@ -121,9 +123,7 @@ public class RestManager {
 		return response(cdto);
 	}
 
-	/**
-	 * Displays the infos of the desired computer
-	 */
+	@Override
 	@RequestMapping(value = "/computer/id/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerById(@PathVariable("id") long id) {
 		Computer c = service.getComputerById(id);
@@ -131,9 +131,7 @@ public class RestManager {
 		return response(cdto);
 	}
 
-	/**
-	 * Creates a computer
-	 */
+	@Override
 	@RequestMapping(value = "/computer/add", method = RequestMethod.POST)
 	public ResponseEntity<List<Problem>> createComputer(@RequestBody ComputerDto cdto) {
 		LOG.info("REST CREATE POST");
@@ -160,9 +158,7 @@ public class RestManager {
 		return new ResponseEntity<List<Problem>>(pbs, status);
 	}
 
-	/**
-	 * Updates a given computer
-	 */
+	@Override
 	@RequestMapping(value = "/computer/update", method = RequestMethod.PUT)
 	public ResponseEntity<Problem> updateComputer(@RequestBody ComputerDto cdto) {
 		LOG.info("REST UPDATE PUT");
@@ -195,9 +191,7 @@ public class RestManager {
 		return new ResponseEntity<Problem>(pb, status);
 	}
 
-	/**
-	 * Deletes a given computer
-	 */
+	@Override
 	@RequestMapping(value = "/computer/del/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteComputer(@PathVariable("id") long id) {
 		LOG.info("REST DELETE COMPUTER");
@@ -217,9 +211,7 @@ public class RestManager {
 		return new ResponseEntity<String>(pb, status);
 	}
 
-	/**
-	 * Deletes a given computer
-	 */
+	@Override
 	@RequestMapping(value = "/company/del/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteCompany(@PathVariable("id") long id) {
 		LOG.info("REST DELETE COMPANY");
