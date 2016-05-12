@@ -17,18 +17,12 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import com.excilys.formation.computerdb.constants.Fields;
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
+import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
-import com.excilys.formation.computerdb.model.Computer;
-import com.excilys.formation.computerdb.model.pagination.Page;
-import com.excilys.formation.computerdb.model.pagination.SortedPage;
-import com.excilys.formation.computerdb.ui.pager.CompanyPager;
-import com.excilys.formation.computerdb.ui.pager.SortedPageComputer;
 
 
 @Controller
@@ -36,22 +30,10 @@ public class RestCLI {
 	public static final String COMPUTER = "computer";
 	public static final String COMPANY = "company";
 	public static final String TIMESTAMP_ZERO = "0000-00-00";
-	public static final String BASE_URL = "http://localhost:8080/computer-database";
-	
-	
-
-	@Autowired
-	SortedPageComputer spc;
-
-	@Autowired
-	CompanyPager cpager;
+	public static final String BASE_URL = "http://localhost:8080/computer-database-ws/rest";
 
 	protected Scanner sc = null;
 	protected int choice = -1;
-	protected SortedPage<Computer> computerSortedPage = null;
-	protected Page<Company> companyPage = null;
-	protected List<Computer> computerList = null;
-	protected List<Company> companyList = null;
 	protected ClientConfig config = null;
 	protected Client client = null;
 	protected WebTarget services = null;
@@ -69,28 +51,10 @@ public class RestCLI {
 		client = ClientBuilder.newClient(config);
 		services = client.target(getBaseURI());
 		
-		int objectsPerPage = 10;
 		if (this.services == null) {
 			System.out.println("this.service is null");
 			throw new RuntimeException("this.service is null");
 		}
-		
-		int nbEntries = getObject("/computers/total", Integer.class);
-		
-		int mpn = maxPageNumber(objectsPerPage, nbEntries);
-		this.computerSortedPage = new SortedPage<>(null, 0, mpn, objectsPerPage, nbEntries, Fields.NAME, true);
-
-		nbEntries = getObject("/companies/total", Integer.class);
-		mpn = maxPageNumber(objectsPerPage, nbEntries);
-		companyPage = new Page<>(companyList, 0, mpn, objectsPerPage, nbEntries);
-	}
-
-	protected int maxPageNumber(int objectsPerPage, int nbEntries) {
-		int maxPageNumber = -1;
-		double opp = (double) objectsPerPage;
-		double nbe = (double) nbEntries;
-		maxPageNumber = (int) Math.ceil(nbe / opp);
-		return maxPageNumber;
 	}
 
 	/**
@@ -188,7 +152,7 @@ public class RestCLI {
 	 */
 	protected void displayAllComputers() {
 		List<ComputerDto> list = null;
-		list = getObjectList("/computers/all", ComputerDto.class);
+		list = getCDTOList("/computers/all");
 		
 		for (ComputerDto c : list) {
 			System.out.println(c.toString());
@@ -201,10 +165,10 @@ public class RestCLI {
 	protected void displayComputersByPages() {
 		String[] params = getPage();
 
-		final String URL = new StringBuilder("/computers/page").append(params[0]).append(params[1]).toString();
+		final String URL = createUrl("/computers/page", params);
 		
 		List<ComputerDto> list = null;
-		list = getObjectList(URL, ComputerDto.class);
+		list = getCDTOList(URL);
 		
 		for (ComputerDto c : list) {
 			System.out.println(c.toString());
@@ -213,7 +177,7 @@ public class RestCLI {
 
 	protected void displayAllCompanies() {
 		List<Company> list = null;
-		list = getObjectList("/companies/all", Company.class);
+		list = getCompanyList("/companies/all");
 		
 		for (Company c : list) {
 			System.out.println(c.toString());
@@ -229,7 +193,7 @@ public class RestCLI {
 		final String URL = createUrl("/companies/page", params);
 		
 		List<Company> list = null;
-		list = getObjectList(URL, Company.class);
+		list = getCompanyList(URL);
 		
 		for (Company c : list) {
 			System.out.println(c.toString());
@@ -332,15 +296,16 @@ public class RestCLI {
 
 		System.out.println("Please enter computer computer introduction date (YYYY-MM-DD) :");
 		infos[1] = sc.nextLine();
-		infos[1] = RestCLI.validateDate(infos[1]);
+		infos[1] = (infos[1].equals("")) ? null : RestCLI.validateDate(infos[1]);
 
 		System.out.println("Please enter computer computer discontinuation date (YYYY-MM-DD) :");
 		infos[2] = sc.nextLine();
-		infos[2] = RestCLI.validateDate(infos[2]);
+		infos[2] = (infos[2].equals("")) ? null : RestCLI.validateDate(infos[2]);
 
 		System.out.println("Please enter company name :");
 		infos[3] = sc.nextLine();
-
+		infos[3] = (infos[3].equals("")) ? null : infos[3];
+		
 		return infos;
 	}
 	
@@ -424,6 +389,7 @@ public class RestCLI {
 	
 	private <T> T getObject(String url, Class<T> type) {
 		this.services = client.target(BASE_URL + url);
+		System.out.println(BASE_URL + url);
  
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response response = request.get();
@@ -434,60 +400,73 @@ public class RestCLI {
 		
 		return null;
 	}
-
 	
-	private <T> List<T> getObjectList(String url, Class<T> type) {
+	private List<Company> getCompanyList(String url) {
 		this.services = client.target(BASE_URL + url);
+		System.out.println("URL: " + BASE_URL + url);
  
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response response = request.get();
 		
+		System.out.println("Status: " + response.getStatus());
+		
 		if (response.getStatus() == 200) {
-			return response.readEntity(new GenericList<T>() {});
+			return response.readEntity(new GenericType<List<Company>>() {});
 		}
 		
 		return null;
 	}
 	
-	/**
-	 * Class to represent a Generic List of T.
-	 *  
-	 * @author Aurélien LEJEAU
-	 *
-	 * @param <T> the List type 
-	 */
-	private class GenericList<T> extends GenericType<List<T>> {
-		public GenericList(){
-			super();
+	private List<ComputerDto> getCDTOList(String url) {
+		this.services = client.target(BASE_URL + url);
+		System.out.println("URL: " + BASE_URL + url);
+ 
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
+		Response response = request.get();
+		
+		System.out.println("Status: " + response.getStatus());
+		
+		if (response.getStatus() == 200) {
+			return response.readEntity(new GenericType<List<ComputerDto>>() {});
 		}
+		
+		return null;
 	}
 	
 	private boolean addComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
  
-		Builder request = this.services.request();
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
 		Response response = request.post(e, Response.class);
 		
-		if (response.getStatus() == 200) {
-			return true;
+		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {});
+		
+		if (pb != null && !pb.isEmpty()) {
+			for (Problem p : pb) {
+				System.out.println(p);
+			}
+			return false;
 		}
 		
-		return false;
+		return true;
 	}
 	
 	private boolean updateComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
  
-		Builder request = this.services.request();
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
 		Response response = request.put(e, Response.class);
 		
-		if (response.getStatus() == 200) {
-			return true;
+		Problem p = response.readEntity(Problem.class);
+		
+		if (p != null) {
+			System.out.println(p);
+			return false;
 		}
 		
-		return false;
+		return true;
 	}
 	
 	private void delObject(String url) {
@@ -496,19 +475,19 @@ public class RestCLI {
 	}
 	
 	public static void main(String[] args) {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-persistence/src/main/resources/persistence-application-context.xml");
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-ws/src/main/resources/ws-application-context.xml");
 
 		Scanner sc = new Scanner(System.in);
-		RestCLI cli = context.getBean(RestCLI.class);
-		cli.setScanner(sc);
-		cli.init();
+		RestCLI restCli = context.getBean(RestCLI.class);
+		restCli.setScanner(sc);
+		restCli.init();
 
 		boolean keepOnRocking = true;
 
 		while (keepOnRocking) {
-			cli.showMenu();
-			cli.makeAChoiceAndChecksIt();
-			keepOnRocking = cli.launch();
+			restCli.showMenu();
+			restCli.makeAChoiceAndChecksIt();
+			keepOnRocking = restCli.launch();
 		}
 
 		sc.close();

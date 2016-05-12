@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.ws.rest.impl;
+package com.excilys.formation.computerdb.rest.impl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.excilys.formation.computerdb.mapper.model.ComputerDtoMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
-import com.excilys.formation.computerdb.ws.rest.RestManager;
+import com.excilys.formation.computerdb.rest.RestManager;
 
 @RestController
 @RequestMapping("rest")
@@ -168,7 +168,7 @@ public class RestManagerImpl implements RestManager {
 		} else {
 			String intro = cdto.getIntro();
 			String outro = cdto.getOutro();
-			Company cy = (companyName != null) ? service.getCompanyByName(companyName) : null;
+			Company cy = (companyName != null && !companyName.equals("")) ? service.getCompanyByName(companyName) : null;
 			pbs = service.createComputer(name, intro, outro, cy);
 			if (pbs == null || pbs.isEmpty()) {
 				status = HttpStatus.CREATED;
@@ -192,12 +192,8 @@ public class RestManagerImpl implements RestManager {
 		// If new name is already taken
 		if (!name.equals(ori.getName()) && service.existsComputer(name)) {
 			pb = new Problem(Fields.NAME.toString(), "A computer with such a name already exists");
-		} else if ((companyName != null) && !service.existsCompany(companyName)) { // If
-																					// the
-																					// company
-																					// does
-																					// not
-																					// exists
+		} else if ((companyName != null) && !service.existsCompany(companyName)) {
+			// If the company does not exists
 			pb = new Problem(Fields.COMPANY.toString(), "No company with such a name exists.");
 		} else {
 			String intro = cdto.getIntro();

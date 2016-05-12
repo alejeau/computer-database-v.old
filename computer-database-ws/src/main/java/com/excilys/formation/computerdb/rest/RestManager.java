@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.ws.rest;
+package com.excilys.formation.computerdb.rest;
 
 import java.util.List;
 
