@@ -39,6 +39,18 @@ public class ComputerDto {
 		this.outro = (o != null) ? (o.toString()) : null;
 		this.company = (cy != null) ? (cy.getName()) : null;
 	}
+
+	/**
+	 * Creates a lighter Computer version with only Company name instead of a Company.
+	 * 
+	 * @param s the name, intro, outro, company in that order
+	 */
+	public ComputerDto(String[] s) {
+		this.name = s[0];
+		this.intro = s[1];
+		this.outro = s[2];
+		this.company = s[3];
+	}
 	
 	/**
 	 * Creates a lighter Computer version with only Company name instead of a Company.
@@ -118,8 +130,27 @@ public class ComputerDto {
 
 	@Override
 	public String toString() {
-		return "ComputerDto [id=" + id + ", name=" + name + ", intro=" + intro + ", outro=" + outro + ", company="
-				+ company + "]";
+		StringBuilder s = new StringBuilder("\"");
+		s.append(name);
+		s.append("\"");
+		
+		if (intro != null) {
+			s.append(", introduced in ");
+			s.append(intro);
+		}
+		if (outro != null) {
+			s.append(", discontinued in ");
+			s.append(outro);
+		}
+		if (company != null) {
+			s.append(", manufactured by ");
+			s.append(company);
+		}
+		
+		s.append(", id: ");
+		s.append(id);
+		
+		return s.toString();
 	}
 
 	public static class ComputerDTOBuilder {

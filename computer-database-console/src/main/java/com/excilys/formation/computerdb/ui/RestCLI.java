@@ -1,27 +1,44 @@
-package com.excilys.formation.computerdb.ws.cli;
+package com.excilys.formation.computerdb.ui;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.computerdb.constants.Fields;
+import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
 import com.excilys.formation.computerdb.model.pagination.Page;
 import com.excilys.formation.computerdb.model.pagination.SortedPage;
-import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
+import com.excilys.formation.computerdb.ui.pager.CompanyPager;
+import com.excilys.formation.computerdb.ui.pager.SortedPageComputer;
+
 
 @Controller
-public class CLI {
+public class RestCLI {
 	public static final String COMPUTER = "computer";
 	public static final String COMPANY = "company";
 	public static final String TIMESTAMP_ZERO = "0000-00-00";
-
-	@Autowired
-	ComputerDatabaseServiceImpl service;
+	public static final String BASE_URL = "http://localhost:8080/computer-database";
+	
+	
 
 	@Autowired
 	SortedPageComputer spc;
@@ -35,26 +52,35 @@ public class CLI {
 	protected Page<Company> companyPage = null;
 	protected List<Computer> computerList = null;
 	protected List<Company> companyList = null;
+	protected ClientConfig config = null;
+	protected Client client = null;
+	protected WebTarget services = null;
 
 	/**
 	 * Creates a CLI using a Scanner
 	 * 
 	 * @param sc a Scanner
 	 */
-	public CLI() {
+	public RestCLI() {
 	}
-
+	
 	public void init() {
+		config = new ClientConfig().register(JacksonFeature.class);
+		client = ClientBuilder.newClient(config);
+		services = client.target(getBaseURI());
+		
 		int objectsPerPage = 10;
-		if (this.service == null) {
+		if (this.services == null) {
 			System.out.println("this.service is null");
 			throw new RuntimeException("this.service is null");
 		}
-		int nbEntries = this.service.getNbComputers();
+		
+		int nbEntries = getObject("/computers/total", Integer.class);
+		
 		int mpn = maxPageNumber(objectsPerPage, nbEntries);
 		this.computerSortedPage = new SortedPage<>(null, 0, mpn, objectsPerPage, nbEntries, Fields.NAME, true);
 
-		nbEntries = this.service.getNbCompanies();
+		nbEntries = getObject("/companies/total", Integer.class);
 		mpn = maxPageNumber(objectsPerPage, nbEntries);
 		companyPage = new Page<>(companyList, 0, mpn, objectsPerPage, nbEntries);
 	}
@@ -161,11 +187,11 @@ public class CLI {
 	 * Displays the list of all Computer or Companies
 	 */
 	protected void displayAllComputers() {
-		List<Computer> comps = null;
-		comps = service.getAllComputers().getPage();
-		System.out.println("comps.size() : " + comps.size());
-		for (Computer comp : comps) {
-			System.out.println(comp.toString());
+		List<ComputerDto> list = null;
+		list = getObjectList("/computers/all", ComputerDto.class);
+		
+		for (ComputerDto c : list) {
+			System.out.println(c.toString());
 		}
 	}
 
@@ -173,45 +199,24 @@ public class CLI {
 	 * Displays a list of Computer by pages
 	 */
 	protected void displayComputersByPages() {
-		boolean keepAtIt = true;
-		int c = -1;
-		while (keepAtIt) {
-			c = getPageChoice();
-			if (c == 5) {
-				break;
-			} else {
-				switch (c) {
-				case 1: // First page
-					computerSortedPage = spc.firstPage(computerSortedPage);
-					break;
-				case 2: // Previous page
-					computerSortedPage = spc.prevPage(computerSortedPage);
-					break;
-				case 3: // Next page
-					computerSortedPage = spc.nextPage(computerSortedPage);
-					break;
-				case 4:
-					int pageNumber = getPageNumber();
-					computerSortedPage = spc.goToPage(pageNumber, computerSortedPage);
-					break;
-				default:
-					break;
-				}
+		String[] params = getPage();
 
-				this.computerList = computerSortedPage.getPage();
-
-				for (Computer comp : this.computerList) {
-					System.out.println(comp.toString());
-				}
-			}
+		final String URL = new StringBuilder("/computers/page").append(params[0]).append(params[1]).toString();
+		
+		List<ComputerDto> list = null;
+		list = getObjectList(URL, ComputerDto.class);
+		
+		for (ComputerDto c : list) {
+			System.out.println(c.toString());
 		}
 	}
 
 	protected void displayAllCompanies() {
-		List<Company> comps = null;
-		comps = service.getAllCompanies().getPage();
-		for (Company comp : comps) {
-			System.out.println(comp.toString());
+		List<Company> list = null;
+		list = getObjectList("/companies/all", Company.class);
+		
+		for (Company c : list) {
+			System.out.println(c.toString());
 		}
 	}
 
@@ -219,83 +224,33 @@ public class CLI {
 	 * Displays a list of Company by pages
 	 */
 	protected void displayCompaniesByPages() {
-		boolean keepAtIt = true;
-		int c = -1;
-		while (keepAtIt) {
-			c = getPageChoice();
-			if (c == 5) {
-				break;
-			} else {
-				switch (c) {
-				case 1: // First page
-					companyPage = cpager.firstPage(companyPage);
-					break;
-				case 2: // Previous page
-					companyPage = cpager.prevPage(companyPage);
-					break;
-				case 3: // Next page
-					companyPage = cpager.nextPage(companyPage);
-					break;
-				case 4:
-					int pageNumber = getPageNumber();
-					companyPage = cpager.goToPage(pageNumber, companyPage);
-					break;
-				default:
-					break;
-				}
+		String[] params = getPage();
 
-				this.companyList = companyPage.getPage();
-
-				for (Company comp : this.companyList) {
-					System.out.println(comp.toString());
-				}
-			}
+		final String URL = createUrl("/companies/page", params);
+		
+		List<Company> list = null;
+		list = getObjectList(URL, Company.class);
+		
+		for (Company c : list) {
+			System.out.println(c.toString());
 		}
-	}
-
-	/**
-	 * Gets the user's choice of page
-	 * 
-	 * @return the user's choice
-	 */
-	protected int getPageChoice() {
-		int c = -1;
-		System.out.println("\n*** Page selection menu ***");
-		System.out.println("1) First page");
-		System.out.println("2) Previous page");
-		System.out.println("3) Next page");
-		System.out.println("4) Custom page number");
-		System.out.println("5) Quit");
-
-		c = sc.nextInt();
-		sc.nextLine();
-
-		return c;
-	}
-
-	/**
-	 * Gets the user's choice for page number
-	 * 
-	 * @return the number of pages
-	 */
-	protected int getPageNumber() {
-		int p = -1;
-		System.out.println("To which page would you like to go?");
-		p = sc.nextInt();
-		sc.nextLine();
-		return p;
 	}
 
 	/**
 	 * Displays the infos of the desired computer
 	 */
 	protected void whichComputer() {
-		System.out.println("Which computer would you like to be detailed?");
 		String name = null;
+		
+		System.out.println("Which computer would you like to be detailed?");
 		name = this.sc.nextLine();
 		System.out.println();
-		Computer c = null;
-		c = service.getComputerByName(name);
+
+		final String URL = createUrl("/computer/name", name);
+		
+		ComputerDto c = null;
+		c = getObject(URL, ComputerDto.class);
+		
 		if (c != null) {
 			System.out.println(c.toString());
 		} else {
@@ -312,11 +267,13 @@ public class CLI {
 		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
 		} else {
-			LocalDate d1 = mapDate(infos[1]);
-			LocalDate d2 = mapDate(infos[2]);
-
-			Company cy = service.getCompanyByName(infos[3]);
-			service.createComputer(new Computer(infos[0], d1, d2, cy));
+			ComputerDto cdto = new ComputerDto(infos);
+			boolean success = addComputer("/computer/add", cdto);
+			if (success) {
+				System.out.println("Computer successfully created!");
+			} else {
+				System.out.println("Error while creating!");
+			}
 		}
 	}
 
@@ -326,23 +283,16 @@ public class CLI {
 	protected void updateComputer() {
 		System.out.println("Computer update menu");
 		String[] infos = getInfo();
-		Computer computer = null;
-
 		if (infos[0].length() == 0) {
 			System.out.println("Error! No name given!");
 		} else {
-			computer = this.service.getComputerByName(infos[0]);
-			String oldName = computer.getName();
-
-			LocalDate d1 = mapDate(infos[1]);
-			LocalDate d2 = mapDate(infos[2]);
-
-			computer.setIntro(d1);
-			computer.setOutro(d2);
-
-			Company cy = this.service.getCompanyByName(infos[3]);
-			computer.setCompany(cy);
-			this.service.updateComputer(computer, oldName);
+			ComputerDto cdto = new ComputerDto(infos);
+			boolean success = updateComputer("/computer/update", cdto);
+			if (success) {
+				System.out.println("Computer successfully created!");
+			} else {
+				System.out.println("Error while creating!");
+			}
 		}
 	}
 
@@ -351,19 +301,19 @@ public class CLI {
 	 */
 	protected void deleteComputer() {
 		System.out.println("Computer deletion menu");
-		System.out.println("Please specify the name of the computer you want to delete");
-		String name = sc.nextLine();
-		this.service.deleteComputer(name);
-
+		System.out.println("Please specify the ID of the computer you want to delete");
+		String id = sc.nextLine();
+		String URL = createUrl("/computer/del", id);
+		delObject(URL);
 	}
 
 	protected void deleteCompany() {
 		System.out.println("Company deletion menu");
-		System.out.println(
-				"Please specify the name of the company you want to delete (and all its affiliated computers)");
-		String name = sc.nextLine();
-		Company c = this.service.getCompanyByName(name);
-		this.service.deleteCompany(c);
+		System.out.println("Please specify the ID of the company you want to delete"
+				+ " (and all its affiliated computers)");
+		String id = sc.nextLine();
+		String URL = createUrl("/company/del", id);
+		delObject(URL);
 	}
 
 	/**
@@ -382,14 +332,29 @@ public class CLI {
 
 		System.out.println("Please enter computer computer introduction date (YYYY-MM-DD) :");
 		infos[1] = sc.nextLine();
-		infos[1] = CLI.validateDate(infos[1]);
+		infos[1] = RestCLI.validateDate(infos[1]);
 
 		System.out.println("Please enter computer computer discontinuation date (YYYY-MM-DD) :");
 		infos[2] = sc.nextLine();
-		infos[2] = CLI.validateDate(infos[2]);
+		infos[2] = RestCLI.validateDate(infos[2]);
 
 		System.out.println("Please enter company name :");
 		infos[3] = sc.nextLine();
+
+		return infos;
+	}
+	
+	protected String[] getPage() {
+		String[] infos = new String[2];
+		do {
+			System.out.println("Please enter page number :");
+			infos[0] = sc.nextLine();
+		} while (infos[0].length() == 0);
+
+		do {
+			System.out.println("Please enter the number of objects per page :");
+			infos[1] = sc.nextLine();
+		} while (infos[1].length() == 0);
 
 		return infos;
 	}
@@ -411,7 +376,7 @@ public class CLI {
 			String[] s = date.split("-");
 			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
-			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
+			} else if (!date.equals(RestCLI.TIMESTAMP_ZERO)) {
 				int year = Integer.valueOf(s[0]);
 				int month = Integer.valueOf(s[1]);
 				int day = Integer.valueOf(s[2]);
@@ -430,7 +395,7 @@ public class CLI {
 			if (s.length != 3) {
 				System.out.println("Wrong date format!\nThe date will be set to null.");
 				date = "";
-			} else if (!date.equals(CLI.TIMESTAMP_ZERO)) {
+			} else if (!date.equals(RestCLI.TIMESTAMP_ZERO)) {
 				int year = Integer.valueOf(s[0]);
 				int month = Integer.valueOf(s[1]);
 				int day = Integer.valueOf(s[2]);
@@ -440,5 +405,113 @@ public class CLI {
 		}
 
 		return date;
+	}
+	
+	private String createUrl(final String base, final String... params) {
+		StringBuilder sb = new StringBuilder(base);
+		
+		for (String s : params) {
+			sb.append("/");
+			sb.append(s);
+		}
+		
+		return sb.toString(); 
+	}
+	
+	private static URI getBaseURI() {
+		return UriBuilder.fromUri(BASE_URL).build();
+	}
+	
+	private <T> T getObject(String url, Class<T> type) {
+		this.services = client.target(BASE_URL + url);
+ 
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
+		Response response = request.get();
+		
+		if (response.getStatus() == 200) {
+			return response.readEntity(type);
+		}
+		
+		return null;
+	}
+	
+	private void delObject(String url) {
+		this.services = client.target(BASE_URL + url);
+		this.services.request().delete();
+	}
+
+	
+	private <T> List<T> getObjectList(String url, Class<T> type) {
+		this.services = client.target(BASE_URL + url);
+ 
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
+		Response response = request.get();
+		
+		if (response.getStatus() == 200) {
+			return response.readEntity(new GenericList<T>() {});
+		}
+		
+		return null;
+	}
+	
+	private boolean addComputer(String url, ComputerDto cdto) {
+		this.services = client.target(BASE_URL + url);
+ 
+		Builder request = this.services.request();
+		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
+		Response response = request.post(e, Response.class);
+		
+		if (response.getStatus() == 200) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean updateComputer(String url, ComputerDto cdto) {
+		this.services = client.target(BASE_URL + url);
+ 
+		Builder request = this.services.request();
+		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
+		Response response = request.put(e, Response.class);
+		
+		if (response.getStatus() == 200) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Class to represent a Generic List of T.
+	 *  
+	 * @author Aurélien LEJEAU
+	 *
+	 * @param <T> the List type 
+	 */
+	private class GenericList<T> extends GenericType<List<T>> {
+		public GenericList(){
+			super();
+		}
+	}
+	
+	public static void main(String[] args) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-persistence/src/main/resources/persistence-application-context.xml");
+
+		Scanner sc = new Scanner(System.in);
+		RestCLI cli = context.getBean(RestCLI.class);
+		cli.setScanner(sc);
+		cli.init();
+
+		boolean keepOnRocking = true;
+
+		while (keepOnRocking) {
+			cli.showMenu();
+			cli.makeAChoiceAndChecksIt();
+			keepOnRocking = cli.launch();
+		}
+
+		sc.close();
+		context.close();
 	}
 }

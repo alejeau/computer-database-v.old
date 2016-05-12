@@ -13,12 +13,18 @@ import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
 
 public interface RestManager {
+	
+	@RequestMapping(value = "/computers/total", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getNbComputers();
+	
+	@RequestMapping(value = "/companies/total", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getNbCompanies();
 
 	@RequestMapping(value = "/computers/all", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listAllComputers();
 
 	/**
-	 * Displays a list of Computer by pages
+	 * Retrieves a list of Computer by pages
 	 */
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listComputerPage(
@@ -26,7 +32,7 @@ public interface RestManager {
 			@PathVariable("objectPerPage") int objectPerPage);
 
 	/**
-	 * Displays a list of Computer by pages
+	 * Retrieves a list of Computer by pages
 	 */
 	@RequestMapping(value = "/computers/page/{pageNumber}/{objectPerPage}/{field}/{ascending}", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listComputerSortedPage(
@@ -39,7 +45,7 @@ public interface RestManager {
 	public ResponseEntity<List<Company>> listAllCompanies();
 
 	/**
-	 * Displays a list of Company by pages
+	 * Retrieves a list of Company by pages
 	 */
 	@RequestMapping(value = "/companies/page/{pageNumber}/{objectPerPage}", method = RequestMethod.GET)
 	public ResponseEntity<List<Company>> listCompanyPage(
@@ -80,14 +86,21 @@ public interface RestManager {
 			@PathVariable("field") String stringField,
 			@PathVariable("ascending") boolean ascending);
 
+
 	/**
-	 * Displays the infos of the desired computer
+	 * Retrieves the infos of the desired computer
+	 */
+	@RequestMapping(value = "/company/name/{name}", method = RequestMethod.GET)
+	public ResponseEntity<Company> getCompanyByName(@PathVariable("name") String name);
+	
+	/**
+	 * Retrieves the infos of the desired computer
 	 */
 	@RequestMapping(value = "/computer/name/{name}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerByName(@PathVariable("name") String name);
 
 	/**
-	 * Displays the infos of the desired computer
+	 * Retrieves the infos of the desired computer
 	 */
 	@RequestMapping(value = "/computer/id/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerById(@PathVariable("id") long id);

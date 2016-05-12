@@ -177,34 +177,30 @@ public class CLI {
 	protected void displayComputersByPages() {
 		boolean keepAtIt = true;
 		int c = -1;
-		while (keepAtIt) {
+		LOOP_CBYPAGES: while (keepAtIt) {
 			c = getPageChoice();
-			if (c == 5) {
+			switch (c) {
+			case 1: // First page
+				computerSortedPage = spc.firstPage(computerSortedPage);
 				break;
-			} else {
-				switch (c) {
-				case 1: // First page
-					computerSortedPage = spc.firstPage(computerSortedPage);
-					break;
-				case 2: // Previous page
-					computerSortedPage = spc.prevPage(computerSortedPage);
-					break;
-				case 3: // Next page
-					computerSortedPage = spc.nextPage(computerSortedPage);
-					break;
-				case 4:
-					int pageNumber = getPageNumber();
-					computerSortedPage = spc.goToPage(pageNumber, computerSortedPage);
-					break;
-				default:
-					break;
-				}
+			case 2: // Previous page
+				computerSortedPage = spc.prevPage(computerSortedPage);
+				break;
+			case 3: // Next page
+				computerSortedPage = spc.nextPage(computerSortedPage);
+				break;
+			case 4:
+				int pageNumber = getPageNumber();
+				computerSortedPage = spc.goToPage(pageNumber, computerSortedPage);
+				break;
+			default:
+				break LOOP_CBYPAGES;
+			}
 
-				this.computerList = computerSortedPage.getPage();
+			this.computerList = computerSortedPage.getPage();
 
-				for (Computer comp : this.computerList) {
-					System.out.println(comp.toString());
-				}
+			for (Computer comp : this.computerList) {
+				System.out.println(comp.toString());
 			}
 		}
 	}

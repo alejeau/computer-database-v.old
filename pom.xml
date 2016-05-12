@@ -64,7 +64,10 @@
 
 		<!-- Jackson -->
 		<jackson.version>2.7.4</jackson.version>
-
+		
+		<!-- Jersey -->
+		<jersey.version>2.22.2</jersey.version>
+		
 		<!-- runtime -->
 		<mysql.version>5.1.38</mysql.version>
 
@@ -151,6 +154,12 @@
 				<artifactId>computer-database-persistence</artifactId>
 				<version>${computer-database.persistence.version}</version>
 			</dependency>
+			<!-- project's ws -->
+			<dependency>
+				<groupId>com.excilys.formation.computerdb.ws</groupId>
+				<artifactId>computer-database-ws</artifactId>
+				<version>${computer-database.ws.version}</version>
+			</dependency>
 
 			<!-- Console dependencies -->
 			<!-- Jackson -->
@@ -159,6 +168,19 @@
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
+			<!-- Jersey -->
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+
+
 
 
 			<!-- Persistence dependencies -->

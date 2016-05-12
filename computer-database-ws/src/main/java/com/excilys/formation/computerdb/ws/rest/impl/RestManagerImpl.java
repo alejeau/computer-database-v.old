@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdb.ws.impl;
+package com.excilys.formation.computerdb.ws.rest.impl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +24,7 @@ import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl
 import com.excilys.formation.computerdb.ws.rest.RestManager;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("rest")
 public class RestManagerImpl implements RestManager {
 	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
@@ -32,6 +32,18 @@ public class RestManagerImpl implements RestManager {
 	ComputerDatabaseServiceImpl service;
 
 	public RestManagerImpl() {
+	}
+	
+	@RequestMapping(value = "/computers/total", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getNbComputers() {
+		Integer nb = this.service.getNbComputers();
+		return response(nb);
+	}
+	
+	@RequestMapping(value = "/companies/total", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getNbCompanies(){
+		Integer nb = this.service.getNbCompanies();
+		return response(nb);
 	}
 
 	@Override
@@ -113,6 +125,14 @@ public class RestManagerImpl implements RestManager {
 		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage, field, ascending);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
+	}
+	
+
+	@Override
+	@RequestMapping(value = "/company/name/{name}", method = RequestMethod.GET)
+	public ResponseEntity<Company> getCompanyByName(@PathVariable("name") String name) {
+		Company c = service.getCompanyByName(name);
+		return response(c);
 	}
 
 	@Override

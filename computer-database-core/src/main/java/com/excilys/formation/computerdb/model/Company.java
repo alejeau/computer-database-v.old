@@ -92,7 +92,14 @@ public class Company implements Comparable<Company> {
 
 	@Override
 	public String toString() {
-		return name;
+		StringBuilder s = new StringBuilder("\"");
+		s.append(name);
+		s.append("\"");
+		
+		s.append(", id: ");
+		s.append(id);
+		
+		return s.toString();
 	}
 
 	public static class Builder {
