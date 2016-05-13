@@ -18,11 +18,15 @@ import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
+import com.excilys.formation.computerdb.model.User;
+import com.excilys.formation.computerdb.model.UsersRoles;
 
 
 @Controller
@@ -74,7 +78,9 @@ public class RestCLI {
 		System.out.println(" 7) Update a computer");
 		System.out.println(" 8) Delete a computer");
 		System.out.println(" 9) Delete a company and all its computers");
-		System.out.println("10) Quit");
+		System.out.println("10) Create a new user");
+		System.out.println("11) Delete a user");
+		System.out.println("12) Quit");
 
 		System.out.println("What do you choose ? ");
 	}
@@ -90,7 +96,7 @@ public class RestCLI {
 		String j = "";
 		int len = tmpChoice.length();
 		if ((len > 0) && (len < 3)) {
-			for (int i = 1; i < 11; i++) {
+			for (int i = 1; i < 13; i++) {
 				j = String.valueOf(i);
 				if (j.equals(tmpChoice)) {
 					choice = i;
@@ -137,7 +143,13 @@ public class RestCLI {
 		case 9: // Delete a company and all computers related to it
 			deleteCompany();
 			break;
-		case 10: // Quit
+		case 10: // Creates a new user
+			addUser();
+			break;
+		case 11: // Delete a user
+			deleteUser();
+			break;
+		case 12: // Quit
 			b = false;
 			break;
 		default:
@@ -276,7 +288,53 @@ public class RestCLI {
 		String URL = createUrl("/company/del", id);
 		delObject(URL);
 	}
+	
+	/**
+	 * Adds a user
+	 */
+//	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	protected void addUser(){
+		String login = getMandatoryField("user", "login");
+		String password = encode(getMandatoryField("user", "password"));
+		String tmp = null;
+		UsersRoles role = UsersRoles.ROLE_USER;
+		
+		do {
+			System.out.println("Please enter user's role (admin or basic --default is basic) :");
+			tmp = sc.nextLine();
+		} while(!(tmp.equals("basic") || tmp.equals("admin")) || (tmp.length() != 0));
+		
+		if (tmp.equals("admin")) {
+			role = UsersRoles.ROLE_ADMIN;
+		}
+		
+		User u = new User(login, password, role);
+		addObj
+	}
 
+	
+	/**
+	 * Deletes a given User
+	 */
+//	@RequestMapping(value = "/user/del/{nom}", method = RequestMethod.DELETE)
+	protected void deleteUser(){
+		
+	}
+
+	public String getMandatoryField(String object, String field) {
+		String s = null;
+		
+		do {
+			System.out.println("Please enter " + object + "'s " + field + " :");
+			s = sc.nextLine();
+			if (s.length() == 0) {
+				System.out.println("Error: This field can't be null.");
+			}
+		} while (s.length() == 0);
+		
+		return s;
+	}
+	
 	/**
 	 * Gets infos about a computer from user's input :<br>
 	 * Name<br>
@@ -486,6 +544,25 @@ public class RestCLI {
 		return true;
 	}
 	
+	private boolean addUser(String url, User u) {
+		this.services = client.target(BASE_URL + url);
+ 
+		Builder request = this.services.request(MediaType.APPLICATION_JSON);
+		Entity<User> e = Entity.entity(u, MediaType.APPLICATION_JSON);
+		Response response = request.post(e, Response.class);
+		
+		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {});
+		
+		if (pb != null && !pb.isEmpty()) {
+			for (Problem p : pb) {
+				System.out.println(p);
+			}
+			return false;
+		}
+		
+		return true;
+	}
+	
 	private Problem updateComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
 
@@ -498,6 +575,12 @@ public class RestCLI {
 	private void delObject(String url) {
 		this.services = client.target(BASE_URL + url);
 		this.services.request().delete();
+	}
+	
+	private static String encode(final String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(password);
+		return hashedPassword;
 	}
 	
 	public static void main(String[] args) {

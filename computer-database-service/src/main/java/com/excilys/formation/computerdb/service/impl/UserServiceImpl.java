@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDaoImpl userDaoImpl;
-	
+
 	@Override
 	public User getUser(String login) {
 		return userDaoImpl.getUser(login);
@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void createUser(User u) {
 		userDaoImpl.createUser(u);
-		
 	}
 
 	@Override
@@ -31,5 +30,4 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(String login) {
 		userDaoImpl.deleteUser(login);
 	}
-
 }

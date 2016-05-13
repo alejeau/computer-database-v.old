@@ -20,7 +20,9 @@ import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.mapper.model.ComputerDtoMapper;
 import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.Computer;
+import com.excilys.formation.computerdb.model.User;
 import com.excilys.formation.computerdb.service.impl.ComputerDatabaseServiceImpl;
+import com.excilys.formation.computerdb.service.impl.UserServiceImpl;
 import com.excilys.formation.computerdb.rest.RestManager;
 
 @RestController
@@ -29,27 +31,30 @@ public class RestManagerImpl implements RestManager {
 	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	ComputerDatabaseServiceImpl service;
+	ComputerDatabaseServiceImpl services;
 
+	@Autowired
+	UserServiceImpl userServices;
+	
 	public RestManagerImpl() {
 	}
 	
 	@RequestMapping(value = "/computers/total", method = RequestMethod.GET)
 	public ResponseEntity<Integer> getNbComputers() {
-		Integer nb = this.service.getNbComputers();
+		Integer nb = this.services.getNbComputers();
 		return response(nb);
 	}
 	
 	@RequestMapping(value = "/companies/total", method = RequestMethod.GET)
 	public ResponseEntity<Integer> getNbCompanies(){
-		Integer nb = this.service.getNbCompanies();
+		Integer nb = this.services.getNbCompanies();
 		return response(nb);
 	}
 
 	@Override
 	@RequestMapping(value = "/computers/all", method = RequestMethod.GET)
 	public ResponseEntity<List<ComputerDto>> listAllComputers() {
-		List<Computer> tmp = service.listAllComputers();
+		List<Computer> tmp = services.listAllComputers();
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -60,7 +65,7 @@ public class RestManagerImpl implements RestManager {
 			@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
-		List<Computer> tmp = service.getComputerList(offset, objectPerPage);
+		List<Computer> tmp = services.getComputerList(offset, objectPerPage);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -78,7 +83,7 @@ public class RestManagerImpl implements RestManager {
 		// Converting stringField into an actual Fields
 		Fields field = toFields(stringField);
 
-		tmp = service.getComputerSortedList(offset, objectPerPage, field, ascending);
+		tmp = services.getComputerSortedList(offset, objectPerPage, field, ascending);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -87,7 +92,7 @@ public class RestManagerImpl implements RestManager {
 	@RequestMapping(value = "/companies/all", method = RequestMethod.GET)
 	public ResponseEntity<List<Company>> listAllCompanies() {
 		List<Company> list = null;
-		list = service.listAllCompanies();
+		list = services.listAllCompanies();
 		return listResponse(list);
 	}
 
@@ -96,7 +101,7 @@ public class RestManagerImpl implements RestManager {
 	public ResponseEntity<List<Company>> listCompanyPage(@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
-		List<Company> list = service.getCompanyList(offset, objectPerPage);
+		List<Company> list = services.getCompanyList(offset, objectPerPage);
 		return listResponse(list);
 	}
 
@@ -107,7 +112,7 @@ public class RestManagerImpl implements RestManager {
 			@PathVariable("pageNumber") int pageNumber,
 			@PathVariable("objectPerPage") int objectPerPage) {
 		int offset = pageNumber * objectPerPage;
-		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage);
+		List<Computer> tmp = services.getComputerSearchList(keyword, offset, objectPerPage);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -122,7 +127,7 @@ public class RestManagerImpl implements RestManager {
 			@PathVariable("ascending") boolean ascending) {
 		int offset = pageNumber * objectPerPage;
 		Fields field = toFields(stringField);
-		List<Computer> tmp = service.getComputerSearchList(keyword, offset, objectPerPage, field, ascending);
+		List<Computer> tmp = services.getComputerSearchList(keyword, offset, objectPerPage, field, ascending);
 		List<ComputerDto> list = ComputerDtoMapper.toDtoList(tmp);
 		return listResponse(list);
 	}
@@ -131,14 +136,14 @@ public class RestManagerImpl implements RestManager {
 	@Override
 	@RequestMapping(value = "/company/name/{name}", method = RequestMethod.GET)
 	public ResponseEntity<Company> getCompanyByName(@PathVariable("name") String name) {
-		Company c = service.getCompanyByName(name);
+		Company c = services.getCompanyByName(name);
 		return response(c);
 	}
 
 	@Override
 	@RequestMapping(value = "/computer/name/{name}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerByName(@PathVariable("name") String name) {
-		Computer c = service.getComputerByName(name);
+		Computer c = services.getComputerByName(name);
 		ComputerDto cdto = new ComputerDto(c);
 		return response(cdto);
 	}
@@ -146,7 +151,7 @@ public class RestManagerImpl implements RestManager {
 	@Override
 	@RequestMapping(value = "/computer/id/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ComputerDto> getComputerById(@PathVariable("id") long id) {
-		Computer c = service.getComputerById(id);
+		Computer c = services.getComputerById(id);
 		ComputerDto cdto = new ComputerDto(c);
 		return response(cdto);
 	}
@@ -161,15 +166,15 @@ public class RestManagerImpl implements RestManager {
 		String name = cdto.getName();
 		String companyName = cdto.getCompany();
 
-		if (service.existsComputer(name)) {
+		if (services.existsComputer(name)) {
 			pbs.add(new Problem(Fields.NAME.toString(), "A computer with such a name already exists"));
-		} else if ((companyName != null) && !service.existsCompany(companyName)) {
+		} else if ((companyName != null) && !services.existsCompany(companyName)) {
 			pbs.add(new Problem(Fields.COMPANY.toString(), "No company with such a name exists."));
 		} else {
 			String intro = cdto.getIntro();
 			String outro = cdto.getOutro();
-			Company cy = (companyName != null && !companyName.equals("")) ? service.getCompanyByName(companyName) : null;
-			pbs = service.createComputer(name, intro, outro, cy);
+			Company cy = (companyName != null && !companyName.equals("")) ? services.getCompanyByName(companyName) : null;
+			pbs = services.createComputer(name, intro, outro, cy);
 			if (pbs == null || pbs.isEmpty()) {
 				status = HttpStatus.CREATED;
 			}
@@ -182,7 +187,7 @@ public class RestManagerImpl implements RestManager {
 	@RequestMapping(value = "/computer/update", method = RequestMethod.PUT)
 	public ResponseEntity<Problem> updateComputer(@RequestBody ComputerDto cdto) {
 		LOG.info("REST UPDATE PUT");
-		Computer ori = service.getComputerById(cdto.getId());
+		Computer ori = services.getComputerById(cdto.getId());
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		Problem pb = null;
 
@@ -190,17 +195,17 @@ public class RestManagerImpl implements RestManager {
 		String companyName = cdto.getCompany();
 
 		// If new name is already taken
-		if (!name.equals(ori.getName()) && service.existsComputer(name)) {
+		if (!name.equals(ori.getName()) && services.existsComputer(name)) {
 			pb = new Problem(Fields.NAME.toString(), "A computer with such a name already exists");
-		} else if ((companyName != null) && !service.existsCompany(companyName)) {
+		} else if ((companyName != null) && !services.existsCompany(companyName)) {
 			// If the company does not exists
 			pb = new Problem(Fields.COMPANY.toString(), "No company with such a name exists.");
 		} else {
 			String intro = cdto.getIntro();
 			String outro = cdto.getOutro();
-			Company cy = (companyName != null) ? service.getCompanyByName(companyName) : null;
+			Company cy = (companyName != null) ? services.getCompanyByName(companyName) : null;
 			Computer c = new Computer(cdto.getId(), name, intro, outro, cy);
-			service.updateComputer(c);
+			services.updateComputer(c);
 			status = HttpStatus.CREATED;
 		}
 
@@ -212,7 +217,7 @@ public class RestManagerImpl implements RestManager {
 	public ResponseEntity<String> deleteComputer(@PathVariable("id") long id) {
 		LOG.info("REST DELETE COMPUTER");
 		Computer c = null;
-		c = service.getComputerById(id);
+		c = services.getComputerById(id);
 
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String pb = null;
@@ -220,7 +225,7 @@ public class RestManagerImpl implements RestManager {
 		if (c == null) {
 			pb = "No such Computer exists!";
 		} else {
-			service.deleteComputer(id);
+			services.deleteComputer(id);
 			status = HttpStatus.OK;
 		}
 
@@ -232,7 +237,7 @@ public class RestManagerImpl implements RestManager {
 	public ResponseEntity<String> deleteCompany(@PathVariable("id") long id) {
 		LOG.info("REST DELETE COMPANY");
 		Company c = null;
-		c = service.getCompanyById(id);
+		c = services.getCompanyById(id);
 
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String pb = null;
@@ -240,11 +245,45 @@ public class RestManagerImpl implements RestManager {
 		if (c == null) {
 			pb = "No such Company exists!";
 		} else {
-			service.deleteCompany(id);
+			services.deleteCompany(id);
 			status = HttpStatus.OK;
 		}
 
 		return new ResponseEntity<String>(pb, status);
+	}
+
+	/**
+	 * Adds a user
+	 */
+	@Override
+	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	public ResponseEntity<String> addUser(@RequestBody User u) {
+		if (u == null) {
+			return new ResponseEntity<String>("User is null.", HttpStatus.BAD_REQUEST);
+		}
+		if (u.getLogin().length() == 0) {
+			return new ResponseEntity<String>("User login can't be null.", HttpStatus.BAD_REQUEST);
+		}
+		if (u.getPassword().length() == 0) {
+			return new ResponseEntity<String>("User password can't be null.", HttpStatus.BAD_REQUEST);
+		}
+		
+		userServices.createUser(u);
+		return new ResponseEntity<String>("", HttpStatus.CREATED);
+	}
+
+	/**
+	 * Deletes a given User
+	 */
+	@Override
+	@RequestMapping(value = "/user/del/{login}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteUser(@PathVariable("login") String login){
+		if (login == null || (login.length() == 0)) {
+			return new ResponseEntity<String>("Username can't be null.", HttpStatus.BAD_REQUEST);
+		}
+		
+		userServices.deleteUser(login);
+		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
 	protected static Fields toFields(String f) {

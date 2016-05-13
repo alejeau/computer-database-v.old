@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.excilys.formation.computerdb.dto.model.ComputerDto;
 import com.excilys.formation.computerdb.errors.Problem;
 import com.excilys.formation.computerdb.model.Company;
+import com.excilys.formation.computerdb.model.User;
 
 public interface RestManager {
 	
@@ -129,4 +130,16 @@ public interface RestManager {
 	 */
 	@RequestMapping(value = "/company/del/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteCompany(@PathVariable("id") long id);
+
+	/**
+	 * Adds a user
+	 */
+	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	public ResponseEntity<String> addUser(@RequestBody User cdto);
+
+	/**
+	 * Deletes a given User
+	 */
+	@RequestMapping(value = "/user/del/{nom}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteUser(@PathVariable("nom") String name);
 }
