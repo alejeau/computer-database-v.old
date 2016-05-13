@@ -242,21 +242,18 @@ public class RestCLI {
 	}
 
 	/**
-	 * Updates a given computer
+	 * Updates a given computer.<br>
+	 * Your server must allow put methods for it to work. 
 	 */
 	protected void updateComputer() {
 		System.out.println("Computer update menu");
-		String[] infos = getInfo();
-		if (infos[0].length() == 0) {
-			System.out.println("Error! No name given!");
+		ComputerDto cdto = getIdAndInfo();
+		
+		Problem pb = updateComputer("/computer/update", cdto);
+		if (pb == null) {
+			System.out.println("Computer successfully created!");
 		} else {
-			ComputerDto cdto = new ComputerDto(infos);
-			boolean success = updateComputer("/computer/update", cdto);
-			if (success) {
-				System.out.println("Computer successfully created!");
-			} else {
-				System.out.println("Error while creating!");
-			}
+			System.out.println("Error while creating!");
 		}
 	}
 
@@ -307,6 +304,43 @@ public class RestCLI {
 		infos[3] = (infos[3].equals("")) ? null : infos[3];
 		
 		return infos;
+	}
+	
+	protected ComputerDto getIdAndInfo() {
+		ComputerDto cdto = null;
+		long id = -1;
+		String[] infos = new String[]{"", "", "", ""};
+		
+		do {
+			System.out.println("Please enter computer ID :");
+			id = sc.nextLong();
+			sc.nextLine();
+		} while (id == -1);
+		
+		do {
+			System.out.println("Please enter computer name :");
+			infos[0] = sc.nextLine();
+			if (infos[0].length() == 0) {
+				System.out.println("Error! No name given!");
+			}
+		} while (infos[0].length() == 0);
+
+		System.out.println("Please enter computer computer introduction date (YYYY-MM-DD) :");
+		infos[1] = sc.nextLine();
+		infos[1] = (infos[1].length() == 0) ? null : RestCLI.validateDate(infos[1]);
+
+		System.out.println("Please enter computer computer discontinuation date (YYYY-MM-DD) :");
+		infos[2] = sc.nextLine();
+		infos[2] = (infos[2].length() == 0) ? null : RestCLI.validateDate(infos[2]);
+		
+		System.out.println("Please enter company name :");
+		infos[3] = sc.nextLine();
+		infos[3] = (infos[3].length() == 0) ? null : infos[3];
+		
+		cdto = new ComputerDto(infos);
+		cdto.setId(id);
+		
+		return cdto;
 	}
 	
 	protected String[] getPage() {
@@ -452,21 +486,13 @@ public class RestCLI {
 		return true;
 	}
 	
-	private boolean updateComputer(String url, ComputerDto cdto) {
+	private Problem updateComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
-		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
-		Response response = request.put(e, Response.class);
+		Response resp = request.put(Entity.entity(cdto, MediaType.APPLICATION_JSON));
 		
-		Problem p = response.readEntity(Problem.class);
-		
-		if (p != null) {
-			System.out.println(p);
-			return false;
-		}
-		
-		return true;
+		return resp.readEntity(Problem.class);
 	}
 	
 	private void delObject(String url) {

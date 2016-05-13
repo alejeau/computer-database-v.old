@@ -123,7 +123,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	@Override
 	public void deleteCompany(long id) {
-		LOG.info("Company deletion: \"DELETE FROM Company WHERE id = " + id + "\"");
+		LOG.info("Company deletion: \"DELETE FROM Company c WHERE c.id = " + id + "\"");
 		final String QUERY_TXT = "DELETE FROM Company c WHERE c.id = :id";
 
 		Query query = null;

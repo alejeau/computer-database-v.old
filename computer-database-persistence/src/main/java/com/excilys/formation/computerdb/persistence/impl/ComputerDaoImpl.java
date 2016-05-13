@@ -252,7 +252,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public void deleteComputersWhereCompanyIdEquals(long id) {
-		String QUERY_TXT = "DELETE FROM Computer c WHERE c.id = :id";
+		String QUERY_TXT = "DELETE FROM Computer c WHERE c.company.id = :id";
 		Query query = entityManager.createQuery(QUERY_TXT);
 		query.setParameter("id", id);
 		query.executeUpdate();

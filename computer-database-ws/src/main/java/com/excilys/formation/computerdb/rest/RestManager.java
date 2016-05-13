@@ -112,7 +112,8 @@ public interface RestManager {
 	public ResponseEntity<List<Problem>> createComputer(@RequestBody ComputerDto cdto);
 
 	/**
-	 * Updates a given computer
+	 * Updates a given computer.<br>
+	 * Your server must allow put methods for it to work.
 	 */
 	@RequestMapping(value = "/computer/update", method = RequestMethod.PUT)
 	public ResponseEntity<Problem> updateComputer(@RequestBody ComputerDto cdto);
