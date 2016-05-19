@@ -252,6 +252,14 @@ public class RestManagerImpl implements RestManager {
 		return new ResponseEntity<String>(pb, status);
 	}
 
+//	/**
+//	 * Retrieves a list of all Users
+//	 */
+//	@RequestMapping(value = "/user/all/", method = RequestMethod.GET)
+//	public ResponseEntity<String> showListUser() {
+//		
+//	}
+
 	/**
 	 * Adds a user
 	 */

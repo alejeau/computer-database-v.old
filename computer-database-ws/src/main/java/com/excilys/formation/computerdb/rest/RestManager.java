@@ -131,6 +131,12 @@ public interface RestManager {
 	@RequestMapping(value = "/company/del/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteCompany(@PathVariable("id") long id);
 
+//	/**
+//	 * Retrieves a list of all Users
+//	 */
+//	@RequestMapping(value = "/user/all/", method = RequestMethod.GET)
+//	public ResponseEntity<String> showListUser();
+
 	/**
 	 * Adds a user
 	 */

@@ -28,7 +28,6 @@ import com.excilys.formation.computerdb.model.Company;
 import com.excilys.formation.computerdb.model.User;
 import com.excilys.formation.computerdb.model.UsersRoles;
 
-
 @Controller
 public class RestCLI {
 	public static final String COMPUTER = "computer";
@@ -45,16 +44,17 @@ public class RestCLI {
 	/**
 	 * Creates a CLI using a Scanner
 	 * 
-	 * @param sc a Scanner
+	 * @param sc
+	 *            a Scanner
 	 */
 	public RestCLI() {
 	}
-	
+
 	public void init() {
 		config = new ClientConfig().register(JacksonFeature.class);
 		client = ClientBuilder.newClient(config);
 		services = client.target(getBaseURI());
-		
+
 		if (this.services == null) {
 			System.out.println("this.service is null");
 			throw new RuntimeException("this.service is null");
@@ -165,7 +165,7 @@ public class RestCLI {
 	protected void displayAllComputers() {
 		List<ComputerDto> list = null;
 		list = getCDTOList("/computers/all");
-		
+
 		for (ComputerDto c : list) {
 			System.out.println(c.toString());
 		}
@@ -178,10 +178,10 @@ public class RestCLI {
 		String[] params = getPage();
 
 		final String URL = createUrl("/computers/page", params);
-		
+
 		List<ComputerDto> list = null;
 		list = getCDTOList(URL);
-		
+
 		for (ComputerDto c : list) {
 			System.out.println(c.toString());
 		}
@@ -190,7 +190,7 @@ public class RestCLI {
 	protected void displayAllCompanies() {
 		List<Company> list = null;
 		list = getCompanyList("/companies/all");
-		
+
 		for (Company c : list) {
 			System.out.println(c.toString());
 		}
@@ -203,10 +203,10 @@ public class RestCLI {
 		String[] params = getPage();
 
 		final String URL = createUrl("/companies/page", params);
-		
+
 		List<Company> list = null;
 		list = getCompanyList(URL);
-		
+
 		for (Company c : list) {
 			System.out.println(c.toString());
 		}
@@ -217,16 +217,16 @@ public class RestCLI {
 	 */
 	protected void whichComputer() {
 		String name = null;
-		
+
 		System.out.println("Which computer would you like to be detailed?");
 		name = this.sc.nextLine();
 		System.out.println();
 
 		final String URL = createUrl("/computer/name", name);
-		
+
 		ComputerDto c = null;
 		c = getObject(URL, ComputerDto.class);
-		
+
 		if (c != null) {
 			System.out.println(c.toString());
 		} else {
@@ -255,12 +255,12 @@ public class RestCLI {
 
 	/**
 	 * Updates a given computer.<br>
-	 * Your server must allow put methods for it to work. 
+	 * Your server must allow put methods for it to work.
 	 */
 	protected void updateComputer() {
 		System.out.println("Computer update menu");
 		ComputerDto cdto = getIdAndInfo();
-		
+
 		Problem pb = updateComputer("/computer/update", cdto);
 		if (pb == null) {
 			System.out.println("Computer successfully created!");
@@ -282,48 +282,51 @@ public class RestCLI {
 
 	protected void deleteCompany() {
 		System.out.println("Company deletion menu");
-		System.out.println("Please specify the ID of the company you want to delete"
-				+ " (and all its affiliated computers)");
+		System.out.println(
+				"Please specify the ID of the company you want to delete" + " (and all its affiliated computers)");
 		String id = sc.nextLine();
 		String URL = createUrl("/company/del", id);
 		delObject(URL);
 	}
-	
+
 	/**
 	 * Adds a user
 	 */
-//	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
-	protected void addUser(){
+	// @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	protected void addUser() {
 		String login = getMandatoryField("user", "login");
 		String password = encode(getMandatoryField("user", "password"));
 		String tmp = null;
 		UsersRoles role = UsersRoles.ROLE_USER;
-		
+
 		do {
 			System.out.println("Please enter user's role (admin or basic --default is basic) :");
 			tmp = sc.nextLine();
-		} while(!(tmp.equals("basic") || tmp.equals("admin")) || (tmp.length() != 0));
-		
+		} while (!(tmp.equals("basic") || tmp.equals("admin")) || (tmp.length() != 0));
+
 		if (tmp.equals("admin")) {
 			role = UsersRoles.ROLE_ADMIN;
 		}
-		
+
 		User u = new User(login, password, role);
-		addObj
+		addUser("user/add", u);
 	}
 
-	
 	/**
 	 * Deletes a given User
 	 */
-//	@RequestMapping(value = "/user/del/{nom}", method = RequestMethod.DELETE)
-	protected void deleteUser(){
-		
+	// @RequestMapping(value = "/user/del/{nom}", method = RequestMethod.DELETE)
+	protected void deleteUser() {
+		System.out.println("Computer deletion menu");
+		System.out.println("Please specify the name of the user you want to delete");
+		String name = sc.nextLine();
+		String URL = createUrl("/user/del", name);
+		delObject(URL);
 	}
 
 	public String getMandatoryField(String object, String field) {
 		String s = null;
-		
+
 		do {
 			System.out.println("Please enter " + object + "'s " + field + " :");
 			s = sc.nextLine();
@@ -331,10 +334,10 @@ public class RestCLI {
 				System.out.println("Error: This field can't be null.");
 			}
 		} while (s.length() == 0);
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Gets infos about a computer from user's input :<br>
 	 * Name<br>
@@ -360,21 +363,21 @@ public class RestCLI {
 		System.out.println("Please enter company name :");
 		infos[3] = sc.nextLine();
 		infos[3] = (infos[3].equals("")) ? null : infos[3];
-		
+
 		return infos;
 	}
-	
+
 	protected ComputerDto getIdAndInfo() {
 		ComputerDto cdto = null;
 		long id = -1;
-		String[] infos = new String[]{"", "", "", ""};
-		
+		String[] infos = new String[] { "", "", "", "" };
+
 		do {
 			System.out.println("Please enter computer ID :");
 			id = sc.nextLong();
 			sc.nextLine();
 		} while (id == -1);
-		
+
 		do {
 			System.out.println("Please enter computer name :");
 			infos[0] = sc.nextLine();
@@ -390,17 +393,17 @@ public class RestCLI {
 		System.out.println("Please enter computer computer discontinuation date (YYYY-MM-DD) :");
 		infos[2] = sc.nextLine();
 		infos[2] = (infos[2].length() == 0) ? null : RestCLI.validateDate(infos[2]);
-		
+
 		System.out.println("Please enter company name :");
 		infos[3] = sc.nextLine();
 		infos[3] = (infos[3].length() == 0) ? null : infos[3];
-		
+
 		cdto = new ComputerDto(infos);
 		cdto.setId(id);
-		
+
 		return cdto;
 	}
-	
+
 	protected String[] getPage() {
 		String[] infos = new String[2];
 		do {
@@ -423,7 +426,8 @@ public class RestCLI {
 	/**
 	 * Checks whether a date is in a valid format or not
 	 * 
-	 * @param date a String representing the date
+	 * @param date
+	 *            a String representing the date
 	 * @return the date or null if the date's wrong
 	 */
 	protected static LocalDate mapDate(String date) {
@@ -463,128 +467,133 @@ public class RestCLI {
 
 		return date;
 	}
-	
+
 	private String createUrl(final String base, final String... params) {
 		StringBuilder sb = new StringBuilder(base);
-		
+
 		for (String s : params) {
 			sb.append("/");
 			sb.append(s);
 		}
-		
-		return sb.toString(); 
+
+		return sb.toString();
 	}
-	
+
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(BASE_URL).build();
 	}
-	
+
 	private <T> T getObject(String url, Class<T> type) {
 		this.services = client.target(BASE_URL + url);
 		System.out.println(BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response response = request.get();
-		
+
 		if (response.getStatus() == 200) {
 			return response.readEntity(type);
 		}
-		
+
 		return null;
 	}
-	
+
 	private List<Company> getCompanyList(String url) {
 		this.services = client.target(BASE_URL + url);
 		System.out.println("URL: " + BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response response = request.get();
-		
+
 		System.out.println("Status: " + response.getStatus());
-		
+
 		if (response.getStatus() == 200) {
-			return response.readEntity(new GenericType<List<Company>>() {});
+			return response.readEntity(new GenericType<List<Company>>() {
+			});
 		}
-		
+
 		return null;
 	}
-	
+
 	private List<ComputerDto> getCDTOList(String url) {
 		this.services = client.target(BASE_URL + url);
 		System.out.println("URL: " + BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response response = request.get();
-		
+
 		System.out.println("Status: " + response.getStatus());
-		
+
 		if (response.getStatus() == 200) {
-			return response.readEntity(new GenericType<List<ComputerDto>>() {});
+			return response.readEntity(new GenericType<List<ComputerDto>>() {
+			});
 		}
-		
+
 		return null;
 	}
-	
+
 	private boolean addComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Entity<ComputerDto> e = Entity.entity(cdto, MediaType.APPLICATION_JSON);
 		Response response = request.post(e, Response.class);
-		
-		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {});
-		
+
+		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {
+		});
+
 		if (pb != null && !pb.isEmpty()) {
 			for (Problem p : pb) {
 				System.out.println(p);
 			}
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean addUser(String url, User u) {
 		this.services = client.target(BASE_URL + url);
- 
+
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Entity<User> e = Entity.entity(u, MediaType.APPLICATION_JSON);
 		Response response = request.post(e, Response.class);
-		
-		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {});
-		
+
+		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {
+		});
+
 		if (pb != null && !pb.isEmpty()) {
 			for (Problem p : pb) {
 				System.out.println(p);
 			}
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private Problem updateComputer(String url, ComputerDto cdto) {
 		this.services = client.target(BASE_URL + url);
 
 		Builder request = this.services.request(MediaType.APPLICATION_JSON);
 		Response resp = request.put(Entity.entity(cdto, MediaType.APPLICATION_JSON));
-		
+
 		return resp.readEntity(Problem.class);
 	}
-	
+
 	private void delObject(String url) {
 		this.services = client.target(BASE_URL + url);
 		this.services.request().delete();
 	}
-	
+
 	private static String encode(final String password) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(password);
 		return hashedPassword;
 	}
-	
+
 	public static void main(String[] args) {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("file:../computer-database-ws/src/main/resources/ws-application-context.xml");
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+				"file:../computer-database-ws/src/main/resources/ws-application-context.xml");
 
 		Scanner sc = new Scanner(System.in);
 		RestCLI restCli = context.getBean(RestCLI.class);
