@@ -302,14 +302,14 @@ public class RestCLI {
 		do {
 			System.out.println("Please enter user's role (admin or basic --default is basic) :");
 			tmp = sc.nextLine();
-		} while (!(tmp.equals("basic") || tmp.equals("admin")) || (tmp.length() != 0));
+		} while (!(tmp.equals("basic") || tmp.equals("admin")) && (tmp.length() != 0));
 
 		if (tmp.equals("admin")) {
 			role = UsersRoles.ROLE_ADMIN;
 		}
 
 		User u = new User(login, password, role);
-		addUser("user/add", u);
+		addUser("/user/add", u);
 	}
 
 	/**
@@ -558,9 +558,8 @@ public class RestCLI {
 		Entity<User> e = Entity.entity(u, MediaType.APPLICATION_JSON);
 		Response response = request.post(e, Response.class);
 
-		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {
-		});
-
+		List<Problem> pb = response.readEntity(new GenericType<List<Problem>>() {});
+		
 		if (pb != null && !pb.isEmpty()) {
 			for (Problem p : pb) {
 				System.out.println(p);
